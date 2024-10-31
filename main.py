@@ -6,7 +6,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from config_data.config import Config, load_config
 from keyboards.set_menu import set_main_menu
-from handlers import other_handlers
+from handlers import other_handlers, user_handlers
 
 
 logger = logging.getLogger(__name__)
@@ -29,6 +29,7 @@ async def main():
 
     # registering_routers
     dp.include_router(other_handlers.other_router)
+    dp.include_router(user_handlers.user_router)
 
     # skip_updates
     await bot.delete_webhook(drop_pending_updates=True)
