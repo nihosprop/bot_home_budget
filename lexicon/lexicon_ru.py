@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class LexiconCommandsRu:
-    start: str = 'Начало',
+    start: str = 'Начало'
     help: str = 'Справка'
 
 
