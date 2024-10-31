@@ -23,8 +23,10 @@ async def main():
 
     # menu_button_setting
     await set_main_menu(bot)
+
     # skip_updates
     await bot.delete_webhook(drop_pending_updates=True)
+
     # start polling
     await dp.start_polling(bot)
 
