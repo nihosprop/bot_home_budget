@@ -28,8 +28,8 @@ async def main():
     await set_main_menu(bot)
 
     # registering_routers
-    dp.include_router(other_handlers.other_router)
     dp.include_router(user_handlers.user_router)
+    dp.include_router(other_handlers.other_router)
 
     # skip_updates
     await bot.delete_webhook(drop_pending_updates=True)
