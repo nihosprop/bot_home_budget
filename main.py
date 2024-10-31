@@ -13,12 +13,17 @@ async def main():
                         format='%(filename)s:%(lineno)d #%(levelname)-8s '
                                '[%(asctime)s] - %(name)s - %(message)s',
                         datefmt='%Y.%m.%d %H:%M:%S')
+
     logger.info('Start bot')
+
     config: Config = load_config()
     bot = Bot(token=config.tg_bot.token,
               default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
 
+    # menu_button_setting
+    await set_main_menu(bot)
+    # skip_updates
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
