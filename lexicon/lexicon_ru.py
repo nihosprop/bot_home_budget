@@ -1,8 +1,11 @@
 from dataclasses import dataclass
 
-LEXICON_COMMANDS_RU: dict[str, str] = {
-        '/start': 'Начало',
-        '/help': 'Справка'}
+
+@dataclass
+class LexiconCommandsRu:
+    start: str = 'Начало',
+    help: str = 'Справка'
+
 
 @dataclass
 class LexiconRu:
