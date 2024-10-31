@@ -25,6 +25,7 @@ async def main():
     await set_main_menu(bot)
     # skip_updates
     await bot.delete_webhook(drop_pending_updates=True)
+    # start polling
     await dp.start_polling(bot)
 
 asyncio.run(main())
