@@ -1,5 +1,9 @@
+from dataclasses import dataclass
+
 LEXICON_COMMANDS_RU: dict[str, str] = {
         '/start': 'Начало',
         '/help': 'Справка'}
 
-LEXICON_RU: dict = {'other_message': 'пишите по делу!'}
+@dataclass
+class LexiconRu:
+    other_message: str = 'пишите по делу!'
