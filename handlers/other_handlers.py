@@ -2,7 +2,7 @@ import logging
 
 from aiogram.types import Message
 from aiogram import Router
-from lexicon import lexicon_ru
+from lexicon.lexicon_ru import LEXICON_RU
 
 logger = logging.getLogger(__name__)
 other_router = Router()
