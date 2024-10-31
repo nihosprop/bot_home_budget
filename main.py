@@ -6,6 +6,9 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from config_data.config import Config, load_config
 from keyboards.set_menu import set_main_menu
+from handlers.other_handlers import other_router
+
+
 logger = logging.getLogger(__name__)
 
 async def main():
@@ -26,7 +29,6 @@ async def main():
 
     # skip_updates
     await bot.delete_webhook(drop_pending_updates=True)
-
     # start polling
     await dp.start_polling(bot)
 
