@@ -7,7 +7,7 @@ from aiogram.types import CallbackQuery, Message, BotCommand
 
 logger = logging.getLogger(__name__)
 user_router = Router()
-lexicon = LexiconRu()
+lexicon_ru = LexiconRu()
 
 @user_router.message(CommandStart())
 async def cmd_start(message: Message):
@@ -16,4 +16,4 @@ async def cmd_start(message: Message):
 
 @user_router.message(F.text.lower() == '/help')
 async def cmd_help(message: Message):
-    await message.answer(lexicon.help)
+    await message.answer(lexicon_ru.help)
