@@ -11,7 +11,7 @@ user_router = Router()
 
 @user_router.message(CommandStart())
 async def cmd_start(message: Message):
-    pass
+    await message.answer(LexiconRu.start)
 
 @user_router.message(F.text.lower() == '/help')
 async def cmd_help(message: Message):
