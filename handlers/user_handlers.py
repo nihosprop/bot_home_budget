@@ -6,7 +6,7 @@ from aiogram.types import (CallbackQuery, Message)
 
 from filters.filters import IsNumber
 from keyboards.keyboard_utils import create_inline_kb
-from lexicon.lexicon_ru import LEXICON, LexiconRu
+from lexicon.lexicon_ru import CATEGORY_1, LexiconRu
 
 logger = logging.getLogger(__name__)
 user_router = Router()
@@ -24,10 +24,10 @@ async def cmd_help(message: Message):
 
 @user_router.message(IsNumber())
 async def number_input(message: Message):
-    keyboard = create_inline_kb(4, **LEXICON)
+    keyboard = create_inline_kb(4, **CATEGORY_1)
     await message.answer(LexiconRu.select_categories, reply_markup=keyboard)
 
 
-@user_router.callback_query(F.data.in_(LEXICON))
+@user_router.callback_query(F.data.in_(CATEGORY_1))
 async def process_button_press(callback: CallbackQuery):
     await callback.answer()

@@ -15,4 +15,6 @@ class LexiconRu:
     select_categories: str = 'Выберите категорию'
 
 
-LEXICON: dict[str, str] = {'gain': 'Доходы', 'expenses': 'Расходы'}
+CATEGORY_1: dict[str, str] = {
+        'gain': 'Доходы',
+        'expenses': 'Расходы'}

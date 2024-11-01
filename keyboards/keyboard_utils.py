@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from lexicon.lexicon_ru import LEXICON
+from lexicon.lexicon_ru import CATEGORY_1
 
 def create_inline_kb(
         width: int, *args: str, **kwargs: str) -> InlineKeyboardMarkup:
@@ -11,8 +11,8 @@ def create_inline_kb(
 
     if args:
         for button in args:
-            buttons.append(InlineKeyboardButton(text=LEXICON[button] if
-            LEXICON.get(button) else button, callback_data=button))
+            buttons.append(InlineKeyboardButton(text=CATEGORY_1[button] if
+            CATEGORY_1.get(button) else button, callback_data=button))
 
     if kwargs:
         for button, text in kwargs.items():
