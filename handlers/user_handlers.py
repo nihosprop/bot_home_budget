@@ -4,6 +4,7 @@ from aiogram.filters import CommandStart
 
 from lexicon.lexicon_ru import LexiconCommandsRu, LexiconRu
 from aiogram.types import CallbackQuery, Message, BotCommand
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 logger = logging.getLogger(__name__)
