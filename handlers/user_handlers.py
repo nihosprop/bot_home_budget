@@ -13,7 +13,6 @@ lexicon_ru = LexiconRu()
 async def cmd_start(message: Message):
     pass
 
-
 @user_router.message(F.text.lower() == '/help')
 async def cmd_help(message: Message):
-    await message.answer(lexicon_ru.help)
+    await message.answer(LexiconRu.help)
