@@ -12,6 +12,7 @@ class LexiconRu:
     start: str = 'Это команда /start'
     help: str = 'Это команда /help'
     other_message: str = 'Пришлите целое или вещественное число!'
+    select_categories: str = 'Выберите категории'
 
 
 LEXICON: dict[str, str] = {'gain': 'Доходы', 'expenses': 'Расходы'}
