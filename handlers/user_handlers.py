@@ -20,3 +20,7 @@ async def cmd_start(message: Message):
 @user_router.message(F.text.lower() == '/help')
 async def cmd_help(message: Message):
     await message.answer(LexiconRu.help)
+
+@user_router.message(IsNumber())
+async def number_input(message: Message):
+    await message.answer(message.text)
