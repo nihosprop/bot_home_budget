@@ -9,4 +9,5 @@ class LexiconCommandsRu:
 
 @dataclass
 class LexiconRu:
-    other_message: str = 'пишите по делу!'
+    help: str = 'Это команда /help'
+    other_message: str = 'Пишите по делу!'
