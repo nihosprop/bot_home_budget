@@ -3,7 +3,7 @@ from aiogram.types import Message
 
 
 class IsNumber(BaseFilter):
-    def __call__(self, message: Message) -> bool:
+    async def __call__(self, message: Message) -> bool:
         number = message.text.replace(',', '.')
 
         try:
