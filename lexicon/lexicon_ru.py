@@ -12,3 +12,8 @@ class LexiconRu:
     start: str = 'Это команда /start'
     help: str = 'Это команда /help'
     other_message: str = 'Пришлите целое или вещественное число!'
+
+@dataclass
+class Lexicon:
+    gain: str = 'Доходы'
+    expenses: str = 'Расходы'
