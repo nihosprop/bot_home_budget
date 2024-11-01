@@ -26,3 +26,7 @@ async def cmd_help(message: Message):
 async def number_input(message: Message):
     keyboard = create_inline_kb(4, **LEXICON)
     await message.answer(LexiconRu.select_categories, reply_markup=keyboard)
+
+@user_router.callback_query(F.data.in_(LEXICON))
+async def process_button_press(callback: CallbackQuery):
+    await callback.answer()
