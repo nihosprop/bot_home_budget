@@ -4,7 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class LexiconCommandsRu:
     start: str = 'Начало'
-    help: str = 'Справка'
+    help: str = '/help'
 
 
 @dataclass
