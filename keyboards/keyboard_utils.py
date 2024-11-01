@@ -19,5 +19,5 @@ def create_inline_kb(
             buttons.append(InlineKeyboardButton(text=text, callback_data=button))
 
     kb_builder.row(*buttons, width=width)
-
+    kb_builder.row(InlineKeyboardButton(text='Отмена', callback_data='last_btn'))
     return kb_builder.as_markup()
