@@ -24,4 +24,5 @@ async def cmd_help(message: Message):
 
 @user_router.message(IsNumber())
 async def number_input(message: Message):
-    await message.answer(message.text)
+    keyboard = create_inline_kb(2, **LEXICON)
+    await message.answer('Выберите категории', reply_markup=keyboard)
