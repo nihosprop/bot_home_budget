@@ -18,3 +18,5 @@ class LexiconRu:
 CATEGORY_1: dict[str, str] = {
         'gain': 'Доходы',
         'expenses': 'Расходы'}
+
+BUTTONS: dict[str, str] = {'cancel': 'Отмена'}
