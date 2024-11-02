@@ -42,3 +42,12 @@ async def process_button_press(callback: CallbackQuery, state: FSMContext):
                                   reply_markup=keyboard)
     await callback.answer()
     await state.set_state(FSMMakeTransaction.select_category)
+
+
+@user_router.callback_query(StateFilter(FSMMakeTransaction.select_category,
+                                        F.data.in_(['prepayment', 'salary'])))
+async def process_button_press_category(
+        callback: CallbackQuery, state: FSMContext):
+    category = callback.message.text
+    user_dct = await state.get_data()
+    logger.info(user_dct)
