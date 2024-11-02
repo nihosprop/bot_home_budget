@@ -9,7 +9,9 @@ class LexiconCommandsRu:
 
 @dataclass
 class LexiconRu:
-    start: str = 'Это команда /start'
+    start: str = ('Это бот учета личных финансов.\nВведите сумму(целое или '
+                  'вещественное число) и выберите '
+                  'категорию.')
     help: str = 'Это команда /help'
     other_message: str = 'Пришлите целое или вещественное число!'
     select_categories: str = 'Выберите категорию'
