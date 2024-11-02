@@ -1,6 +1,7 @@
 import asyncio
 import logging
 
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram import Dispatcher, Bot
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
