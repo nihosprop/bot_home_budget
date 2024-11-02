@@ -1,6 +1,6 @@
 import asyncio
 import logging
-
+from typing import Any
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram import Dispatcher, Bot
 from aiogram.client.default import DefaultBotProperties
@@ -12,7 +12,7 @@ from handlers import other_handlers, user_handlers
 
 logger = logging.getLogger(__name__)
 storage = MemoryStorage()
-user_dict: dict = {}
+user_dict: dict[str, Any] = {}
 
 async def main():
     logging.basicConfig(level=logging.INFO,
