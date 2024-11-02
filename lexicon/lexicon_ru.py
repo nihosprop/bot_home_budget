@@ -20,6 +20,7 @@ class LexiconRu:
     waiting_number: str = 'В ожидании суммы..'
 
 
+# collect_into_dataclass
 DIRECTION: dict[str, str] = {
         'gain': 'Доходы',
         'expenses': 'Расходы'}
@@ -27,7 +28,9 @@ DIRECTION: dict[str, str] = {
 GAIN_CATEGORIES: dict[str, str] = {
         'salary': 'Зарплата',
         'prepayment': 'Аванс',
-        'other': 'Иное'}
+        'present': 'Подарки',
+        'investments': 'Инвестиции',
+        'temporary_work': 'Подработка'}
 
 BUTTONS: dict[str, str] = {
-        'cancel': 'Отмена'}
+        'cancel': '❌Отмена'}
