@@ -133,3 +133,16 @@ MAP = """
     — Ипотека 
     — Займ
 """
+
+user_dict_example = {
+        'user_id': {
+                'gain': {
+                        'salary': 0,
+                        'prepayment': 0,
+                        'temporary_work': 0,
+                        'present': 0,
+                        'investments': 0},
+                'expenses': {
+                        'food_and_drink': 0,
+                        'utility_payments': 0,
+                        'transport': 0}}}
