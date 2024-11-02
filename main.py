@@ -25,7 +25,7 @@ async def main():
     config: Config = load_config()
     bot = Bot(token=config.tg_bot.token,
               default=DefaultBotProperties(parse_mode=ParseMode.HTML))
-    dp = Dispatcher()
+    dp = Dispatcher(storage=storage)
 
     # menu_button_setting
     await set_main_menu(bot)
