@@ -12,7 +12,6 @@ from handlers import other_handlers, user_handlers
 
 logger = logging.getLogger(__name__)
 storage = MemoryStorage()
-user_dict: dict[str, Any] = {}
 
 async def main():
     logging.basicConfig(level=logging.INFO,
