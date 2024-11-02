@@ -1,5 +1,4 @@
 import logging
-from typing import Any
 
 from aiogram import F, Router
 from aiogram.filters import CommandStart, StateFilter
@@ -14,6 +13,20 @@ from states.states import FSMMakeTransaction
 
 logger = logging.getLogger(__name__)
 user_router = Router()
+
+user_dict = {
+        'user_id': {
+                'gain': {
+                        'salary': 0,
+                        'prepayment': 0,
+                        'temporary_work': 0,
+                        'present': 0,
+                        'investments': 0},
+                'expenses': {
+                        'food_and_drink': 0,
+                        'utility_payments': 0,
+                        'transport': 0}}}
+
 
 @user_router.message(CommandStart(), StateFilter(default_state))
 async def cmd_start(message: Message, state: FSMContext):
@@ -38,8 +51,8 @@ async def process_number_sent(message: Message, state: FSMContext):
 
 
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
-                            F.data.in_(DIRECTION))
-async def process_button_press_direction(
+                            F.data == 'gain')
+async def button_press_gain(
         callback: CallbackQuery, state: FSMContext):
     keyboard = create_inline_kb(2, **GAIN_CATEGORIES)
     await callback.message.edit_text(LexiconRu.select_category,
@@ -48,10 +61,16 @@ async def process_button_press_direction(
     await state.set_state(FSMMakeTransaction.select_category)
 
 
-@user_router.callback_query(StateFilter(FSMMakeTransaction.select_category,
-                                        F.data.in_(['prepayment', 'salary'])))
-async def process_button_press_category(
-        callback: CallbackQuery, state: FSMContext):
-    category = callback.message.text
-    user_dct = await state.get_data()
-    logger.info(user_dct)
+@user_router.callback_query(StateFilter(FSMMakeTransaction.select_category),
+                            F.data.in_(GAIN_CATEGORIES))
+async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
+    category = callback.data
+    dct = await state.get_data()
+    amount = dct['amount']
+    user_dict.setdefault(str(callback.from_user.id), {'gain': {category: 0}})
+    user_dict[str(callback.from_user.id)]['gain'][category] += int(amount)
+
+    await callback.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
+                                     f'{LexiconRu.waiting_number}')
+    logger.info(f'{user_dict}')
+    await state.set_state(FSMMakeTransaction.fill_number)
