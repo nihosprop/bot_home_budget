@@ -1,12 +1,16 @@
 import logging
+from turtledemo.penrose import start
 
 from aiogram import F, Router
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, StateFilter
 from aiogram.types import (CallbackQuery, Message)
-
+from aiogram.fsm.state import default_state
+from aiogram.fsm.context import FSMContext
 from filters.filters import IsNumber
 from keyboards.keyboard_utils import create_inline_kb
-from lexicon.lexicon_ru import CATEGORY_1, LexiconRu
+from lexicon.lexicon_ru import DIRECTION, LexiconRu, GAIN_CATEGORIES
+from states.states import FSMMakeTransaction
+
 
 logger = logging.getLogger(__name__)
 user_router = Router()
