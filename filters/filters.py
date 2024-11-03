@@ -6,15 +6,11 @@ class IsNumber(BaseFilter):
 
     async def __call__(self, message: Message) -> bool | dict[str, int | float]:
         number = message.text.replace(',', '.')
-
         try:
-            value = int(number)
+            value = {'number': int(number)}
         except ValueError:
             try:
-                value = float(number)
+                value = {'number': float(number)}
             except ValueError:
                 return False
-            else:
-                return {'number': value}
-        else:
-            return {'number': value}
+        return value
