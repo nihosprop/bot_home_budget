@@ -3,17 +3,18 @@ from aiogram.types import Message
 
 
 class IsNumber(BaseFilter):
-    async def __call__(self, message: Message) -> bool:
+
+    async def __call__(self, message: Message) -> bool | dict[str, int | float]:
         number = message.text.replace(',', '.')
 
         try:
-            int(number)
+            value = int(number)
         except ValueError:
             try:
-                float(number)
+                value = float(number)
             except ValueError:
                 return False
             else:
-                return True
+                return {'number': value}
         else:
-            return True
+            return {'number': value}
