@@ -13,19 +13,7 @@ from states.states import FSMMakeTransaction
 
 logger = logging.getLogger(__name__)
 user_router = Router()
-
-user_dict = {
-        'user_id': {
-                'gain': {
-                        'salary': 0,
-                        'prepayment': 0,
-                        'temporary_work': 0,
-                        'present': 0,
-                        'investments': 0},
-                'expenses': {
-                        'food_and_drink': 0,
-                        'utility_payments': 0,
-                        'transport': 0}}}
+user_dict = {}
 
 
 @user_router.message(CommandStart(), StateFilter(default_state))
@@ -42,6 +30,7 @@ async def process_cancel_command_state(
     await state.set_state(FSMMakeTransaction.fill_number)
 
 
+# fill_number
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number), IsNumber())
 async def process_number_sent(message: Message, state: FSMContext):
     keyboard = create_inline_kb(2, **DIRECTION)
@@ -67,8 +56,11 @@ async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
     category = callback.data
     dct = await state.get_data()
     amount = dct['amount']
-    user_dict.setdefault(str(callback.from_user.id), {'gain': {category: 0}})
-    user_dict[str(callback.from_user.id)]['gain'][category] += int(amount)
+    logger.info(f'переменная {amount=}')
+    user_dict.setdefault(str(callback.from_user.id), {
+            'gain': {
+                    category: 0}})
+    user_dict[str(callback.from_user.id)]['gain'][category] += amount
 
     await callback.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                      f'{LexiconRu.waiting_number}')

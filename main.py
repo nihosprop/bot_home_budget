@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from typing import Any
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram import Dispatcher, Bot
 from aiogram.client.default import DefaultBotProperties

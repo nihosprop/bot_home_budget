@@ -22,7 +22,12 @@ class LexiconRu:
     waiting_number: str = 'В ожидании суммы..'
 
 
-# collect_into_dataclass
+@dataclass
+class Categories:
+    pass
+
+
+# collect into dataclass Categories
 DIRECTION: dict[str, str] = {
         'gain': 'Доходы',
         'expenses': 'Расходы'}
