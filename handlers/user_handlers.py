@@ -6,6 +6,7 @@ from aiogram.types import (CallbackQuery, Message)
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 
+from keyboards.keyboards import kb_for_gain, kb_direction
 from filters.filters import IsNumber
 from keyboards.keyboard_utils import create_inline_kb
 from lexicon.lexicon_ru import DIRECTION, GAIN_CATEGORIES, LexiconRu
@@ -35,9 +36,8 @@ async def process_cancel_command_state(
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number), IsNumber())
 async def process_number_sent(
         message: Message, state: FSMContext, number: dict[str, int | float]):
-    keyboard = create_inline_kb(2, **DIRECTION)
     await state.update_data(amount=number)
-    await message.answer(LexiconRu.select_direction, reply_markup=keyboard)
+    await message.answer(LexiconRu.select_direction, reply_markup=kb_direction)
     await state.set_state(FSMMakeTransaction.select_direction)
 
 # (fill_number) sent not number
@@ -51,19 +51,17 @@ async def sent_invalid_number(message: Message):
                             F.data == 'gain')
 async def button_press_gain(
         callback: CallbackQuery, state: FSMContext):
-    keyboard = create_inline_kb(2, **GAIN_CATEGORIES)
 
     # delete_old_messages!
     await callback.message.edit_text(LexiconRu.select_category,
-                                     reply_markup=keyboard)
+                                     reply_markup=kb_for_gain)
     await callback.answer()
     await state.set_state(FSMMakeTransaction.select_category)
 
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
 async def sent_invalid_select_direction(message: Message):
-    keyboard = create_inline_kb(2, **DIRECTION)
     # logger.info(message.model_dump_json(indent=4, exclude_defaults=True))
-    await message.answer(text='Выберите направление', reply_markup=keyboard)
+    await message.answer(text='Выберите направление', reply_markup=kb_direction)
 
 
 # select_category
