@@ -39,13 +39,12 @@ async def process_number_sent(
     await message.answer(LexiconRu.select_direction, reply_markup=kb_direction)
     await state.set_state(FSMMakeTransaction.select_direction)
 
-# (fill_number) sent not number
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number))
 async def sent_invalid_number(message: Message):
     await message.answer(f'{LexiconRu.other_message}')
 
 
-# state select_direction
+# select_direction
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
                             F.data == 'gain')
 async def button_press_gain(
