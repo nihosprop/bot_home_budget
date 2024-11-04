@@ -37,7 +37,7 @@ GAIN_CATEGORIES: dict[str, str] = {
         'other': 'Иное',
         'prepayment': 'Аванс',
         'present': 'Подарки',
-        'investments': 'Инвестиции',
+        'dividends': 'Дивиденды',
         'temporary_work': 'Подработка'}
 
 EXPENSES_CATEGORIES: dict[str, str] = {
