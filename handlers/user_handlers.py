@@ -15,13 +15,13 @@ logger = logging.getLogger(__name__)
 user_router = Router()
 user_dict = {}
 
-
+# default_state
 @user_router.message(CommandStart(), StateFilter(default_state))
 async def cmd_start(message: Message, state: FSMContext):
     await message.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
 
-
+# not default_state -> cancel
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
 async def process_cancel_command_state(
         callback: CallbackQuery, state: FSMContext):
@@ -31,7 +31,7 @@ async def process_cancel_command_state(
     await state.set_state(FSMMakeTransaction.fill_number)
 
 
-# fill_number
+# state fill_number
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number), IsNumber())
 async def process_number_sent(
         message: Message, state: FSMContext, number: dict[str, int | float]):
@@ -40,28 +40,30 @@ async def process_number_sent(
     await message.answer(LexiconRu.select_direction, reply_markup=keyboard)
     await state.set_state(FSMMakeTransaction.select_direction)
 
-
+# (fill_number) sent not number
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number))
-async def process_invalid_number(message: Message):
+async def sent_invalid_number(message: Message):
     await message.answer(f'{LexiconRu.other_message}')
 
 
-# select_direction
+# state select_direction
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
                             F.data == 'gain')
 async def button_press_gain(
         callback: CallbackQuery, state: FSMContext):
     keyboard = create_inline_kb(2, **GAIN_CATEGORIES)
+
+    # delete_old_messages!
     await callback.message.edit_text(LexiconRu.select_category,
                                      reply_markup=keyboard)
     await callback.answer()
     await state.set_state(FSMMakeTransaction.select_category)
 
-
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
-async def process_invalid_select_direction(message: Message, state: FSMContext):
-    # остается сообщение 'Выберите направление' надо его убрать
-    await message.answer(text='Выберите направление')
+async def sent_invalid_select_direction(message: Message):
+    keyboard = create_inline_kb(2, **DIRECTION)
+    # logger.info(message.model_dump_json(indent=4, exclude_defaults=True))
+    await message.answer(text='Выберите направление', reply_markup=keyboard)
 
 
 # select_category
@@ -86,4 +88,5 @@ async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
 
 @user_router.message(StateFilter(FSMMakeTransaction.select_category))
 async def process_invalid_gain_categories(message: Message):
-    await message.answer(text='Выберите категорию')
+    keyboard = create_inline_kb(2, **GAIN_CATEGORIES)
+    await message.answer(text='Выберите категорию', reply_markup=keyboard)
