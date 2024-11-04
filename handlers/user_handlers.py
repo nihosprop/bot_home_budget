@@ -8,8 +8,7 @@ from aiogram.fsm.context import FSMContext
 
 from keyboards.keyboards import kb_for_gain, kb_direction
 from filters.filters import IsNumber
-from keyboards.keyboard_utils import create_inline_kb
-from lexicon.lexicon_ru import DIRECTION, GAIN_CATEGORIES, LexiconRu
+from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
 
 logger = logging.getLogger(__name__)
@@ -86,5 +85,4 @@ async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
 
 @user_router.message(StateFilter(FSMMakeTransaction.select_category))
 async def process_invalid_gain_categories(message: Message):
-    keyboard = create_inline_kb(2, **GAIN_CATEGORIES)
-    await message.answer(text='Выберите категорию', reply_markup=keyboard)
+    await message.answer(text='Выберите категорию', reply_markup=kb_for_gain)
