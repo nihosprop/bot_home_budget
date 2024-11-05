@@ -19,7 +19,7 @@ class LexiconRu:
     select_category: str = 'Выберите категорию'
     select_subcategory: str = 'Выберите под-категорию'
     transaction_recorded: str = 'Транзакция записана!'
-    waiting_number: str = 'В ожидании суммы…'
+    waiting_number: str = 'Ожидаю ввод суммы…'
 
 
 @dataclass
