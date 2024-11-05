@@ -1,6 +1,9 @@
+from aiogram.enums import ContentType
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
+import logging
 
+filters_logger = logging.getLogger(__name__)
 
 class IsNumber(BaseFilter):
 
