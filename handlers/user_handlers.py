@@ -6,7 +6,7 @@ from aiogram.types import (CallbackQuery, Message)
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 
-from keyboards.keyboards import kb_direction, kb_for_gain
+from keyboards.keyboards import kb_direction, kb_gain_categories
 from filters.filters import IsNumber
 from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
@@ -55,7 +55,7 @@ async def button_press_gain(
 
     # delete_old_messages!
     await callback.message.edit_text(LexiconRu.select_category,
-                                     reply_markup=kb_for_gain)
+                                     reply_markup=kb_gain_categories)
     await callback.answer()
     await state.set_state(FSMMakeTransaction.select_category)
 
@@ -75,7 +75,10 @@ async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     amount = data['amount']
     # logger.info(f'переменная {amount=}')
-    user_dict.setdefault(user_id, {'gain': {}, 'expenses': {}})
+    user_dict.setdefault(user_id,
+                         {
+                                 'gain': {},
+                                 'expenses': {}})
     user_dict[user_id]['gain'][category] = (
             user_dict[user_id]['gain'].setdefault(category, 0) + amount)
 
@@ -88,4 +91,5 @@ async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
 
 @user_router.message(StateFilter(FSMMakeTransaction.select_category))
 async def process_invalid_gain_categories(message: Message):
-    await message.answer(text='Выберите категорию', reply_markup=kb_for_gain)
+    await message.answer(text='Выберите категорию',
+                         reply_markup=kb_gain_categories)
