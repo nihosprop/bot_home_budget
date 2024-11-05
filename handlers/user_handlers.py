@@ -6,7 +6,7 @@ from aiogram.types import (CallbackQuery, Message)
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 
-from keyboards.keyboards import kb_for_gain, kb_direction
+from keyboards.keyboards import kb_direction, kb_for_gain
 from filters.filters import IsNumber
 from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
@@ -71,13 +71,13 @@ async def sent_invalid_select_direction(message: Message):
                             F.data.in_(GAIN_CATEGORIES))
 async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
     category = callback.data
-    dct = await state.get_data()
-    amount = dct['amount']
-    logger.info(f'переменная {amount=}')
-    user_dict.setdefault(str(callback.from_user.id), {
-            'gain': {
-                    category: 0}})
-    user_dict[str(callback.from_user.id)]['gain'][category] += amount
+    user_id = str(callback.from_user.id)
+    data = await state.get_data()
+    amount = data['amount']
+    # logger.info(f'переменная {amount=}')
+    user_dict.setdefault(user_id, {'gain': {}, 'expenses': {}})
+    user_dict[user_id]['gain'][category] = (
+            user_dict[user_id]['gain'].setdefault(category, 0) + amount)
 
     await callback.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                      f'{LexiconRu.waiting_number}')
