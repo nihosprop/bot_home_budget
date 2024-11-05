@@ -15,11 +15,13 @@ logger = logging.getLogger(__name__)
 user_router = Router()
 user_dict = {}
 
+
 # default_state
 @user_router.message(CommandStart(), StateFilter(default_state))
 async def cmd_start(message: Message, state: FSMContext):
     await message.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
+
 
 # not default_state -> cancel
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
@@ -39,6 +41,7 @@ async def process_number_sent(
     await message.answer(LexiconRu.select_direction, reply_markup=kb_direction)
     await state.set_state(FSMMakeTransaction.select_direction)
 
+
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number))
 async def sent_invalid_number(message: Message):
     await message.answer(f'{LexiconRu.other_message}')
@@ -55,6 +58,7 @@ async def button_press_gain(
                                      reply_markup=kb_for_gain)
     await callback.answer()
     await state.set_state(FSMMakeTransaction.select_category)
+
 
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
 async def sent_invalid_select_direction(message: Message):
