@@ -2,7 +2,6 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from lexicon.lexicon_ru import BUTTONS
 
-# to make universal 
 def create_inline_kb(
         width: int, *args: str, **kwargs: str) -> InlineKeyboardMarkup:
     """Generates inline keyboards on the fly"""

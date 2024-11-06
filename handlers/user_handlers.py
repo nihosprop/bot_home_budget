@@ -75,10 +75,7 @@ async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     amount = data['amount']
     # logger.info(f'переменная {amount=}')
-    user_dict.setdefault(user_id,
-                         {
-                                 'gain': {},
-                                 'expenses': {}})
+    user_dict.setdefault(user_id, {'gain': {}, 'expenses': {}})
     user_dict[user_id]['gain'][category] = (
             user_dict[user_id]['gain'].setdefault(category, 0) + amount)
 

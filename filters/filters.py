@@ -20,4 +20,5 @@ class IsNumber(BaseFilter):
                     return False
             return value
         filters_logger.info(f'drop_update -> {message.content_type}')
+
         return False
