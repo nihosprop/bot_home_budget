@@ -9,7 +9,7 @@ from aiogram.fsm.context import FSMContext
 from database.db import database
 from keyboards.keyboards import kb_direction, kb_gain_categories
 from filters.filters import IsNumber
-from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu
+from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu, EXPENSES_CATEGORIES
 from states.states import FSMMakeTransaction
 from utils.utils import add_income_data_in_db
 
@@ -60,24 +60,22 @@ async def button_press_gain(
     await callback.answer()
     await state.set_state(FSMMakeTransaction.select_category)
 
-
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
 async def sent_invalid_select_direction(message: Message):
     # logger.info(message.model_dump_json(indent=4, exclude_defaults=True))
     await message.answer(text='Выберите направление', reply_markup=kb_direction)
 
 
-# select_category
+# income_select_category
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_category),
                             F.data.in_(GAIN_CATEGORIES))
-async def press_bt_gain_categories(clbk: CallbackQuery, state: FSMContext):
+async def press_gain_categories(clbk: CallbackQuery, state: FSMContext):
     await add_income_data_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                  f'{LexiconRu.waiting_number}')
     logger.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
-
 
 @user_router.message(StateFilter(FSMMakeTransaction.select_category))
 async def process_invalid_gain_categories(message: Message):
