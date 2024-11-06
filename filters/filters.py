@@ -18,7 +18,9 @@ class IsNumber(BaseFilter):
                     value = {'number': float(number)}
                 except ValueError:
                     return False
-            return value
+            filters_logger.info(f'{value=}')
+            return value if value['number'] != 0 else False
+
         filters_logger.info(f'drop_update -> {message.content_type}')
 
         return False
