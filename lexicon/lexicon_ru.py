@@ -31,18 +31,27 @@ class Categories:
 # collect into dataclass Categories
 DIRECTION: dict[str, str] = {'income': 'Доходы', 'expenses': 'Расходы'}
 
-GAIN_CATEGORIES: dict[str, str] = {'salary': 'Зарплата', 'other': 'Иное',
-        'prepayment': 'Аванс', 'present': 'Подарки', 'dividends': 'Дивиденды',
+GAIN_CATEGORIES: dict[str, str] = {
+        'salary': 'Зарплата',
+        'other': 'Иное',
+        'prepayment': 'Аванс',
+        'present': 'Подарки',
+        'dividends': 'Дивиденды',
         'temporary_work': 'Подработка'}
 
-EXPENSES_CATEGORIES: dict[str, str] = {'products': 'Продукты',
-        'feeding': 'Питание', 'transport': 'Транспорт',
+EXPENSES_CATEGORIES: dict[str, str] = {
+        'products': 'Продукты',
+        'feeding': 'Питание',
+        'transport': 'Транспорт',
         'utility_payments': 'Коммунальные платежи',
         'entertainment_and_relaxation': 'Развлечения и отдых',
-        'health_and_beauty': 'Здоровье и красота', 'education': 'Образование',
+        'health_and_beauty': 'Здоровье и красота',
+        'education': 'Образование',
         'clothing_and_accessories': 'Одежда и аксессуары',
-        'pets': 'Домашние животные', 'other_expenses': 'Прочие расходы',
-        'household_expenses': 'Бытовые расходы', 'arrears': 'Задолженности'}
+        'pets': 'Домашние животные',
+        'other_expenses': 'Прочие расходы',
+        'household_expenses': 'Бытовые расходы',
+        'arrears': 'Задолженности'}
 
 PRODUCTS = {'supermarket': 'Супермаркет', 'alcohol': 'Алкоголь'}
 FEEDING = {'restaurant': 'Ресторан', 'cafe': 'Кафе', 'canteen': 'Столовая'}
