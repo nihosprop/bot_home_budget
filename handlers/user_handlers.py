@@ -13,7 +13,7 @@ from keyboards.keyboards import (kb_direction,
 from filters.filters import IsNumber
 from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
-from utils.utils import add_income_data_in_db
+from utils.utils import add_income_in_db
 
 logger = logging.getLogger(__name__)
 user_router = Router()
@@ -50,38 +50,35 @@ async def sent_invalid_number(message: Message):
     await message.answer(f'{LexiconRu.other_message}')
 
 
-# select_direction
+# select_direction_income
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
                             F.data == 'income')
-async def button_press_gain(
+async def button_press_income(
         clbk: CallbackQuery, state: FSMContext):
-
-    # delete_old_messages!
     await clbk.message.edit_text(LexiconRu.select_category,
                                  reply_markup=kb_gain_categories)
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_category)
 
-
+# invalid_direction
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
-async def sent_invalid_select_direction(message: Message):
-    # logger.info(message.model_dump_json(indent=4, exclude_defaults=True))
+async def invalid_select_direction(message: Message):
     await message.answer(text='Выберите направление', reply_markup=kb_direction)
 
 
 # income_select_category
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_category),
                             F.data.in_(GAIN_CATEGORIES))
-async def press_gain_categories(clbk: CallbackQuery, state: FSMContext):
-    await add_income_data_in_db(clbk, state)
+async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
+    await add_income_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                  f'{LexiconRu.waiting_number}')
     logger.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
-
+# invalid_category
 @user_router.message(StateFilter(FSMMakeTransaction.select_category))
-async def process_invalid_gain_categories(message: Message):
+async def invalid_income_categories(message: Message):
     await message.answer(text='Выберите категорию',
                          reply_markup=kb_gain_categories)
