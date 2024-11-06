@@ -58,7 +58,7 @@ async def button_press_income(
     await clbk.message.edit_text(LexiconRu.select_category,
                                  reply_markup=kb_gain_categories)
     await clbk.answer()
-    await state.set_state(FSMMakeTransaction.select_category)
+    await state.set_state(FSMMakeTransaction.select_income)
 
 # invalid_direction
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
@@ -67,7 +67,7 @@ async def invalid_select_direction(message: Message):
 
 
 # income_select_category
-@user_router.callback_query(StateFilter(FSMMakeTransaction.select_category),
+@user_router.callback_query(StateFilter(FSMMakeTransaction.select_income),
                             F.data.in_(GAIN_CATEGORIES))
 async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     await add_income_in_db(clbk, state)
@@ -78,7 +78,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     await state.set_state(FSMMakeTransaction.fill_number)
 
 # invalid_category
-@user_router.message(StateFilter(FSMMakeTransaction.select_category))
+@user_router.message(StateFilter(FSMMakeTransaction.select_income))
 async def invalid_income_categories(message: Message):
     await message.answer(text='Выберите категорию',
                          reply_markup=kb_gain_categories)
