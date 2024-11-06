@@ -6,9 +6,9 @@ from database.db import database
 
 logger = logging.getLogger(__name__)
 
-async def add_income_data_in_db(clbk: CallbackQuery,
-                          state: FSMContext,
-                          db=database):
+async def add_income_in_db(clbk: CallbackQuery,
+                           state: FSMContext,
+                           db=database):
     category = clbk.data
     user_id = str(clbk.from_user.id)
     data = await state.get_data()
