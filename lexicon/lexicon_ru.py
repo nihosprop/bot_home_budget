@@ -14,7 +14,8 @@ class LexiconRu:
                   'Отправьте сумму(целое или вещественное число) и выберите '
                   'категорию.')
     help: str = 'Это команда /help'
-    other_message: str = 'Пришлите целое или вещественное число!'
+    other_message: str = ('Пришлите целое или вещественное число, '
+                          'отличное от нуля!')
     select_direction: str = 'Выберите направление'
     select_category: str = 'Выберите категорию'
     select_subcategory: str = 'Выберите под-категорию'
@@ -28,42 +29,25 @@ class Categories:
 
 
 # collect into dataclass Categories
-DIRECTION: dict[str, str] = {
-        'income': 'Доходы',
-        'expenses': 'Расходы'}
+DIRECTION: dict[str, str] = {'income': 'Доходы', 'expenses': 'Расходы'}
 
-GAIN_CATEGORIES: dict[str, str] = {
-        'salary': 'Зарплата',
-        'other': 'Иное',
-        'prepayment': 'Аванс',
-        'present': 'Подарки',
-        'dividends': 'Дивиденды',
+GAIN_CATEGORIES: dict[str, str] = {'salary': 'Зарплата', 'other': 'Иное',
+        'prepayment': 'Аванс', 'present': 'Подарки', 'dividends': 'Дивиденды',
         'temporary_work': 'Подработка'}
 
-EXPENSES_CATEGORIES: dict[str, str] = {
-        'products': 'Продукты',
-        'feeding': 'Питание',
-        'transport': 'Транспорт',
+EXPENSES_CATEGORIES: dict[str, str] = {'products': 'Продукты',
+        'feeding': 'Питание', 'transport': 'Транспорт',
         'utility_payments': 'Коммунальные платежи',
         'entertainment_and_relaxation': 'Развлечения и отдых',
-        'health_and_beauty': 'Здоровье и красота',
-        'education': 'Образование',
+        'health_and_beauty': 'Здоровье и красота', 'education': 'Образование',
         'clothing_and_accessories': 'Одежда и аксессуары',
-        'pets': 'Домашние животные',
-        'other_expenses': 'Прочие расходы',
-        'household_expenses': 'Бытовые расходы',
-        'arrears': 'Задолженности'}
+        'pets': 'Домашние животные', 'other_expenses': 'Прочие расходы',
+        'household_expenses': 'Бытовые расходы', 'arrears': 'Задолженности'}
 
-PRODUCTS = {
-        'supermarket': 'Супермаркет',
-        'alcohol': 'Алкоголь'}
-FEEDING = {
-        'restaurant': 'Ресторан',
-        'cafe': 'Кафе',
-        'canteen': 'Столовая'}
+PRODUCTS = {'supermarket': 'Супермаркет', 'alcohol': 'Алкоголь'}
+FEEDING = {'restaurant': 'Ресторан', 'cafe': 'Кафе', 'canteen': 'Столовая'}
 
-BUTTONS: dict[str, str] = {
-        'cancel': '❌Отмена'}
+BUTTONS: dict[str, str] = {'cancel': '❌Отмена'}
 
 MAP = """
 Доходы:
