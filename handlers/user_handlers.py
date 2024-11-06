@@ -27,10 +27,10 @@ async def cmd_start(message: Message, state: FSMContext):
 # not default_state -> cancel
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
 async def process_cancel_command_state(
-        callback: CallbackQuery, state: FSMContext):
-    await callback.message.delete()
-    await callback.message.answer(LexiconRu.waiting_number)
-    await callback.answer()
+        clbk: CallbackQuery, state: FSMContext):
+    await clbk.message.delete()
+    await clbk.message.answer(LexiconRu.waiting_number)
+    await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
 
@@ -52,13 +52,14 @@ async def sent_invalid_number(message: Message):
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
                             F.data == 'income')
 async def button_press_gain(
-        callback: CallbackQuery, state: FSMContext):
+        clbk: CallbackQuery, state: FSMContext):
 
     # delete_old_messages!
-    await callback.message.edit_text(LexiconRu.select_category,
-                                     reply_markup=kb_gain_categories)
-    await callback.answer()
+    await clbk.message.edit_text(LexiconRu.select_category,
+                                 reply_markup=kb_gain_categories)
+    await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_category)
+
 
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
 async def sent_invalid_select_direction(message: Message):
@@ -76,6 +77,7 @@ async def press_gain_categories(clbk: CallbackQuery, state: FSMContext):
     logger.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
+
 
 @user_router.message(StateFilter(FSMMakeTransaction.select_category))
 async def process_invalid_gain_categories(message: Message):
