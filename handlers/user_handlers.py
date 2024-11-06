@@ -82,3 +82,37 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
 async def invalid_income_categories(message: Message):
     await message.answer(text='Выберите категорию',
                          reply_markup=kb_gain_categories)
+
+
+# select_direction_expenses
+@user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
+                            F.data == 'expenses')
+async def button_press_expenses(
+        clbk: CallbackQuery, state: FSMContext):
+    await clbk.message.edit_text(LexiconRu.select_category,
+                                 reply_markup=kb_expenses_categories)
+    await clbk.answer()
+    await state.set_state(FSMMakeTransaction.select_expenses)
+
+# invalid_direction
+@user_router.message(StateFilter(FSMMakeTransaction.select_direction))
+async def invalid_select_direction(message: Message):
+    await message.answer(text=LexiconRu.select_direction,
+                         reply_markup=kb_direction)
+
+# expenses_select_category
+@user_router.callback_query(StateFilter(FSMMakeTransaction.select_expenses),
+                            F.data.in_(EXPENSES_CATEGORIES))
+async def process_expenses_categories(clbk: CallbackQuery, state: FSMContext):
+    await add_expenses_in_db(clbk, state)
+    await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
+                                 f'{LexiconRu.waiting_number}')
+    logger.info(f'{database}')
+    await clbk.answer()
+    await state.set_state(FSMMakeTransaction.fill_number)
+
+# invalid_expenses
+@user_router.message(StateFilter(FSMMakeTransaction.select_expenses))
+async def invalid_income_categories(message: Message):
+    await message.answer(text=LexiconRu.select_category,
+                         reply_markup=kb_expenses_categories)
