@@ -6,10 +6,12 @@ from aiogram.types import (CallbackQuery, Message)
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 
+from database.db import database
 from keyboards.keyboards import kb_direction, kb_gain_categories
 from filters.filters import IsNumber
 from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
+from utils.utils import add_income_data_in_db
 
 logger = logging.getLogger(__name__)
 user_router = Router()
