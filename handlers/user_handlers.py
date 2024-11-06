@@ -49,7 +49,7 @@ async def sent_invalid_number(message: Message):
 
 # select_direction
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
-                            F.data == 'gain')
+                            F.data == 'income')
 async def button_press_gain(
         callback: CallbackQuery, state: FSMContext):
 
@@ -75,9 +75,9 @@ async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     amount = data['amount']
     # logger.info(f'переменная {amount=}')
-    user_dict.setdefault(user_id, {'gain': {}, 'expenses': {}})
-    user_dict[user_id]['gain'][category] = (
-            user_dict[user_id]['gain'].setdefault(category, 0) + amount)
+    user_dict.setdefault(user_id, {'income': {}, 'expenses': {}})
+    user_dict[user_id]['income'][category] = (
+            user_dict[user_id]['income'].setdefault(category, 0) + amount)
 
     await callback.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                      f'{LexiconRu.waiting_number}')
