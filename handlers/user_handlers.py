@@ -7,9 +7,11 @@ from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 
 from database.db import database
-from keyboards.keyboards import kb_direction, kb_gain_categories
+from keyboards.keyboards import (kb_direction,
+                                 kb_expenses_categories,
+                                 kb_gain_categories)
 from filters.filters import IsNumber
-from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu, EXPENSES_CATEGORIES
+from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
 from utils.utils import add_income_data_in_db
 
