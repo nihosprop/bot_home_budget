@@ -15,7 +15,6 @@ from utils.utils import add_income_data_in_db
 
 logger = logging.getLogger(__name__)
 user_router = Router()
-user_dict = {}
 
 
 # default_state
@@ -72,18 +71,18 @@ async def sent_invalid_select_direction(message: Message):
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_category),
                             F.data.in_(GAIN_CATEGORIES))
 async def press_bt_gain_categories(callback: CallbackQuery, state: FSMContext):
-    category = callback.data
-    user_id = str(callback.from_user.id)
-    data = await state.get_data()
-    amount = data['amount']
-    # logger.info(f'переменная {amount=}')
-    user_dict.setdefault(user_id, {'income': {}, 'expenses': {}})
-    user_dict[user_id]['income'][category] = (
-            user_dict[user_id]['income'].setdefault(category, 0) + amount)
+    await add_income_data_in_db(callback, state)
+    # category = callback.data
+    # user_id = str(callback.from_user.id)
+    # data = await state.get_data()
+    # amount = data['amount']
+    # user_dict.setdefault(user_id, {'income': {}, 'expenses': {}})
+    # user_dict[user_id]['income'][category] = (
+    #         user_dict[user_id]['income'].setdefault(category, 0) + amount)
 
     await callback.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                      f'{LexiconRu.waiting_number}')
-    logger.info(f'{user_dict}')
+    logger.info(f'{database}')
     await callback.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
