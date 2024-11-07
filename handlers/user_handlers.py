@@ -21,8 +21,8 @@ user_router = Router()
 
 # default_state
 @user_router.message(CommandStart(), StateFilter(default_state))
-async def cmd_start(message: Message, state: FSMContext):
-    await message.answer(LexiconRu.start)
+async def cmd_start(msg: Message, state: FSMContext):
+    await msg.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
 
 
@@ -39,15 +39,15 @@ async def process_cancel_command_state(
 # state fill_number
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number), IsNumber())
 async def process_number_sent(
-        message: Message, state: FSMContext, number: dict[str, int | float]):
+        msg: Message, state: FSMContext, number: dict[str, int | float]):
     await state.update_data(amount=number)
-    await message.answer(LexiconRu.select_direction, reply_markup=kb_direction)
+    await msg.answer(LexiconRu.select_direction, reply_markup=kb_direction)
     await state.set_state(FSMMakeTransaction.select_direction)
 
 
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number))
-async def sent_invalid_number(message: Message):
-    await message.answer(f'{LexiconRu.other_message}')
+async def sent_invalid_number(msg: Message):
+    await msg.answer(f'{LexiconRu.other_message}')
 
 
 # select_direction_income
@@ -62,8 +62,8 @@ async def button_press_income(
 
 # invalid_direction
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
-async def invalid_select_direction(message: Message):
-    await message.answer(text='Выберите направление', reply_markup=kb_direction)
+async def invalid_select_direction(msg: Message):
+    await msg.answer(text='Выберите направление', reply_markup=kb_direction)
 
 
 # income_select_category
@@ -79,9 +79,9 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
 
 # invalid_category
 @user_router.message(StateFilter(FSMMakeTransaction.select_income))
-async def invalid_income_categories(message: Message):
-    await message.answer(text='Выберите категорию',
-                         reply_markup=kb_gain_categories)
+async def invalid_income_categories(msg: Message):
+    await msg.answer(text='Выберите категорию',
+                     reply_markup=kb_gain_categories)
 
 
 # select_direction_expenses
@@ -96,9 +96,9 @@ async def button_press_expenses(
 
 # invalid_direction
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
-async def invalid_select_direction(message: Message):
-    await message.answer(text=LexiconRu.select_direction,
-                         reply_markup=kb_direction)
+async def invalid_select_direction(msg: Message):
+    await msg.answer(text=LexiconRu.select_direction,
+                     reply_markup=kb_direction)
 
 # expenses_select_category
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_expenses),
@@ -113,6 +113,6 @@ async def process_expenses_categories(clbk: CallbackQuery, state: FSMContext):
 
 # invalid_expenses
 @user_router.message(StateFilter(FSMMakeTransaction.select_expenses))
-async def invalid_income_categories(message: Message):
-    await message.answer(text=LexiconRu.select_category,
-                         reply_markup=kb_expenses_categories)
+async def invalid_income_categories(msg: Message):
+    await msg.answer(text=LexiconRu.select_category,
+                     reply_markup=kb_expenses_categories)
