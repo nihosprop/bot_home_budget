@@ -1,4 +1,6 @@
 # bot_home_budget
+**Version:** 0.0.1
+
 # Income and Expense Tracker Bot
 
 ![GitHub stars](https://img.shields.io/github/stars/username/repository)
