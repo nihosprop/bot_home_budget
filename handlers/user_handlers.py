@@ -29,7 +29,7 @@ async def cmd_start(msg: Message, state: FSMContext):
 @user_router.message(F.text == '/help')
 async def cmd_help(msg: Message, state: FSMContext):
     stt = await state.get_state()
-    logger.info(f'{stt=}')
+    user_hand_logger.info(f'{stt=}')
     if stt:
         await msg.answer(LexiconRu.state_is_on)
     else:
@@ -84,7 +84,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     await add_income_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                  f'{LexiconRu.waiting_number}')
-    logger.info(f'{database}')
+    user_hand_logger.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
@@ -119,7 +119,7 @@ async def process_expenses_categories(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                  f'{LexiconRu.waiting_number}')
-    logger.info(f'{database}')
+    user_hand_logger.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
