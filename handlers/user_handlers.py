@@ -40,7 +40,7 @@ async def cmd_help(msg: Message, state: FSMContext):
                              reply_markup=kb_income_categories)
         case FSMMakeTransaction.select_expenses:
             await msg.answer(LexiconRu.help_state_categories,
-                             kb_expenses_categories)
+                             reply_markup=kb_expenses_categories)
         case _:
             await msg.answer(LexiconRu.help_default_state)
 
