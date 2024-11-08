@@ -11,7 +11,7 @@ from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
                                  kb_gain_categories)
 from filters.filters import IsNumber
-from lexicon.lexicon_ru import EXPENSES_CATEGORIES, GAIN_CATEGORIES, LexiconRu
+from lexicon.lexicon_ru import EXPENSES_CATEGORIES, INCOME_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
 from utils.utils import add_expenses_in_db, add_income_in_db
 
@@ -79,7 +79,7 @@ async def invalid_select_direction(msg: Message):
 
 # income_select_category
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_income),
-                            F.data.in_(GAIN_CATEGORIES))
+                            F.data.in_(INCOME_CATEGORIES))
 async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     await add_income_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'

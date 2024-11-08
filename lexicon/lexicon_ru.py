@@ -47,7 +47,7 @@ class Categories:
 # collect into dataclass Categories
 DIRECTION: dict[str, str] = {'income': 'Доходы', 'expenses': 'Расходы'}
 
-GAIN_CATEGORIES: dict[str, str] = {
+INCOME_CATEGORIES: dict[str, str] = {
         'salary': 'Зарплата',
         'other': 'Иное',
         'prepayment': 'Аванс',
