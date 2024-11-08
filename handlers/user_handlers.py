@@ -11,9 +11,9 @@ from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
                                  kb_gain_categories)
 from filters.filters import IsNumber
-from lexicon.lexicon_ru import GAIN_CATEGORIES, LexiconRu, EXPENSES_CATEGORIES
+from lexicon.lexicon_ru import EXPENSES_CATEGORIES, GAIN_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
-from utils.utils import add_income_in_db, add_expenses_in_db
+from utils.utils import add_expenses_in_db, add_income_in_db
 
 logger = logging.getLogger(__name__)
 user_router = Router()
@@ -60,6 +60,7 @@ async def button_press_income(
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_income)
 
+
 # invalid_direction
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
 async def invalid_select_direction(msg: Message):
@@ -77,11 +78,11 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
+
 # invalid_category
 @user_router.message(StateFilter(FSMMakeTransaction.select_income))
 async def invalid_income_categories(msg: Message):
-    await msg.answer(text='Выберите категорию',
-                     reply_markup=kb_gain_categories)
+    await msg.answer(text='Выберите категорию', reply_markup=kb_gain_categories)
 
 
 # select_direction_expenses
@@ -94,11 +95,12 @@ async def button_press_expenses(
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_expenses)
 
+
 # invalid_direction
 @user_router.message(StateFilter(FSMMakeTransaction.select_direction))
 async def invalid_select_direction(msg: Message):
-    await msg.answer(text=LexiconRu.select_direction,
-                     reply_markup=kb_direction)
+    await msg.answer(text=LexiconRu.select_direction, reply_markup=kb_direction)
+
 
 # expenses_select_category
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_expenses),
@@ -110,6 +112,7 @@ async def process_expenses_categories(clbk: CallbackQuery, state: FSMContext):
     logger.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
+
 
 # invalid_expenses
 @user_router.message(StateFilter(FSMMakeTransaction.select_expenses))
