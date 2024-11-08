@@ -44,6 +44,7 @@ async def cmd_help(msg: Message, state: FSMContext):
         case _:
             await msg.answer(LexiconRu.help_default_state)
 
+
 # not default_state -> cancel
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
 async def process_cancel_command_state(
@@ -100,7 +101,8 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
 # invalid_category
 @user_router.message(StateFilter(FSMMakeTransaction.select_income))
 async def invalid_income_categories(msg: Message):
-    await msg.answer(text='Выберите категорию', reply_markup=kb_income_categories)
+    await msg.answer(text='Выберите категорию',
+                     reply_markup=kb_income_categories)
 
 
 # select_direction_expenses
