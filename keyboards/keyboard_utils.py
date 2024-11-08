@@ -1,6 +1,11 @@
+import logging
+
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 from lexicon.lexicon_ru import BUTTONS
+
+kb_logger = logging.getLogger(__name__)
 
 def create_inline_kb(
         width: int, *args: str, **kwargs: str) -> InlineKeyboardMarkup:

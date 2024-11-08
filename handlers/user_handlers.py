@@ -15,7 +15,7 @@ from lexicon.lexicon_ru import EXPENSES_CATEGORIES, INCOME_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
 from utils.utils import add_expenses_in_db, add_income_in_db
 
-logger = logging.getLogger(__name__)
+user_hand_logger = logging.getLogger(__name__)
 user_router = Router()
 
 

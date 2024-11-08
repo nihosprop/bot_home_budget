@@ -5,7 +5,7 @@ from aiogram import Router
 from lexicon.lexicon_ru import LexiconRu
 
 
-logger = logging.getLogger(__name__)
+other_hand_logger = logging.getLogger(__name__)
 other_router = Router()
 
 @other_router.message()
