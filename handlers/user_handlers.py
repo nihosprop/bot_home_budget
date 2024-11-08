@@ -9,7 +9,7 @@ from aiogram.fsm.context import FSMContext
 from database.db import database
 from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
-                                 kb_gain_categories)
+                                 kb_income_categories)
 from filters.filters import IsNumber
 from lexicon.lexicon_ru import EXPENSES_CATEGORIES, INCOME_CATEGORIES, LexiconRu
 from states.states import FSMMakeTransaction
@@ -28,13 +28,21 @@ async def cmd_start(msg: Message, state: FSMContext):
 
 @user_router.message(F.text == '/help')
 async def cmd_help(msg: Message, state: FSMContext):
-    stt = await state.get_state()
-    user_hand_logger.info(f'{stt=}')
-    if stt:
-        await msg.answer(LexiconRu.state_is_on)
-    else:
-        await msg.answer(LexiconRu.state_is_off)
 
+    match await state.get_state():
+        case FSMMakeTransaction.fill_number:
+            await msg.answer(LexiconRu.help_state_fill_number)
+        case FSMMakeTransaction.select_direction:
+            await msg.answer(LexiconRu.help_state_direction,
+                             reply_markup=kb_direction)
+        case FSMMakeTransaction.select_income:
+            await msg.answer(LexiconRu.help_state_categories,
+                             reply_markup=kb_income_categories)
+        case FSMMakeTransaction.select_expenses:
+            await msg.answer(LexiconRu.help_state_categories,
+                             kb_expenses_categories)
+        case _:
+            await msg.answer(LexiconRu.help_default_state)
 
 # not default_state -> cancel
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
@@ -66,7 +74,7 @@ async def sent_invalid_number(msg: Message):
 async def button_press_income(
         clbk: CallbackQuery, state: FSMContext):
     await clbk.message.edit_text(LexiconRu.select_category,
-                                 reply_markup=kb_gain_categories)
+                                 reply_markup=kb_income_categories)
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_income)
 
@@ -92,7 +100,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
 # invalid_category
 @user_router.message(StateFilter(FSMMakeTransaction.select_income))
 async def invalid_income_categories(msg: Message):
-    await msg.answer(text='Выберите категорию', reply_markup=kb_gain_categories)
+    await msg.answer(text='Выберите категорию', reply_markup=kb_income_categories)
 
 
 # select_direction_expenses
