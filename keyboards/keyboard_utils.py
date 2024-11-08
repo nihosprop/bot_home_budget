@@ -7,18 +7,31 @@ def create_inline_kb(
     """Generates inline keyboards on the fly"""
 
     kb_builder = InlineKeyboardBuilder()
-    buttons: list[InlineKeyboardButton] = []
+    big_text: list[InlineKeyboardButton] = []
+    small_text: list[InlineKeyboardButton] = []
 
     if args:
         for button in args:
-            buttons.append(InlineKeyboardButton(text=BUTTONS[button] if
-            BUTTONS.get(button) else button, callback_data=button))
+            if len(button) > 16:
+                big_text.append(InlineKeyboardButton(text=BUTTONS[
+                    button] if BUTTONS.get(button) else button,
+                                                     callback_data=button))
+            else:
+                small_text.append(InlineKeyboardButton(text=BUTTONS[
+                    button] if BUTTONS.get(button) else button,
+                                                       callback_data=button))
 
     if kwargs:
         for button, text in kwargs.items():
-            buttons.append(InlineKeyboardButton(text=text, callback_data=button))
+            if len(text) > 16:
+                big_text.append(InlineKeyboardButton(text=text,
+                                                     callback_data=button))
+            else:
+                small_text.append(InlineKeyboardButton(text=text,
+                                                     callback_data=button))
 
-    kb_builder.row(*buttons, width=width)
+    kb_builder.row(*small_text, width=width)
+    kb_builder.row(*big_text, width=1)
     kb_builder.row(InlineKeyboardButton(text=BUTTONS['cancel'],
                                         callback_data='/cancel'))
     return kb_builder.as_markup()
