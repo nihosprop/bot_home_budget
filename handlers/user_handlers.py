@@ -26,6 +26,16 @@ async def cmd_start(msg: Message, state: FSMContext):
     await state.set_state(FSMMakeTransaction.fill_number)
 
 
+@user_router.message(F.text == '/help')
+async def cmd_help(msg: Message, state: FSMContext):
+    stt = await state.get_state()
+    logger.info(f'{stt=}')
+    if stt:
+        await msg.answer(LexiconRu.state_is_on)
+    else:
+        await msg.answer(LexiconRu.state_is_off)
+
+
 # not default_state -> cancel
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
 async def process_cancel_command_state(
