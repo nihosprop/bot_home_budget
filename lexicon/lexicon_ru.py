@@ -21,6 +21,7 @@ class LexiconRu:
     select_subcategory: str = 'Выберите под-категорию'
     transaction_recorded: str = 'Транзакция записана!'
     waiting_number: str = 'Ожидаю ввод суммы…'
+    problems: str = 'Что-то пошло не так. Нажмите\n/start'
 
 
 @dataclass
