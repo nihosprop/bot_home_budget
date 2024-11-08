@@ -1,14 +1,13 @@
 import logging
 from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
-from database.db import database
+from database.db import database as db
 
 
 logger = logging.getLogger(__name__)
 
 async def add_income_in_db(clbk: CallbackQuery,
-                           state: FSMContext,
-                           db=database):
+                           state: FSMContext):
     category = clbk.data
     user_id = str(clbk.from_user.id)
     data = await state.get_data()
@@ -18,8 +17,7 @@ async def add_income_in_db(clbk: CallbackQuery,
             db[user_id]['income'].setdefault(category, 0) + amount)
 
 async def add_expenses_in_db(clbk: CallbackQuery,
-                           state: FSMContext,
-                           db=database):
+                           state: FSMContext):
     category = clbk.data
     user_id = str(clbk.from_user.id)
     data = await state.get_data()
