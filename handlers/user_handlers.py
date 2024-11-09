@@ -54,6 +54,13 @@ async def process_cancel_command_state(
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
+# default_state -> cancel
+@user_router.callback_query(F.data == '/cancel', StateFilter(default_state))
+async def cmd_cancel_in_state(clbk: CallbackQuery):
+    await clbk.message.delete()
+    await clbk.message.answer(f'Сейчас вам нечего отменять.\n'
+                              f'{LexiconRu.await_start}')
+    await clbk.answer()
 
 # state fill_number
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number), IsNumber())
