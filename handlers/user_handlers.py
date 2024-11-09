@@ -47,7 +47,7 @@ async def cmd_help(msg: Message, state: FSMContext):
 
 # not default_state -> cancel
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
-async def process_cancel_command_state(
+async def cmd_cancel_in_state(
         clbk: CallbackQuery, state: FSMContext):
     await clbk.message.delete()
     await clbk.message.answer(LexiconRu.waiting_number)
@@ -58,7 +58,7 @@ async def process_cancel_command_state(
 @user_router.callback_query(F.data == '/cancel', StateFilter(default_state))
 async def cmd_cancel_in_state(clbk: CallbackQuery):
     await clbk.message.delete()
-    await clbk.message.answer(f'Сейчас вам нечего отменять.\n'
+    await clbk.message.answer(f'Сейчас нечего отменять.\n'
                               f'{LexiconRu.await_start}')
     await clbk.answer()
 
@@ -143,6 +143,6 @@ async def process_expenses_categories(clbk: CallbackQuery, state: FSMContext):
 
 # invalid_expenses
 @user_router.message(StateFilter(FSMMakeTransaction.select_expenses))
-async def invalid_income_categories(msg: Message):
+async def invalid_expenses_categories(msg: Message):
     await msg.answer(text=LexiconRu.select_category,
                      reply_markup=kb_expenses_categories)
