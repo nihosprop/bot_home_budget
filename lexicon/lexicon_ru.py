@@ -70,8 +70,6 @@ EXPENSES_CATEG_BUTT: dict[str, str] = {
         'household_expenses': 'Бытовые расходы',
         'debts': 'Задолженности'}
 
-PRODUCTS = {'products': 'Продукты', 'alcohol': 'Алкоголь'}
-FEEDING = {'restaurant': 'Ресторан', 'cafe': 'Кафе', 'canteen': 'Столовая'}
 SUPERMARKET_BUTT = {'products': 'Продукты', 'alcohol': 'Алкоголь'}
 FEEDING_BUTT = {'restaurant': 'Ресторан', 'cafe': 'Кафе', 'canteen': 'Столовая'}
 
