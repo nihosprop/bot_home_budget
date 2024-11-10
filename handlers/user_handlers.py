@@ -9,9 +9,13 @@ from aiogram.fsm.context import FSMContext
 from database.db import database
 from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
-                                 kb_income_categories)
+                                 kb_income_categories,
+                                 kbs_for_expenses)
 from filters.filters import IsNumber
-from lexicon.lexicon_ru import EXPENSES_CATEGORIES, INCOME_CATEGORIES, LexiconRu
+from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
+                                EXPENSE_SUBCATEGORY_BUTTONS,
+                                INCOME_CATEG_BUTT,
+                                LexiconRu)
 from states.states import FSMMakeTransaction
 from utils.utils import add_expenses_in_db, add_income_in_db
 
