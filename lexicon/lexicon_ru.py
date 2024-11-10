@@ -46,9 +46,9 @@ class Categories:
 
 
 # collect into dataclass Categories
-DIRECTION: dict[str, str] = {'income': 'Доходы', 'expenses': 'Расходы'}
+DIRECTION_BUTT: dict[str, str] = {'income': 'Доходы', 'expenses': 'Расходы'}
 
-INCOME_CATEGORIES: dict[str, str] = {
+INCOME_CATEG_BUTT: dict[str, str] = {
         'salary': 'Зарплата',
         'other': 'Иное',
         'prepayment': 'Аванс',
@@ -56,7 +56,7 @@ INCOME_CATEGORIES: dict[str, str] = {
         'dividends': 'Дивиденды',
         'temporary_work': 'Подработка'}
 
-EXPENSES_CATEGORIES: dict[str, str] = {
+EXPENSES_CATEG_BUTT: dict[str, str] = {
         'supermarket': 'Супермаркет',
         'feeding': 'Питание',
         'transport': 'Транспорт',
@@ -66,12 +66,14 @@ EXPENSES_CATEGORIES: dict[str, str] = {
         'education': 'Образование',
         'clothing_and_accessories': 'Одежда и аксессуары',
         'pets': 'Домашние животные',
-        'other_expenses': 'Прочие расходы',
+        'misc_expenses': 'Прочие расходы',
         'household_expenses': 'Бытовые расходы',
-        'arrears': 'Задолженности'}
+        'debts': 'Задолженности'}
 
 PRODUCTS = {'products': 'Продукты', 'alcohol': 'Алкоголь'}
 FEEDING = {'restaurant': 'Ресторан', 'cafe': 'Кафе', 'canteen': 'Столовая'}
+SUPERMARKET_BUTT = {'products': 'Продукты', 'alcohol': 'Алкоголь'}
+FEEDING_BUTT = {'restaurant': 'Ресторан', 'cafe': 'Кафе', 'canteen': 'Столовая'}
 
 BUTTONS: dict[str, str] = {'cancel': '❌ОТМЕНА'}
 
@@ -96,14 +98,7 @@ MAP = """
 
 3. Транспорт
     — Личный
-        — Топливо
-        — Ремонт и обслуживание
     — Общественный
-        — Автобус
-        — Метро
-        — Такси
-        — Трамвай
-        — Поезд
 
 4. Коммуналка
     — Квартплата

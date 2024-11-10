@@ -3,8 +3,7 @@ from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 from database.db import database as db
 
-
-logger = logging.getLogger(__name__)
+logger_utils = logging.getLogger(__name__)
 
 async def add_income_in_db(clbk: CallbackQuery,
                            state: FSMContext):
