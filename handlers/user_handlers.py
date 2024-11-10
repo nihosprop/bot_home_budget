@@ -135,10 +135,3 @@ async def process_expenses_categories(clbk: CallbackQuery, state: FSMContext):
     user_hand_logger.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
-
-
-# invalid_expenses
-@user_router.message(StateFilter(FSMMakeTransaction.select_expenses))
-async def invalid_expenses_categories(msg: Message):
-    await msg.answer(text=LexiconRu.select_category,
-                     reply_markup=kb_expenses_categories)
