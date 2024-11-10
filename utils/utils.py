@@ -20,10 +20,7 @@ async def add_expenses_in_db(clbk: CallbackQuery,
 
     user_id = str(clbk.from_user.id)
 
-    logger_utils.info(f'{clbk.data=}')
-
     data = await state.get_data()
-
     logger_utils.info(f'{data=}')
 
     amount = data['amount']

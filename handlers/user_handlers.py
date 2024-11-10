@@ -153,7 +153,6 @@ async def invalid_expenses_categories(msg: Message):
                                         F.data.in_(
                                                 EXPENSE_SUBCATEGORY_BUTTONS.values())))
 async def press_market_category(clbk: CallbackQuery, state: FSMContext):
-    await state.update_data(subcategory=clbk.data)
     await add_expenses_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                  f'{LexiconRu.waiting_number}')
