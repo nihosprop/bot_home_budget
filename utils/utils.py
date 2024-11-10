@@ -17,10 +17,20 @@ async def add_income_in_db(clbk: CallbackQuery,
 
 async def add_expenses_in_db(clbk: CallbackQuery,
                            state: FSMContext):
-    category = clbk.data
+
     user_id = str(clbk.from_user.id)
+
+    logger_utils.info(f'{clbk.data=}')
+
     data = await state.get_data()
+
+    logger_utils.info(f'{data=}')
+
     amount = data['amount']
+    category = data['category']
+    subcategory = clbk.data
+
     db.setdefault(user_id, {'income': {}, 'expenses': {}})
-    db[user_id]['expenses'][category] = (
-            db[user_id]['expenses'].setdefault(category, 0) + amount)
+    db[user_id]['expenses'][category][subcategory] = (
+            db[user_id]['expenses'].setdefault(category, {}).setdefault(
+                    subcategory, 0) + amount)
