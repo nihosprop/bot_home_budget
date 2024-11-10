@@ -15,7 +15,7 @@ from filters.filters import IsNumber
 from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
                                 EXPENSE_SUBCATEGORY_BUTTONS,
                                 INCOME_CATEG_BUTT,
-                                LexiconRu)
+                                LexiconRu, MAP)
 from states.states import FSMMakeTransaction
 from utils.utils import add_expenses_in_db, add_income_in_db
 
@@ -66,6 +66,12 @@ async def cmd_cancel_in_state(clbk: CallbackQuery):
     await clbk.message.answer(f'Сейчас нечего отменять.\n'
                               f'{LexiconRu.await_start}')
     await clbk.answer()
+
+
+# cmd_categories
+@user_router.message(F.text == '/category')
+async def cmd_categories(msg: Message):
+    await msg.answer(f'<code>{MAP}</code>')
 
 
 # state fill_number
