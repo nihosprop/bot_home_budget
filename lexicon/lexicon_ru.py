@@ -116,7 +116,6 @@ DEBTS_BUTT = {
         'mortgage': 'Ипотека',
         'borrowing': 'Займ'}
 
-BUTTONS: dict[str, str] = {'cancel': '❌ОТМЕНА'}
 EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
                                               **FEEDING_BUTT,
                                               **TRANSPORT_BUTT, **DEBTS_BUTT,
@@ -129,6 +128,7 @@ EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
                                               **ENTERTAINMENT_BUTT,
                                               **UTILITIES_BUTT)
 
+CANCEL_BUTT: dict[str, str] = {'cancel': '❌ОТМЕНА'}
 
 MAP = """
 Доходы:
