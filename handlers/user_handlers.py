@@ -140,6 +140,20 @@ async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_subcategory)
 
+
+# invalid select expenses
+@user_router.message(StateFilter(FSMMakeTransaction.select_expenses))
+async def invalid_expenses_categories(msg: Message):
+    await msg.answer(text=LexiconRu.select_category,
+                     reply_markup=kb_expenses_categories)
+
+
+# select subcategories
+@user_router.callback_query(StateFilter(FSMMakeTransaction.select_subcategory,
+                                        F.data.in_(
+                                                EXPENSE_SUBCATEGORY_BUTTONS.values())))
+async def press_market_category(clbk: CallbackQuery, state: FSMContext):
+    await state.update_data(subcategory=clbk.data)
     await add_expenses_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                  f'{LexiconRu.waiting_number}')
