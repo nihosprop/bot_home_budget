@@ -72,8 +72,63 @@ EXPENSES_CATEG_BUTT: dict[str, str] = {
 
 SUPERMARKET_BUTT = {'products': 'Продукты', 'alcohol': 'Алкоголь'}
 FEEDING_BUTT = {'restaurant': 'Ресторан', 'cafe': 'Кафе', 'canteen': 'Столовая'}
+TRANSPORT_BUTT = {'personal': 'Личный', 'public': 'Общественный'}
+UTILITIES_BUTT = {
+        'rent': 'Квартплата',
+        'electricity': 'Электричество',
+        'internet': 'Интернет',
+        'mobile': 'Моб связь',
+        'housing_rent': 'Аренда жилья',
+        'repair_maintenance': 'Обслуживание и ремонт'}
+ENTERTAINMENT_BUTT = {
+        'cinema_theater': 'Кино и театр',
+        'hobbies': 'Хобби',
+        'flights': 'Авиабилеты',
+        'car_rental': 'Аренда авто',
+        'travel_packages': 'Путевки'}
+HEALTH_BEAUTY_BUTT = {
+        'medical_services': 'Мед услуги',
+        'fitness': 'Фитнес',
+        'self_care': 'Уход за собой'}
+EDUCATION_BUTT = {
+        'courses_training': 'Курсы и обучение',
+        'books_materials': 'Книги и материалы',
+        'child_education': 'Детское образование'}
+CLOTHING_ACCESSORIES_BUTT = {'clothing': 'Одежда', 'accessories': 'Аксессуары'}
+PETS_BUTT = {
+        'food': 'Корм',
+        'medical_expenses': 'Медицинские расходы',
+        'accessories_toys': 'Аксессуары и игрушки',
+        'grooming': 'Груминг'}
+MISC_EXPENSES_BUTT = {
+        'gifts': 'Подарки',
+        'donations': 'Пожертвования',
+        'investing': 'Инвестинг'}
+HOUSEHOLD_NEEDS_BUTT = {
+        'dry_cleaning': 'Химчистка',
+        'home_goods': 'Товары для дома',
+        'household_chemicals': 'Бытовая химия',
+        'electronics': 'Техника и электроника',
+        'plumbing': 'Сантехника'}
+DEBTS_BUTT = {
+        'loan': 'Кредит',
+        'installment': 'Рассрочка',
+        'mortgage': 'Ипотека',
+        'borrowing': 'Займ'}
 
 BUTTONS: dict[str, str] = {'cancel': '❌ОТМЕНА'}
+EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
+                                              **FEEDING_BUTT,
+                                              **TRANSPORT_BUTT, **DEBTS_BUTT,
+                                              **HOUSEHOLD_NEEDS_BUTT,
+                                              **MISC_EXPENSES_BUTT,
+                                              **PETS_BUTT,
+                                              **CLOTHING_ACCESSORIES_BUTT,
+                                              **EDUCATION_BUTT,
+                                              **HEALTH_BEAUTY_BUTT,
+                                              **ENTERTAINMENT_BUTT,
+                                              **UTILITIES_BUTT)
+
 
 MAP = """
 Доходы:
