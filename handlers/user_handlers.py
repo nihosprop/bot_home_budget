@@ -131,8 +131,15 @@ async def invalid_select_direction(msg: Message):
 
 # select_expenses
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_expenses),
-                            F.data.in_(EXPENSES_CATEGORIES))
-async def process_expenses_categories(clbk: CallbackQuery, state: FSMContext):
+                            F.data.in_(EXPENSES_CATEG_BUTT))
+async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
+    category = clbk.data
+    await state.update_data(category=category)
+    await clbk.message.edit_text('Выберите категорию',
+                                 reply_markup=kbs_for_expenses[category])
+    await clbk.answer()
+    await state.set_state(FSMMakeTransaction.select_subcategory)
+
     await add_expenses_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                  f'{LexiconRu.waiting_number}')
