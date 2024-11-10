@@ -20,6 +20,27 @@ kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)
 kb_direction = create_inline_kb(2, **DIRECTION_BUTT)
 kb_expenses_categories = create_inline_kb(2, **EXPENSES_CATEG_BUTT)
 
-kb_income_categories = create_inline_kb(3, **INCOME_CATEGORIES)
-kb_direction = create_inline_kb(2, **DIRECTION)
-kb_expenses_categories = create_inline_kb(2, **EXPENSES_CATEGORIES)
+kb_supermarket = create_inline_kb(2, **SUPERMARKET_BUTT)
+kb_feeding = create_inline_kb(2, **FEEDING_BUTT)
+kb_transport = create_inline_kb(2, **TRANSPORT_BUTT)
+kb_utility_payments = create_inline_kb(2, **UTILITIES_BUTT)
+kb_entertainment = create_inline_kb(2, **ENTERTAINMENT_BUTT)
+kb_health = create_inline_kb(2, **HEALTH_BEAUTY_BUTT)
+kb_education = create_inline_kb(2, **EDUCATION_BUTT)
+kb_pets = create_inline_kb(2, **PETS_BUTT)
+kb_misc = create_inline_kb(2, **MISC_EXPENSES_BUTT)
+kb_household = create_inline_kb(2, **HOUSEHOLD_NEEDS_BUTT)
+kb_debts = create_inline_kb(2, **DEBTS_BUTT)
+
+kbs_for_expenses: dict[str, InlineKeyboardMarkup] = {
+        'supermarket': kb_supermarket,
+        'feeding': kb_feeding,
+        'transport': kb_transport,
+        'utility_payments': kb_utility_payments,
+        'entertainment_and_relaxation': kb_entertainment,
+        'health_and_beauty': kb_health,
+        'education': kb_education,
+        'pets': kb_pets,
+        'misc_expenses': kb_misc,
+        'household_expenses': kb_household,
+        'debts': kb_debts}
