@@ -17,7 +17,6 @@ async def add_income_in_db(clbk: CallbackQuery,
 
 async def add_expenses_in_db(clbk: CallbackQuery,
                            state: FSMContext):
-
     user_id = str(clbk.from_user.id)
 
     data = await state.get_data()
