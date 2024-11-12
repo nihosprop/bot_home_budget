@@ -14,7 +14,7 @@ from lexicon.lexicon_ru import (DIRECTION_BUTT,
                                 PETS_BUTT,
                                 MISC_EXPENSES_BUTT,
                                 HOUSEHOLD_NEEDS_BUTT,
-                                DEBTS_BUTT)
+                                DEBTS_BUTT, CLOTHING_ACCESSORIES_BUTT)
 
 kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)
 kb_direction = create_inline_kb(2, **DIRECTION_BUTT)
@@ -31,6 +31,7 @@ kb_pets = create_inline_kb(2, **PETS_BUTT)
 kb_misc = create_inline_kb(2, **MISC_EXPENSES_BUTT)
 kb_household = create_inline_kb(2, **HOUSEHOLD_NEEDS_BUTT)
 kb_debts = create_inline_kb(2, **DEBTS_BUTT)
+kb_clothing = create_inline_kb(2, **CLOTHING_ACCESSORIES_BUTT)
 
 kbs_for_expenses: dict[str, InlineKeyboardMarkup] = {
         'supermarket': kb_supermarket,
@@ -43,4 +44,5 @@ kbs_for_expenses: dict[str, InlineKeyboardMarkup] = {
         'pets': kb_pets,
         'misc_expenses': kb_misc,
         'household_expenses': kb_household,
+        'clothing_and_accessories': kb_clothing,
         'debts': kb_debts}
