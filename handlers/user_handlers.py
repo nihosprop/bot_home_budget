@@ -45,6 +45,7 @@ async def cmd_help(msg: Message, state: FSMContext):
         case FSMMakeTransaction.select_expenses:
             await msg.answer(LexiconRu.help_state_categories,
                              reply_markup=kb_expenses_categories)
+
         case _:
             await msg.answer(LexiconRu.help_default_state)
 
@@ -139,6 +140,7 @@ async def invalid_select_direction(msg: Message):
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_expenses),
                             F.data.in_(EXPENSES_CATEG_BUTT))
 async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
+
     category = clbk.data
     await state.update_data(category=category)
     await clbk.message.edit_text('Выберите категорию',
@@ -165,3 +167,12 @@ async def press_market_category(clbk: CallbackQuery, state: FSMContext):
     user_hand_logger.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
+
+
+# invalid select subcategory
+@user_router.message(StateFilter(FSMMakeTransaction.select_subcategory))
+async def invalid_subcategory(msg: Message, state: FSMContext):
+    data = await state.get_data()
+    markup = data.get('category')
+    await msg.answer(LexiconRu.await_categories,
+                     reply_markup=kbs_for_expenses[markup])
