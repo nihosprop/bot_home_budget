@@ -16,4 +16,5 @@ async def other_message(msg: Message):
 @other_router.callback_query()
 async def other_clbk(clbk: CallbackQuery):
     await clbk.message.delete()
-    await clbk.message.answer('Запустите бота -> /start')
+    await clbk.answer('Запустите бота\n'
+                      'Меню -> /start', show_alert=True)
