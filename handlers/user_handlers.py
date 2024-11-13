@@ -94,8 +94,10 @@ async def sent_invalid_number(msg: Message):
                             F.data == 'income')
 async def button_press_income(
         clbk: CallbackQuery, state: FSMContext):
-    await clbk.message.edit_text(LexiconRu.select_category,
+    value = await clbk.message.edit_text(LexiconRu.select_category,
                                  reply_markup=kb_income_categories)
+    msg_id = value.message_id
+    await state.update_data(msg_id=msg_id)
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_income)
 
@@ -114,9 +116,16 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
 
 # invalid_category
 @user_router.message(StateFilter(FSMMakeTransaction.select_income))
-async def invalid_income_categories(msg: Message):
-    await msg.answer(text='Выберите категорию',
+async def invalid_income_category(msg: Message, state: FSMContext):
+    msg_id = dict(await state.get_data()).get('msg_id')
+
+    if msg_id:
+        await msg.bot.delete_message(chat_id=msg.chat.id, message_id=msg_id)
+
+    value = await msg.answer(text='Выберите категорию',
                      reply_markup=kb_income_categories)
+    msg_id = value.message_id
+    await state.update_data(msg_id=msg_id)
 
 
 # expenses_click
