@@ -86,7 +86,8 @@ async def process_number_sent(
 
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number))
 async def sent_invalid_number(msg: Message):
-    await msg.answer(f'{LexiconRu.other_message}')
+    await msg.delete()
+    # await msg.answer(f'{LexiconRu.other_message}')
 
 
 # select_income_direction

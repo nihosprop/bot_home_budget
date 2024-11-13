@@ -24,7 +24,7 @@ class LexiconRu:
     select_direction: str = 'Выберите направление'
     select_category: str = 'Выберите категорию'
     select_subcategory: str = 'Выберите под-категорию'
-    transaction_recorded: str = 'Транзакция записана!'
+    transaction_recorded: str = 'Транзакция записана!✅'
     waiting_number: str = 'Ожидаю ввод суммы…'
     problems: str = ('Что-то пошло не так\n'
                      'Нажмите: /start')
