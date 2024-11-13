@@ -15,7 +15,8 @@ from filters.filters import IsNumber
 from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
                                 EXPENSE_SUBCATEGORY_BUTTONS,
                                 INCOME_CATEG_BUTT,
-                                LexiconRu, MAP)
+                                LexiconRu,
+                                MAP)
 from states.states import FSMMakeTransaction
 from utils.utils import add_expenses_in_db, add_income_in_db
 
@@ -88,7 +89,7 @@ async def sent_invalid_number(msg: Message):
     await msg.answer(f'{LexiconRu.other_message}')
 
 
-# select_direction_income
+# select_income_direction
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
                             F.data == 'income')
 async def button_press_income(
