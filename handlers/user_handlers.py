@@ -61,12 +61,11 @@ async def cmd_cancel_in_state(
 
 
 # default_state -> cancel
-@user_router.callback_query(F.data == '/cancel', StateFilter(default_state))
-async def cmd_cancel_in_state(clbk: CallbackQuery):
-    await clbk.message.delete()
-    await clbk.message.answer(f'Сейчас нечего отменять.\n'
-                              f'{LexiconRu.await_start}')
-    await clbk.answer()
+@user_router.message(F.text == '/cancel', StateFilter(default_state))
+async def cmd_cancel_in_state(msg: Message):
+    await msg.delete()
+    await msg.answer(f'Сейчас нечего отменять.\n'
+                     f'{LexiconRu.await_start}')
 
 
 # cmd_categories
