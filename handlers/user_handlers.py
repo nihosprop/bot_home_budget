@@ -20,7 +20,7 @@ from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
 from states.states import FSMMakeTransaction
 from utils.utils import add_expenses_in_db, add_income_in_db
 
-user_hand_logger = logging.getLogger(__name__)
+logger_user_hand = logging.getLogger(__name__)
 user_router = Router()
 
 

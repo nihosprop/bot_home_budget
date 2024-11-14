@@ -5,7 +5,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from lexicon.lexicon_ru import CANCEL_BUTT
 
-kb_logger = logging.getLogger(__name__)
+logger_kb_utils = logging.getLogger(__name__)
 
 def create_inline_kb(
         width: int, *args: str, **kwargs: str) -> InlineKeyboardMarkup:

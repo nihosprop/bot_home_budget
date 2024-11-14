@@ -1,5 +1,7 @@
 from dataclasses import dataclass
+import logging
 
+logger_lexicon = logging.getLogger(__name__)
 
 @dataclass
 class LexiconCommandsRu:

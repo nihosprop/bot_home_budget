@@ -9,7 +9,7 @@ from keyboards.set_menu import set_main_menu
 from handlers import other_handlers, user_handlers
 
 
-logger = logging.getLogger(__name__)
+logger_main = logging.getLogger(__name__)
 storage = MemoryStorage()
 
 async def main():
@@ -18,7 +18,7 @@ async def main():
                                '[%(asctime)s] - %(name)s - %(message)s',
                         datefmt='%Y.%m.%d %H:%M:%S')
 
-    logger.info('Start bot')
+    logger_main.info('Start bot')
 
     config: Config = load_config()
     bot = Bot(token=config.tg_bot.token,

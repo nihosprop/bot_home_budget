@@ -1,3 +1,4 @@
+import logging
 from aiogram.types import InlineKeyboardMarkup
 
 from keyboards.keyboard_utils import create_inline_kb
@@ -15,6 +16,8 @@ from lexicon.lexicon_ru import (DIRECTION_BUTT,
                                 MISC_EXPENSES_BUTT,
                                 HOUSEHOLD_NEEDS_BUTT,
                                 DEBTS_BUTT, CLOTHING_ACCESSORIES_BUTT)
+
+logger_keyboards = logging.getLogger(__name__)
 
 kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)
 kb_direction = create_inline_kb(2, **DIRECTION_BUTT)

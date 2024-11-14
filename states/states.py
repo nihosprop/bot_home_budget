@@ -1,5 +1,8 @@
+import logging
+
 from aiogram.fsm.state import StatesGroup, State
 
+logger_states = logging.getLogger(__name__)
 
 class FSMMakeTransaction(StatesGroup):
     fill_number = State()
