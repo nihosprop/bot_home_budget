@@ -8,6 +8,7 @@ class LexiconCommandsRu:
     start: str = 'Начало'
     help: str = 'Справка'
     category: str = 'Посмотреть категории'
+    report: str = 'Отчет по транзакциям'
 
 
 @dataclass
