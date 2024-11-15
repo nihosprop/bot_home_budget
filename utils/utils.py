@@ -10,6 +10,9 @@ from database.db import database as db
 
 logger_utils = logging.getLogger(__name__)
 
+async def add_user_in_db(msg: Message):
+    user_id = str(msg.from_user.id)
+    db.setdefault(user_id, {'income': {}, 'expenses': {}})
 
 async def add_income_in_db(
         clbk: CallbackQuery, state: FSMContext):
