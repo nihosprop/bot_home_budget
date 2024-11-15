@@ -110,7 +110,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     await add_income_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                  f'{LexiconRu.waiting_number}')
-    user_hand_logger.info(f'{database}')
+    logger_user_hand.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
@@ -174,7 +174,7 @@ async def press_market_category(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                  f'{LexiconRu.waiting_number}')
-    user_hand_logger.info(f'{database}')
+    logger_user_hand.info(f'{database}')
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
