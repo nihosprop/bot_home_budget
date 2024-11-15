@@ -18,7 +18,7 @@ from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
                                 LexiconRu,
                                 MAP)
 from states.states import FSMMakeTransaction
-from utils.utils import add_expenses_in_db, add_income_in_db
+from utils.utils import add_expenses_in_db, add_income_in_db, generate_fin_report
 
 logger_user_hand = logging.getLogger(__name__)
 user_router = Router()
@@ -30,6 +30,12 @@ async def cmd_start(msg: Message, state: FSMContext):
     await msg.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
 
+@user_router.message(F.text == '/report')
+async def cmd_report(msg: Message):
+    if database.get(str(msg.from_user.id)):
+        await msg.answer(await generate_fin_report(msg, database))
+    await msg.answer(f'Что-то пошло не так, или у вас еще нет истории '
+                     f'транзакций\n Нажмите <b>/start</b>')
 
 @user_router.message(F.text == '/help')
 async def cmd_help(msg: Message, state: FSMContext):
