@@ -10,6 +10,9 @@ from database.db import database as db
 
 logger_utils = logging.getLogger(__name__)
 
+async def remove_user_from_db(user_id: str):
+    db.pop(user_id)
+
 async def add_user_in_db(msg: Message):
     user_id = str(msg.from_user.id)
     db.setdefault(user_id, {'income': {}, 'expenses': {}})
