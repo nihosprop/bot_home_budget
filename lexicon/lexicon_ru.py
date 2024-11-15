@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 import logging
 
+from states.states import FSMMakeTransaction
+
 logger_lexicon = logging.getLogger(__name__)
 
 
@@ -136,6 +138,13 @@ EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
                                                    **UTILITIES_BUTT)
 
 CANCEL_BUTT: dict[str, str] = {'cancel': '❌ОТМЕНА'}
+
+TEXTS_FOR_STATES: dict[FSMMakeTransaction, str] = {
+        FSMMakeTransaction.fill_number: LexiconRu.await_amount,
+        FSMMakeTransaction.select_direction: LexiconRu.select_direction,
+        FSMMakeTransaction.select_expenses: LexiconRu.select_direction,
+        FSMMakeTransaction.select_income: LexiconRu.select_category,
+        FSMMakeTransaction.select_subcategory: LexiconRu.select_category}
 
 MAP = """
 Доходы:
