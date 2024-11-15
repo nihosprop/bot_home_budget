@@ -3,6 +3,7 @@ import logging
 
 logger_lexicon = logging.getLogger(__name__)
 
+
 @dataclass
 class LexiconCommandsRu:
     start: str = 'Запуск'
@@ -18,7 +19,7 @@ class LexiconRu:
                   ' категорию.')
     await_start = ('<b>Что-бы запустить бота нажмите:\n'
                    '-> /start</b>')
-    await_amount = '<b>Сейчас ожидается сумма…</b>'
+    await_amount = '<b>Ожидаю ввод суммы…</b>'
     await_direction = '<b>Сейчас ожидается выбор направления…</b>'
     await_categories = '<b>Сейчас ожидается выбор категории…</b>'
 
@@ -28,7 +29,6 @@ class LexiconRu:
     select_category: str = 'Выберите категорию'
     select_subcategory: str = 'Выберите под-категорию'
     transaction_recorded: str = 'Транзакция записана!✅'
-    waiting_number: str = 'Ожидаю ввод суммы…'
     problems: str = ('Что-то пошло не так\n'
                      'Нажмите: /start')
     help: str = (f'Бот находится в постоянном ожидании суммы(числа).\n'
@@ -123,23 +123,24 @@ DEBTS_BUTT = {
         'borrowing': 'Займ'}
 
 EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
-                                              **FEEDING_BUTT,
-                                              **TRANSPORT_BUTT, **DEBTS_BUTT,
-                                              **HOUSEHOLD_NEEDS_BUTT,
-                                              **MISC_EXPENSES_BUTT,
-                                              **PETS_BUTT,
-                                              **CLOTHING_ACCESSORIES_BUTT,
-                                              **EDUCATION_BUTT,
-                                              **HEALTH_BEAUTY_BUTT,
-                                              **ENTERTAINMENT_BUTT,
-                                              **UTILITIES_BUTT)
+                                                   **FEEDING_BUTT,
+                                                   **TRANSPORT_BUTT,
+                                                   **DEBTS_BUTT,
+                                                   **HOUSEHOLD_NEEDS_BUTT,
+                                                   **MISC_EXPENSES_BUTT,
+                                                   **PETS_BUTT,
+                                                   **CLOTHING_ACCESSORIES_BUTT,
+                                                   **EDUCATION_BUTT,
+                                                   **HEALTH_BEAUTY_BUTT,
+                                                   **ENTERTAINMENT_BUTT,
+                                                   **UTILITIES_BUTT)
 
 CANCEL_BUTT: dict[str, str] = {'cancel': '❌ОТМЕНА'}
 
 MAP = """
 Доходы:
   1.Зарплата
-  2.Аванс 
+  2.Аванс
   3.Иное
   4.Подработка
   5.Подарки 
