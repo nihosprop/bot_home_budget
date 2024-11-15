@@ -56,8 +56,8 @@ async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
 async def cmd_report(msg: Message):
     if database.get(str(msg.from_user.id)) is None:
         await add_user_in_db(msg)
-        await msg.answer(f'Что-то пошло не так, или у вас еще нет истории '
-                         f'транзакций\n Нажмите <b>/start</b>')
+        await msg.answer(f'У вас еще нет истории транзакций\n'
+                         f'Нажмите <b>/start</b>')
     else:
         await msg.answer(await generate_fin_report(msg, database))
 
