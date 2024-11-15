@@ -58,13 +58,13 @@ async def generate_fin_report(msg: Message, data: dict) -> str:
 
     for categ, value in monthly_income.items():
         report += f'  {INCOME_CATEG_BUTT[categ]}: {value}\n'
-    report += (f'------------------------\n'
-               f'<b>Расходы за месяц: {round(sum_expenses, 2)}<b>\n')
+    report += (f'<b>------------------------\n'
+               f'Расходы за месяц: {round(sum_expenses, 2)}</b>\n')
 
     for category, data in expenses.items():
         report += f'  {EXPENSES_CATEG_BUTT[category]}:\n'
         for subcategory, value in data.items():
             report += (f'    {EXPENSE_SUBCATEGORY_BUTTONS[subcategory]}: '
                        f'{value}\n')
-    report + '\nПришлите сумму…'
-    return report
+
+    return f'{report}\nОтправьте сумму👇'

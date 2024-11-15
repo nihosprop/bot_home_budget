@@ -5,7 +5,7 @@ logger_lexicon = logging.getLogger(__name__)
 
 @dataclass
 class LexiconCommandsRu:
-    start: str = 'Начало'
+    start: str = 'Запуск'
     help: str = 'Справка'
     category: str = 'Посмотреть категории'
     report: str = 'Отчет по транзакциям'
