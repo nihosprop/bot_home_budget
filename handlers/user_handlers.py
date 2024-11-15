@@ -10,6 +10,7 @@ from database.db import database
 from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
                                  kb_income_categories,
+                                 kb_yes_cancel,
                                  kbs_for_expenses)
 from filters.filters import IsNumber
 from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
@@ -18,8 +19,11 @@ from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
                                 LexiconRu,
                                 MAP)
 from states.states import FSMMakeTransaction
-from utils.utils import (add_expenses_in_db, add_income_in_db,
-                         generate_fin_report, add_user_in_db)
+from utils.utils import (add_expenses_in_db,
+                         add_income_in_db,
+                         add_user_in_db,
+                         generate_fin_report,
+                         remove_user_from_db)
 
 logger_user_hand = logging.getLogger(__name__)
 user_router = Router()
@@ -30,6 +34,23 @@ user_router = Router()
 async def cmd_start(msg: Message, state: FSMContext):
     await msg.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
+
+
+# remove user
+@user_router.message(F.text == '/delete_user')
+async def cmd_delete_user(msg: Message):
+    await msg.answer('Подтвердить удаление данных!', reply_markup=kb_yes_cancel)
+
+
+# confirm remove user
+@user_router.callback_query(F.data == 'yes')
+async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
+    user_id = str(clbk.from_user.id)
+    await remove_user_from_db(user_id)
+    await clbk.message.edit_text('Ваши данные удалены!✅\n'
+                                 'Нажмите <b>/start</b> что-бы начать')
+    await state.clear()
+
 
 @user_router.message(F.text == '/report')
 async def cmd_report(msg: Message):
