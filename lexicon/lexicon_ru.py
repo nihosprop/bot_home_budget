@@ -9,6 +9,7 @@ logger_lexicon = logging.getLogger(__name__)
 @dataclass
 class LexiconCommandsRu:
     start: str = 'Запуск'
+    delete_user: str = 'Стереть все данные'
     help: str = 'Справка'
     category: str = 'Посмотреть категории'
     report: str = 'Отчет по транзакциям'
@@ -16,6 +17,7 @@ class LexiconCommandsRu:
 
 @dataclass
 class LexiconRu:
+
     start: str = ('Это бот учета личных финансов.\n'
                   'Отправьте сумму(целое или вещественное число) и выберите'
                   ' категорию.')
@@ -138,6 +140,7 @@ EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
                                                    **UTILITIES_BUTT)
 
 CANCEL_BUTT: dict[str, str] = {'cancel': '❌ОТМЕНА'}
+YES_NO_BUTT: dict[str, str] = {'yes': '🗑️Удалить', '/cancel': 'Отмена'}
 
 TEXTS_FOR_STATES: dict[FSMMakeTransaction, str] = {
         FSMMakeTransaction.fill_number: LexiconRu.await_amount,
