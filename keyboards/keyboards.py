@@ -15,12 +15,16 @@ from lexicon.lexicon_ru import (DIRECTION_BUTT,
                                 PETS_BUTT,
                                 MISC_EXPENSES_BUTT,
                                 HOUSEHOLD_NEEDS_BUTT,
-                                DEBTS_BUTT, CLOTHING_ACCESSORIES_BUTT)
+                                DEBTS_BUTT,
+                                CLOTHING_ACCESSORIES_BUTT,
+                                YES_NO_BUTT)
 
 logger_keyboards = logging.getLogger(__name__)
 
-kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)
+kb_yes_cancel = create_inline_kb(2, cancel_butt=False, **YES_NO_BUTT)
+
 kb_direction = create_inline_kb(2, **DIRECTION_BUTT)
+kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)
 kb_expenses_categories = create_inline_kb(2, **EXPENSES_CATEG_BUTT)
 
 kb_supermarket = create_inline_kb(2, **SUPERMARKET_BUTT)
