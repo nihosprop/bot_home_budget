@@ -18,7 +18,8 @@ from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
                                 LexiconRu,
                                 MAP)
 from states.states import FSMMakeTransaction
-from utils.utils import add_expenses_in_db, add_income_in_db, generate_fin_report
+from utils.utils import (add_expenses_in_db, add_income_in_db,
+                         generate_fin_report, add_user_in_db)
 
 logger_user_hand = logging.getLogger(__name__)
 user_router = Router()
@@ -32,10 +33,12 @@ async def cmd_start(msg: Message, state: FSMContext):
 
 @user_router.message(F.text == '/report')
 async def cmd_report(msg: Message):
-    if database.get(str(msg.from_user.id)):
+    if database.get(str(msg.from_user.id)) is None:
+        await add_user_in_db(msg)
+        await msg.answer(f'Что-то пошло не так, или у вас еще нет истории '
+                         f'транзакций\n Нажмите <b>/start</b>')
+    else:
         await msg.answer(await generate_fin_report(msg, database))
-    await msg.answer(f'Что-то пошло не так, или у вас еще нет истории '
-                     f'транзакций\n Нажмите <b>/start</b>')
 
 @user_router.message(F.text == '/help')
 async def cmd_help(msg: Message, state: FSMContext):
@@ -86,14 +89,15 @@ async def cmd_categories(msg: Message):
 async def process_number_sent(
         msg: Message, state: FSMContext, number: dict[str, int | float]):
     await state.update_data(amount=number)
-    await msg.answer(LexiconRu.select_direction, reply_markup=kb_direction)
+    value = await msg.answer(LexiconRu.select_direction,
+                            reply_markup=kb_direction)
+    await state.update_data(msg_id_direction=value.message_id)
     await state.set_state(FSMMakeTransaction.select_direction)
 
-
+# invalid number
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number))
 async def sent_invalid_number(msg: Message):
     await msg.delete()
-    # await msg.answer(f'{LexiconRu.other_message}')
 
 
 # select_income_direction
@@ -103,13 +107,18 @@ async def button_press_income(
         clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.edit_text(LexiconRu.select_category,
                                  reply_markup=kb_income_categories)
-    msg_id = value.message_id
-    await state.update_data(msg_id=msg_id)
+    await state.update_data(msg_id_income_categ=value.message_id)
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_income)
 
 
-# income_select_category
+# invalid_direction
+@user_router.message(StateFilter(FSMMakeTransaction.select_direction))
+async def invalid_select_direction(msg: Message, state: FSMContext):
+    await msg.delete()
+
+
+# select_income_category
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_income),
                             F.data.in_(INCOME_CATEG_BUTT))
 async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
@@ -124,16 +133,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
 # invalid_category
 @user_router.message(StateFilter(FSMMakeTransaction.select_income))
 async def invalid_income_category(msg: Message, state: FSMContext):
-    msg_id = dict(await state.get_data()).get('msg_id')
-
-    if msg_id:
-        await msg.bot.delete_message(chat_id=msg.chat.id, message_id=msg_id)
-
-    value = await msg.answer(text='Выберите категорию',
-                     reply_markup=kb_income_categories)
-    msg_id = value.message_id
-    await state.update_data(msg_id=msg_id)
-
+    await msg.delete()
 
 # expenses_click
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
@@ -145,18 +145,10 @@ async def button_press_expenses(
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_expenses)
 
-
-# invalid_direction
-@user_router.message(StateFilter(FSMMakeTransaction.select_direction))
-async def invalid_select_direction(msg: Message):
-    await msg.answer(text=LexiconRu.select_direction, reply_markup=kb_direction)
-
-
 # select_expenses
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_expenses),
                             F.data.in_(EXPENSES_CATEG_BUTT))
 async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
-
     category = clbk.data
     await state.update_data(category=category)
     await clbk.message.edit_text('Выберите категорию',
@@ -168,8 +160,7 @@ async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
 # invalid select expenses
 @user_router.message(StateFilter(FSMMakeTransaction.select_expenses))
 async def invalid_expenses_categories(msg: Message):
-    await msg.answer(text=LexiconRu.select_category,
-                     reply_markup=kb_expenses_categories)
+    await msg.delete()
 
 
 # select subcategories
@@ -188,7 +179,4 @@ async def press_market_category(clbk: CallbackQuery, state: FSMContext):
 # invalid select subcategory
 @user_router.message(StateFilter(FSMMakeTransaction.select_subcategory))
 async def invalid_subcategory(msg: Message, state: FSMContext):
-    data = await state.get_data()
-    markup = data.get('category')
-    await msg.answer(LexiconRu.await_categories,
-                     reply_markup=kbs_for_expenses[markup])
+    await msg.delete()
