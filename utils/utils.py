@@ -13,9 +13,10 @@ logger_utils = logging.getLogger(__name__)
 async def remove_user_from_db(user_id: str):
     db.pop(user_id)
 
+# move to middleware!!!
 async def add_user_in_db(msg: Message):
     user_id = str(msg.from_user.id)
-    db.setdefault(user_id, {'income': {}, 'expenses': {}})
+    db.setdefault(user_id, {'balance': 0, 'income': {}, 'expenses': {}})
 
 async def add_income_in_db(
         clbk: CallbackQuery, state: FSMContext):
@@ -23,6 +24,7 @@ async def add_income_in_db(
     user_id = str(clbk.from_user.id)
     data = await state.get_data()
     amount = data['amount']
+    db.setdefault(user_id, {'income': {}, 'expenses': {}})
     db[user_id]['income'][category] = (
             db[user_id]['income'].setdefault(category, 0) + amount)
 
@@ -37,6 +39,7 @@ async def add_expenses_in_db(
     amount = data['amount']
     category = data['category']
     subcategory = clbk.data
+    db.setdefault(user_id, {'income': {}, 'expenses': {}})
     db[user_id]['expenses'][category][subcategory] = (
             db[user_id]['expenses'].setdefault(category, {}).setdefault(
                     subcategory,
@@ -45,15 +48,15 @@ async def add_expenses_in_db(
 
 async def generate_fin_report(msg: Message, data: dict) -> str:
     user_id = str(msg.from_user.id)
-    balance = 0
     monthly_income: dict[str, float | int] = data[user_id]['income']
     sum_income = sum(monthly_income.values())
+    balance: int | float = data[user_id]['balance'] + sum_income
 
     expenses: dict[str, dict[str, float | int]] = data[user_id]['expenses']
     sum_expenses = sum(
             sum(obj) for obj in (categ.values() for categ in expenses.values()))
 
-    report: str = (f'<b>Баланс: {balance + sum_income}\n'
+    report: str = (f'<b>Баланс: {balance}\n'
                    f'Сальдо:'
                    f' {sum_income - sum_expenses}\n'
                    f'------------------------\n'
