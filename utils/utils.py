@@ -23,7 +23,6 @@ async def add_income_in_db(
     user_id = str(clbk.from_user.id)
     data = await state.get_data()
     amount = data['amount']
-    db.setdefault(user_id, {'income': {}, 'expenses': {}})
     db[user_id]['income'][category] = (
             db[user_id]['income'].setdefault(category, 0) + amount)
 
@@ -38,8 +37,6 @@ async def add_expenses_in_db(
     amount = data['amount']
     category = data['category']
     subcategory = clbk.data
-
-    db.setdefault(user_id, {'income': {}, 'expenses': {}})
     db[user_id]['expenses'][category][subcategory] = (
             db[user_id]['expenses'].setdefault(category, {}).setdefault(
                     subcategory,
