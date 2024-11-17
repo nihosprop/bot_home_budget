@@ -141,6 +141,7 @@ EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
 
 CANCEL_BUTT: dict[str, str] = {'cancel': '❌ОТМЕНА'}
 YES_NO_BUTT: dict[str, str] = {'yes': '🗑️Удалить', '/cancel': 'Отмена'}
+VIEW_THE_REPORT_BUTT: dict[str, str] = {'/report': 'Посмотреть отчет'}
 
 TEXTS_FOR_STATES: dict[FSMMakeTransaction, str] = {
         FSMMakeTransaction.fill_number: LexiconRu.await_amount,
