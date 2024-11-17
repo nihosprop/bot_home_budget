@@ -46,31 +46,35 @@ async def add_expenses_in_db(
                     0) + amount)
 
 
-async def generate_fin_report(msg: Message, data: dict) -> str:
-    user_id = str(msg.from_user.id)
+async def generate_fin_report(clbk: CallbackQuery, data: dict) -> str:
+    date: str = clbk.message.date.strftime('%d.%m.%Y %H:%M (UTC)')
+
+    logger_utils.info(f'{date}')
+
+    user_id = str(clbk.from_user.id)
     monthly_income: dict[str, float | int] = data[user_id]['income']
     sum_income = sum(monthly_income.values())
     balance: int | float = data[user_id]['balance'] + sum_income
-
     expenses: dict[str, dict[str, float | int]] = data[user_id]['expenses']
     sum_expenses = sum(
             sum(obj) for obj in (categ.values() for categ in expenses.values()))
 
-    report: str = (f'<b>Баланс: {balance}\n'
-                   f'Сальдо:'
+    report: str = (f'<u><i>{date}</i></u>\n\n'
+                   f'<b>Баланс: </b>{balance}\n'
+                   f'<b>Сальдо:</b>'
                    f' {sum_income - sum_expenses}\n'
                    f'------------------------\n'
-                   f'Доходы за месяц: {sum_income}</b>\n')
+                   f'<b>Доходы за месяц:</b> {sum_income}\n')
 
     for categ, value in monthly_income.items():
-        report += f'  {INCOME_CATEG_BUTT[categ]}: {value}\n'
+        report += f'  - {INCOME_CATEG_BUTT[categ]}: {value}\n'
     report += (f'<b>------------------------\n'
                f'Расходы за месяц: {round(sum_expenses, 2)}</b>\n')
 
     for category, data in expenses.items():
         report += f'  {EXPENSES_CATEG_BUTT[category]}:\n'
         for subcategory, value in data.items():
-            report += (f'    {EXPENSE_SUBCATEGORY_BUTTONS[subcategory]}: '
+            report += (f'    - {EXPENSE_SUBCATEGORY_BUTTONS[subcategory]}: '
                        f'{value}\n')
 
-    return f'{report}\nОтправьте сумму👇'
+    return report

@@ -17,11 +17,12 @@ from lexicon.lexicon_ru import (DIRECTION_BUTT,
                                 HOUSEHOLD_NEEDS_BUTT,
                                 DEBTS_BUTT,
                                 CLOTHING_ACCESSORIES_BUTT,
-                                YES_NO_BUTT)
+                                YES_NO_BUTT, VIEW_THE_REPORT_BUTT)
 
 logger_keyboards = logging.getLogger(__name__)
 
 kb_yes_cancel = create_inline_kb(2, cancel_butt=False, **YES_NO_BUTT)
+kb_report = create_inline_kb(1, cancel_butt=False, **VIEW_THE_REPORT_BUTT)
 
 kb_direction = create_inline_kb(2, **DIRECTION_BUTT)
 kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)
