@@ -143,7 +143,7 @@ VIEW_THE_REPORT_BUTT: dict[str, str] = {'/report': 'Посмотреть отч�
 TEXTS_FOR_STATES: dict[FSMMakeTransaction, str] = {
         FSMMakeTransaction.fill_number: LexiconRu.await_amount,
         FSMMakeTransaction.select_direction: LexiconRu.select_direction,
-        FSMMakeTransaction.select_expenses: LexiconRu.select_direction,
+        FSMMakeTransaction.select_expenses: LexiconRu.select_category,
         FSMMakeTransaction.select_income: LexiconRu.select_category,
         FSMMakeTransaction.select_subcategory: LexiconRu.select_category}
 
