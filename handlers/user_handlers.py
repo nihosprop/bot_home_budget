@@ -190,8 +190,7 @@ async def invalid_expenses_categories(msg: Message):
 
 # select subcategories
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_subcategory,
-                                        F.data.in_(
-                                                EXPENSE_SUBCATEGORY_BUTTONS.values())))
+                                        F.data.in_(EXPENSE_SUBCATEGORY_BUTTONS.values())))
 async def press_market_category(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
     await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
