@@ -10,6 +10,7 @@ from database.db import database
 from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
                                  kb_income_categories,
+                                 kb_report,
                                  kb_yes_cancel,
                                  kbs_for_expenses)
 from filters.filters import IsNumber
@@ -32,6 +33,8 @@ user_router = Router()
 # default_state
 @user_router.message(CommandStart(), StateFilter(default_state))
 async def cmd_start(msg: Message, state: FSMContext):
+    await add_user_in_db(msg)
+    logger_user_hand.info(database)
     await msg.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
 
@@ -52,14 +55,15 @@ async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
     await state.clear()
 
 
-@user_router.message(F.text == '/report')
-async def cmd_report(msg: Message):
-    if database.get(str(msg.from_user.id)) is None:
-        await add_user_in_db(msg)
-        await msg.answer(f'У вас еще нет истории транзакций\n'
-                         f'Нажмите <b>/start</b>')
-    else:
-        await msg.answer(await generate_fin_report(msg, database))
+@user_router.callback_query(F.data == '/report',
+                            StateFilter(FSMMakeTransaction.fill_number))
+async def cmd_report(clbk: CallbackQuery, state: FSMContext):
+    msg_id = dict(await state.get_data()).get('msg_record_trans')
+    logger_user_hand.info(msg_id)
+    if msg_id:
+        await clbk.message.delete()
+    await clbk.message.answer(text=await generate_fin_report(clbk,
+                                                             database) + '\n' + LexiconRu.await_amount)
 
 
 @user_router.message(F.text == '/help')
@@ -146,10 +150,12 @@ async def invalid_select_direction(msg: Message):
                             F.data.in_(INCOME_CATEG_BUTT))
 async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     await add_income_in_db(clbk, state)
-    await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
-                                 f'{LexiconRu.await_amount}')
-    logger_user_hand.info(f'{database}')
+    value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
+                                         f'{LexiconRu.await_amount}',
+                                         reply_markup=kb_report)
+    logger_user_hand.info(f'{__name__} : {database}')
     await clbk.answer()
+    await state.update_data(msg_record_trans=value.message_id)
     await state.set_state(FSMMakeTransaction.fill_number)
 
 
@@ -193,10 +199,12 @@ async def invalid_expenses_categories(msg: Message):
                                         F.data.in_(EXPENSE_SUBCATEGORY_BUTTONS.values())))
 async def press_market_category(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
-    await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
-                                 f'{LexiconRu.await_amount}')
+    value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
+                                         f'{LexiconRu.await_amount}',
+                                         reply_markup=kb_report)
     logger_user_hand.info(f'{database}')
     await clbk.answer()
+    await state.update_data(msg_record_trans=value.message_id)
     await state.set_state(FSMMakeTransaction.fill_number)
 
 
