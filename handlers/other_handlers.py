@@ -1,7 +1,7 @@
 import logging
 
 from aiogram.types import Message, CallbackQuery
-from aiogram import Router
+from aiogram import Router, F
 from lexicon.lexicon_ru import LexiconRu
 
 
@@ -13,7 +13,7 @@ async def other_message(msg: Message):
     await msg.answer(LexiconRu.problems)
 
 # cap
-@other_router.callback_query()
+@other_router.callback_query(F.data != '/start')
 async def other_clbk(clbk: CallbackQuery):
     await clbk.message.delete()
     await clbk.answer('Запустите бота\n'
