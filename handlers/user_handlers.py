@@ -42,7 +42,7 @@ async def cmd_start(msg: Message, state: FSMContext):
 
 
 # remove user
-@user_router.message(F.text == '/delete_user')
+@user_router.message(F.text == '/delete_user', ~StateFilter(default_state))
 async def cmd_delete_user(msg: Message):
     await msg.answer('Подтвердить удаление данных!', reply_markup=kb_yes_cancel)
 
