@@ -75,7 +75,7 @@ async def cmd_help(msg: Message, state: FSMContext):
             await msg.answer(LexiconRu.help_default_state)
 
 
-# not default_state -> cancel
+# cancel -> ~default_state
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
 async def cmd_cancel_in_state(
         clbk: CallbackQuery, state: FSMContext):
@@ -83,6 +83,7 @@ async def cmd_cancel_in_state(
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
+# cmd_report
 @user_router.callback_query(F.data == '/report',
                             StateFilter(FSMMakeTransaction.fill_number))
 async def cmd_report(clbk: CallbackQuery, state: FSMContext):
