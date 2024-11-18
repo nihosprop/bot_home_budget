@@ -1,29 +1,30 @@
 import logging
+
 from aiogram.types import InlineKeyboardMarkup
 
 from keyboards.keyboard_utils import create_inline_kb
-from lexicon.lexicon_ru import (DIRECTION_BUTT,
+from lexicon.lexicon_ru import (CLOTHING_ACCESSORIES_BUTT,
+                                DEBTS_BUTT,
+                                DIRECTION_BUTT,
+                                EDUCATION_BUTT,
+                                ENTERTAINMENT_BUTT,
                                 EXPENSES_CATEG_BUTT,
-                                INCOME_CATEG_BUTT,
-                                SUPERMARKET_BUTT,
                                 FEEDING_BUTT,
+                                HEALTH_BEAUTY_BUTT,
+                                HOUSEHOLD_NEEDS_BUTT,
+                                INCOME_CATEG_BUTT,
+                                MISC_EXPENSES_BUTT,
+                                PETS_BUTT,
+                                SUPERMARKET_BUTT,
                                 TRANSPORT_BUTT,
                                 UTILITIES_BUTT,
-                                ENTERTAINMENT_BUTT,
-                                HEALTH_BEAUTY_BUTT,
-                                EDUCATION_BUTT,
-                                PETS_BUTT,
-                                MISC_EXPENSES_BUTT,
-                                HOUSEHOLD_NEEDS_BUTT,
-                                DEBTS_BUTT,
-                                CLOTHING_ACCESSORIES_BUTT,
-                                YES_NO_BUTT, VIEW_THE_REPORT_BUTT)
+                                VIEW_THE_REPORT_BUTT,
+                                YES_NO_BUTT)
 
 logger_keyboards = logging.getLogger(__name__)
 
 kb_yes_cancel = create_inline_kb(2, cancel_butt=False, **YES_NO_BUTT)
 kb_report = create_inline_kb(1, cancel_butt=False, **VIEW_THE_REPORT_BUTT)
-
 kb_direction = create_inline_kb(2, **DIRECTION_BUTT)
 kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)
 kb_expenses_categories = create_inline_kb(2, **EXPENSES_CATEG_BUTT)

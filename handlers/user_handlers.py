@@ -55,26 +55,6 @@ async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
     await clbk.message.edit_text(LexiconRu.text_confirm_remove)
     await state.clear()
 
-
-@user_router.message(F.text == '/help')
-async def cmd_help(msg: Message, state: FSMContext):
-    match await state.get_state():
-        case FSMMakeTransaction.fill_number:
-            await msg.answer(LexiconRu.help_state_fill_number)
-        case FSMMakeTransaction.select_direction:
-            await msg.answer(LexiconRu.help_state_direction,
-                             reply_markup=kb_direction)
-        case FSMMakeTransaction.select_income:
-            await msg.answer(LexiconRu.help_state_categories,
-                             reply_markup=kb_income_categories)
-        case FSMMakeTransaction.select_expenses:
-            await msg.answer(LexiconRu.help_state_categories,
-                             reply_markup=kb_expenses_categories)
-
-        case _:
-            await msg.answer(LexiconRu.help_default_state)
-
-
 # cancel -> ~default_state
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
 async def cmd_cancel_in_state(
@@ -109,8 +89,9 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     logger_user_hand.info(msg_id)
     if msg_id:
         await clbk.message.delete()
-    await clbk.message.answer(
-            text=await generate_fin_report(clbk, database) + '\n' + LexiconRu.await_amount)
+    await clbk.message.answer(text=await generate_fin_report(clbk,
+                                                             database) + '\n' + LexiconRu.await_amount)
+
 
 # default_state -> cancel
 @user_router.message(F.text == '/cancel', StateFilter(default_state))
@@ -227,8 +208,7 @@ async def invalid_expenses_categories(msg: Message):
 
 # select subcategories
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_subcategory,
-                                        F.data.in_(
-                                                EXPENSE_SUBCATEGORY_BUTTONS.values())))
+                                        F.data.in_(EXPENSE_SUBCATEGORY_BUTTONS.values())))
 async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'

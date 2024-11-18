@@ -10,7 +10,6 @@ logger_lexicon = logging.getLogger(__name__)
 class LexiconCommandsRu:
     start: str = 'Запуск'
     delete_user: str = 'Стереть все данные'
-    help: str = 'Справка'
     category: str = 'Посмотреть категории'
 
 
@@ -33,7 +32,7 @@ class LexiconRu:
     text_problems: str = 'Нажмите: <b>/start</b>'
     text_confirm_remove: str = ('Ваши данные удалены!✅\n'
                            'Нажмите <b>/start</b> что-бы начать')
-    help: str = (f'Бот находится в постоянном ожидании суммы(числа).\n'
+    text_help: str = (f'Бот находится в постоянном ожидании суммы(числа).\n'
                  'Вам нужно:\n'
                  '1. Ввести сумму.\n'
                  '2. Выбрать одно из направлений:\n'
@@ -42,10 +41,10 @@ class LexiconRu:
                  'Что-бы посмотреть структуру категорий нажмите:\n'
                  '-> <b>/category</b>\n\n')
 
-    help_default_state: str = help + await_start
-    help_state_fill_number: str = help + await_amount
-    help_state_direction: str = help + await_direction
-    help_state_categories: str = help + await_categories
+    help_default_state: str = text_help + await_start
+    help_state_fill_number: str = text_help + await_amount
+    help_state_direction: str = text_help + await_direction
+    help_state_categories: str = text_help + await_categories
 
 
 @dataclass
@@ -140,13 +139,6 @@ EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
 CANCEL_BUTT: dict[str, str] = {'cancel': '❌ОТМЕНА'}
 YES_NO_BUTT: dict[str, str] = {'yes': '🗑️Удалить', '/cancel': 'Отмена'}
 VIEW_THE_REPORT_BUTT: dict[str, str] = {'/report': 'Посмотреть отчет'}
-
-TEXTS_FOR_STATES: dict[FSMMakeTransaction, str] = {
-        FSMMakeTransaction.fill_number: LexiconRu.await_amount,
-        FSMMakeTransaction.select_direction: LexiconRu.select_direction,
-        FSMMakeTransaction.select_expenses: LexiconRu.select_category,
-        FSMMakeTransaction.select_income: LexiconRu.select_category,
-        FSMMakeTransaction.select_subcategory: LexiconRu.select_category}
 
 MAP = """
 Доходы:
