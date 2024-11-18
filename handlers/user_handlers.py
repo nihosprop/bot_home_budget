@@ -106,7 +106,7 @@ async def cmd_cancel_in_state(msg: Message):
         FSMMakeTransaction.fill_number))
 async def cmd_show_categories(clbk: CallbackQuery):
     kb = clbk.message.reply_markup
-    await clbk.message.answer(f'<code>{MAP}</code>\n{LexiconRu.await_amount}',
+    await clbk.message.answer(f'<pre>{MAP}</pre>\n{LexiconRu.await_amount}',
                               reply_markup=kb)
 
 
