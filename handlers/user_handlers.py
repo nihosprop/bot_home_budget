@@ -79,7 +79,24 @@ async def cmd_help(msg: Message, state: FSMContext):
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
 async def cmd_cancel_in_state(
         clbk: CallbackQuery, state: FSMContext):
-    await clbk.message.edit_text(LexiconRu.await_amount)
+    value = await clbk.message.edit_text(LexiconRu.await_amount,
+                                         reply_markup=kb_report)
+
+    msg_for_del: set = dict(await state.get_data()).get('msg_for_del', set())
+    for msg_id in msg_for_del:
+        try:
+            await clbk.bot.delete_message(chat_id=clbk.message.chat.id,
+                                          message_id=msg_id)
+        except TelegramBadRequest as err:
+            logger_user_hand.error(f'Failed to remove inline keyboard: {err}')
+    await state.update_data(msg_for_del=set())
+
+    msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
+                                                             set())
+    msg_for_del.add(value.message_id)
+    await state.update_data(msg_for_del=msg_for_del)
+
+    await state.set_state(FSMMakeTransaction.fill_number)
     await clbk.answer()
 
 
@@ -152,7 +169,24 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{LexiconRu.await_amount}',
                                          reply_markup=kb_report)
-    logger_user_hand.info(f'{__name__} : {database}')
+    logger_user_hand.info(database)
+    msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
+                                                             set())
+
+    for msg_id in msg_for_del:
+        try:
+            await clbk.bot.delete_message(chat_id=clbk.message.chat.id,
+                                          message_id=msg_id)
+        except TelegramBadRequest as err:
+            logger_user_hand.error(f'Failed to remove inline keyboard: {err}')
+    await state.update_data(msg_for_del=set())
+
+    msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
+                                                             set())
+    msg_for_del.add(value.message_id)
+    await state.update_data(msg_for_del=msg_for_del)
+
+    await state.set_state(FSMMakeTransaction.fill_number)
     await clbk.answer()
 
 
@@ -201,6 +235,24 @@ async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
                                          f'{LexiconRu.await_amount}',
                                          reply_markup=kb_report)
     logger_user_hand.info(f'{database}')
+    msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
+                                                             set())
+
+    for msg_id in msg_for_del:
+        try:
+            await clbk.bot.delete_message(chat_id=clbk.message.chat.id,
+                                          message_id=msg_id)
+        except TelegramBadRequest as err:
+            logger_user_hand.error(f'Failed to remove inline keyboard: {err}')
+
+    await state.update_data(msg_for_del=set())
+
+    msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
+                                                             set())
+    msg_for_del.add(value.message_id)
+    await state.update_data(msg_for_del=msg_for_del)
+
+    await state.set_state(FSMMakeTransaction.fill_number)
     await clbk.answer()
 
 
