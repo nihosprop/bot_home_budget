@@ -38,6 +38,7 @@ async def cmd_start(msg: Message, state: FSMContext):
     logger_user_hand.info(database)
     await msg.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
+    await state.update_data(msg_for_del=set())
 
 
 # remove user
