@@ -55,17 +55,6 @@ async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
     await state.clear()
 
 
-@user_router.callback_query(F.data == '/report',
-                            StateFilter(FSMMakeTransaction.fill_number))
-async def cmd_report(clbk: CallbackQuery, state: FSMContext):
-    msg_id = dict(await state.get_data()).get('msg_record_trans')
-    logger_user_hand.info(msg_id)
-    if msg_id:
-        await clbk.message.delete()
-    await clbk.message.answer(
-            text=await generate_fin_report(clbk, database) + '\n' + LexiconRu.await_amount)
-
-
 @user_router.message(F.text == '/help')
 async def cmd_help(msg: Message, state: FSMContext):
     # user_hand_logger.info(msg.model_dump_json(indent=4, exclude_defaults=True))
@@ -94,6 +83,15 @@ async def cmd_cancel_in_state(
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
+@user_router.callback_query(F.data == '/report',
+                            StateFilter(FSMMakeTransaction.fill_number))
+async def cmd_report(clbk: CallbackQuery, state: FSMContext):
+    msg_id = dict(await state.get_data()).get('msg_record_trans')
+    logger_user_hand.info(msg_id)
+    if msg_id:
+        await clbk.message.delete()
+    await clbk.message.answer(
+            text=await generate_fin_report(clbk, database) + '\n' + LexiconRu.await_amount)
 
 # default_state -> cancel
 @user_router.message(F.text == '/cancel', StateFilter(default_state))
