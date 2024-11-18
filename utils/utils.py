@@ -10,13 +10,21 @@ from database.db import database as db
 
 logger_utils = logging.getLogger(__name__)
 
+
 async def remove_user_from_db(user_id: str):
     db.pop(user_id)
+
 
 # move to middleware!!!
 async def add_user_in_db(msg: Message):
     user_id = str(msg.from_user.id)
     db.setdefault(user_id, {'balance': 0, 'income': {}, 'expenses': {}})
+
+
+async def calc_percent(
+        amount: int | float, num: int | float) -> (int | float):
+    return round(num * 100 / amount, 1)
+
 
 async def add_income_in_db(
         clbk: CallbackQuery, state: FSMContext):
@@ -75,6 +83,7 @@ async def generate_fin_report(clbk: CallbackQuery, data: dict) -> str:
         report += f'  {EXPENSES_CATEG_BUTT[category]}:\n'
         for subcategory, value in data.items():
             report += (f'    - {EXPENSE_SUBCATEGORY_BUTTONS[subcategory]}: '
-                       f'{value}\n')
+                       f'{value}('
+                   f'{await calc_percent(sum_income, value)}%)\n')
 
     return f'<code>{report}</code>'
