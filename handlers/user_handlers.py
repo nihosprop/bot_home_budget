@@ -50,14 +50,12 @@ async def cmd_delete_user(msg: Message):
 async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
     user_id = str(clbk.from_user.id)
     await remove_user_from_db(user_id)
-    await clbk.message.edit_text('Ваши данные удалены!✅\n'
-                                 'Нажмите <b>/start</b> что-бы начать')
+    await clbk.message.edit_text(LexiconRu.text_confirm_remove)
     await state.clear()
 
 
 @user_router.message(F.text == '/help')
 async def cmd_help(msg: Message, state: FSMContext):
-    # user_hand_logger.info(msg.model_dump_json(indent=4, exclude_defaults=True))
     match await state.get_state():
         case FSMMakeTransaction.fill_number:
             await msg.answer(LexiconRu.help_state_fill_number)
@@ -81,8 +79,9 @@ async def cmd_cancel_in_state(
         clbk: CallbackQuery, state: FSMContext):
     await clbk.message.edit_text(LexiconRu.await_amount)
     await clbk.answer()
-    await state.set_state(FSMMakeTransaction.fill_number)
 
+
+# region important(__int__)
 # cmd_report
 @user_router.callback_query(F.data == '/report',
                             StateFilter(FSMMakeTransaction.fill_number))
@@ -123,6 +122,8 @@ async def sent_invalid_number(msg: Message):
     await msg.delete()
 
 
+# endregion
+
 # select_income_direction
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
                             F.data == 'income')
@@ -131,8 +132,8 @@ async def button_press_income(
     value = await clbk.message.edit_text(LexiconRu.select_category,
                                          reply_markup=kb_income_categories)
     await state.update_data(msg_id_income_categ=value.message_id)
-    await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_income)
+    await clbk.answer()
 
 
 # invalid_direction
@@ -151,8 +152,6 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
                                          reply_markup=kb_report)
     logger_user_hand.info(f'{__name__} : {database}')
     await clbk.answer()
-    await state.update_data(msg_record_trans=value.message_id)
-    await state.set_state(FSMMakeTransaction.fill_number)
 
 
 # invalid_category
@@ -168,8 +167,8 @@ async def button_press_expenses(
         clbk: CallbackQuery, state: FSMContext):
     await clbk.message.edit_text(LexiconRu.select_category,
                                  reply_markup=kb_expenses_categories)
-    await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_expenses)
+    await clbk.answer()
 
 
 # select_expenses
@@ -180,8 +179,8 @@ async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
     await state.update_data(category=category)
     await clbk.message.edit_text('Выберите категорию',
                                  reply_markup=kbs_for_expenses[category])
-    await clbk.answer()
     await state.set_state(FSMMakeTransaction.select_subcategory)
+    await clbk.answer()
 
 
 # invalid select expenses
@@ -194,15 +193,13 @@ async def invalid_expenses_categories(msg: Message):
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_subcategory,
                                         F.data.in_(
                                                 EXPENSE_SUBCATEGORY_BUTTONS.values())))
-async def press_market_category(clbk: CallbackQuery, state: FSMContext):
+async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{LexiconRu.await_amount}',
                                          reply_markup=kb_report)
     logger_user_hand.info(f'{database}')
     await clbk.answer()
-    await state.update_data(msg_record_trans=value.message_id)
-    await state.set_state(FSMMakeTransaction.fill_number)
 
 
 # invalid select subcategory

@@ -10,7 +10,7 @@ other_router = Router()
 
 @other_router.message()
 async def other_message(msg: Message):
-    await msg.answer(LexiconRu.problems)
+    await msg.answer(LexiconRu.text_problems)
 
 # cap
 @other_router.callback_query(F.data != '/start')
