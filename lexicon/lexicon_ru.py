@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 import logging
 
-from states.states import FSMMakeTransaction
-
 logger_lexicon = logging.getLogger(__name__)
 
 
