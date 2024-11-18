@@ -11,7 +11,7 @@ from database.db import database
 from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
                                  kb_income_categories,
-                                 kb_report,
+                                 kb_for_wait_amount,
                                  kb_yes_cancel,
                                  kbs_for_expenses)
 from filters.filters import IsNumber
@@ -60,7 +60,7 @@ async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
 async def cmd_cancel_in_state(
         clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.edit_text(LexiconRu.await_amount,
-                                         reply_markup=kb_report)
+                                         reply_markup=kb_for_wait_amount)
 
     msg_for_del: set = dict(await state.get_data()).get('msg_for_del', set())
     for msg_id in msg_for_del:
@@ -149,7 +149,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     await add_income_in_db(clbk, state)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{LexiconRu.await_amount}',
-                                         reply_markup=kb_report)
+                                         reply_markup=kb_for_wait_amount)
     logger_user_hand.info(database)
     msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
                                                              set())
@@ -213,7 +213,7 @@ async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{LexiconRu.await_amount}',
-                                         reply_markup=kb_report)
+                                         reply_markup=kb_for_wait_amount)
     logger_user_hand.info(f'{database}')
     msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
                                                              set())
