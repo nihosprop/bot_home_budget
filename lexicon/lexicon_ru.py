@@ -30,8 +30,7 @@ class LexiconRu:
     select_category: str = 'Выберите категорию'
     select_subcategory: str = 'Выберите под-категорию'
     transaction_recorded: str = 'Транзакция записана!✅'
-    problems: str = ('Что-то пошло не так\n'
-                     'Нажмите: /start')
+    problems: str = 'Нажмите: <b>/start</b>'
     help: str = (f'Бот находится в постоянном ожидании суммы(числа).\n'
                  'Вам нужно:\n'
                  '1. Ввести сумму.\n'
