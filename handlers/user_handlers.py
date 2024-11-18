@@ -102,9 +102,12 @@ async def cmd_cancel_in_state(msg: Message):
 
 
 # cmd_categories
-@user_router.message(F.text == '/category')
-async def cmd_categories(msg: Message):
-    await msg.answer(f'<code>{MAP}</code>')
+@user_router.callback_query(F.data == '/category', StateFilter(
+        FSMMakeTransaction.fill_number))
+async def cmd_show_categories(clbk: CallbackQuery):
+    kb = clbk.message.reply_markup
+    await clbk.message.answer(f'<code>{MAP}</code>\n{LexiconRu.await_amount}',
+                              reply_markup=kb)
 
 
 # state fill_number
