@@ -90,8 +90,7 @@ async def cmd_help(msg: Message, state: FSMContext):
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
 async def cmd_cancel_in_state(
         clbk: CallbackQuery, state: FSMContext):
-    await clbk.message.delete()
-    await clbk.message.answer(LexiconRu.await_amount)
+    await clbk.message.edit_text(LexiconRu.await_amount)
     await clbk.answer()
     await state.set_state(FSMMakeTransaction.fill_number)
 
