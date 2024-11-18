@@ -5,6 +5,7 @@ from aiogram.filters import CommandStart, StateFilter
 from aiogram.types import (CallbackQuery, Message)
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
+from aiogram.exceptions import TelegramBadRequest
 
 from database.db import database
 from keyboards.keyboards import (kb_direction,
