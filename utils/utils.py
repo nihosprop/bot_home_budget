@@ -77,4 +77,4 @@ async def generate_fin_report(clbk: CallbackQuery, data: dict) -> str:
             report += (f'    - {EXPENSE_SUBCATEGORY_BUTTONS[subcategory]}: '
                        f'{value}\n')
 
-    return report
+    return f'<code>{report}</code>'
