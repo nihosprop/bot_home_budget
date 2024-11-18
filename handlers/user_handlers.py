@@ -62,8 +62,8 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     logger_user_hand.info(msg_id)
     if msg_id:
         await clbk.message.delete()
-    await clbk.message.answer(text=await generate_fin_report(clbk,
-                                                             database) + '\n' + LexiconRu.await_amount)
+    await clbk.message.answer(
+            text=await generate_fin_report(clbk, database) + '\n' + LexiconRu.await_amount)
 
 
 @user_router.message(F.text == '/help')
@@ -114,9 +114,7 @@ async def cmd_categories(msg: Message):
 async def process_number_sent(
         msg: Message, state: FSMContext, number: dict[str, int | float]):
     await state.update_data(amount=number)
-    value = await msg.answer(LexiconRu.select_direction,
-                             reply_markup=kb_direction)
-    await state.update_data(msg_id_direction=value.message_id)
+    await msg.answer(LexiconRu.select_direction, reply_markup=kb_direction)
     await state.set_state(FSMMakeTransaction.select_direction)
 
 
@@ -195,7 +193,8 @@ async def invalid_expenses_categories(msg: Message):
 
 # select subcategories
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_subcategory,
-                                        F.data.in_(EXPENSE_SUBCATEGORY_BUTTONS.values())))
+                                        F.data.in_(
+                                                EXPENSE_SUBCATEGORY_BUTTONS.values())))
 async def press_market_category(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
