@@ -1,14 +1,20 @@
+import logging
+
 from aiogram.enums import ContentType
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
-import logging
 
 logger_filters = logging.getLogger(__name__)
 
+
 class IsNumber(BaseFilter):
+    """ Filter to check if the message content is a number. """
 
     async def __call__(self, message: Message) -> bool | dict[str, int | float]:
-
+        """ Checks whether the message content is a number. Returns
+        False if the content is not a number. Returns a dictionary with
+        number if the content is a number.
+        """
         if message.content_type is ContentType.TEXT:
             number = message.text.replace(',', '.')
             try:
@@ -17,8 +23,8 @@ class IsNumber(BaseFilter):
                 try:
                     value = {'number': float(number)}
                 except ValueError:
-                    logger_filters.info(f'Не удалось преобразовать сообщение в '
-                                     f'число: {message.text}')
+                    logger_filters.debug(f'Не удалось преобразовать сообщение в '
+                                         f'число: {message.text}')
                     return False
             logger_filters.debug(f'{value=}')
             return value if value['number'] != 0 else False
