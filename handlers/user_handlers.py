@@ -30,6 +30,14 @@ from utils.utils import (add_expenses_in_db,
 user_router = Router()
 logger_user_hand = logging.getLogger(__name__)
 
+format_1 = ('[{asctime}] #{levelname:8} {filename}: {lineno} - <{funcName}> - {'
+            'message}')
+formatter1 = logging.Formatter(fmt=format_1,
+                               datefmt='%Y.%m.%d %H:%M:%S',
+                               style='{')
+file_handler = logging.FileHandler('logs/logs.log')
+file_handler.setFormatter(formatter1)
+logger_user_hand.addHandler(file_handler)
 
 # default_state
 @user_router.message(CommandStart(), StateFilter(default_state))
