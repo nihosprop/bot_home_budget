@@ -134,7 +134,7 @@ EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
                                                    **UTILITIES_BUTT)
 
 CANCEL_BUTT: dict[str, str] = {'cancel': '❌ОТМЕНА'}
-YES_NO_BUTT: dict[str, str] = {'yes': '🗑️Удалить', '/cancel': 'Отмена'}
+YES_NO_BUTT: dict[str, str] = {'yes': '🗑️Удалить', '/cancel': '❌Отмена'}
 FOR_AWAIT_AMOUNT_BUTT: dict[str, str] = {
         '/report': 'Посмотреть отчет',
         '/category': 'Посмотреть категории'}
