@@ -10,8 +10,8 @@ from aiogram.exceptions import TelegramBadRequest
 from database.db import database
 from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
-                                 kb_income_categories,
                                  kb_for_wait_amount,
+                                 kb_income_categories,
                                  kb_yes_cancel,
                                  kbs_for_expenses)
 from filters.filters import IsNumber
@@ -27,15 +27,15 @@ from utils.utils import (add_expenses_in_db,
                          generate_fin_report,
                          remove_user_from_db)
 
-logger_user_hand = logging.getLogger(__name__)
 user_router = Router()
+logger_user_hand = logging.getLogger(__name__)
 
 
 # default_state
 @user_router.message(CommandStart(), StateFilter(default_state))
 async def cmd_start(msg: Message, state: FSMContext):
     await add_user_in_db(msg)
-    logger_user_hand.debug(database)
+    logger_user_hand.debug(f'{database=}')
     await msg.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
     await state.update_data(msg_for_del=set())
@@ -54,6 +54,7 @@ async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
     await remove_user_from_db(user_id)
     await clbk.message.edit_text(LexiconRu.text_confirm_remove)
     await state.clear()
+
 
 # cancel -> ~default_state
 @user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
@@ -90,7 +91,8 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     if msg_id:
         await clbk.message.delete()
     await clbk.message.answer(text=await generate_fin_report(clbk,
-                                                             database) + '\n' + LexiconRu.await_amount)
+                                                             database) + '\n'
+                                   + LexiconRu.await_amount)
 
 
 # default_state -> cancel
@@ -102,8 +104,8 @@ async def cmd_cancel_in_state(msg: Message):
 
 
 # cmd_categories
-@user_router.callback_query(F.data == '/category', StateFilter(
-        FSMMakeTransaction.fill_number))
+@user_router.callback_query(F.data == '/category',
+                            StateFilter(FSMMakeTransaction.fill_number))
 async def cmd_show_categories(clbk: CallbackQuery):
     kb = clbk.message.reply_markup
     await clbk.message.answer(f'<pre>{MAP}</pre>\n{LexiconRu.await_amount}',
@@ -211,7 +213,8 @@ async def invalid_expenses_categories(msg: Message):
 
 # select subcategories
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_subcategory,
-                                        F.data.in_(EXPENSE_SUBCATEGORY_BUTTONS.values())))
+                                        F.data.in_(
+                                                EXPENSE_SUBCATEGORY_BUTTONS.values())))
 async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
