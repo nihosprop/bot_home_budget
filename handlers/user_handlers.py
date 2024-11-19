@@ -35,7 +35,7 @@ format_1 = ('[{asctime}] #{levelname:8} {filename}: {lineno} - <{funcName}> - {'
 formatter1 = logging.Formatter(fmt=format_1,
                                datefmt='%Y.%m.%d %H:%M:%S',
                                style='{')
-file_handler = logging.FileHandler('logs/logs.log')
+file_handler = logging.FileHandler('logs/logs.log', mode='w', encoding='utf-8')
 file_handler.setFormatter(formatter1)
 logger_user_hand.addHandler(file_handler)
 
