@@ -41,9 +41,8 @@ async def add_income_in_db(
 async def add_expenses_in_db(
         clbk: CallbackQuery, state: FSMContext):
     user_id = str(clbk.from_user.id)
-
     data = await state.get_data()
-    logger_utils.info(f'{data=}')
+    logger_utils.debug(f'{data=}')
 
     amount = data['amount']
     category = data['category']
@@ -58,8 +57,7 @@ async def add_expenses_in_db(
 async def generate_fin_report(clbk: CallbackQuery, data: dict) -> str:
     date: str = clbk.message.date.strftime('%d.%m.%Y %H:%M (UTC)')
 
-    logger_utils.info(f'{date}')
-
+    logger_utils.debug(f'{date}')
     user_id = str(clbk.from_user.id)
     monthly_income: dict[str, float | int] = data[user_id]['income']
     sum_income = sum(monthly_income.values())
@@ -75,14 +73,15 @@ async def generate_fin_report(clbk: CallbackQuery, data: dict) -> str:
                    f'------------------------\n'
                    f'<b>Доходы за месяц:</b> {sum_income}\n')
 
-    for categ, value in monthly_income.items():
-        report += f'  - {INCOME_CATEG_BUTT[categ]}: {value}\n'
+    for category, value in monthly_income.items():
+        report += f'  - {INCOME_CATEG_BUTT[category]}: {value}\n'
     report += (f'<b>------------------------\n'
                f'Расходы за месяц: {round(sum_expenses, 2)}</b>\n')
 
     for category, data in expenses.items():
         report += f'  {EXPENSES_CATEG_BUTT[category]}:\n'
         for subcategory, value in data.items():
+
             report += (f'    - {EXPENSE_SUBCATEGORY_BUTTONS[subcategory]}: '
                        f'{value}{await calc_percent(sum_income, value)}\n')
 
