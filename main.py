@@ -1,21 +1,24 @@
 import asyncio
 import logging
+
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram import Dispatcher, Bot
+from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
+
 from config_data.config import Config, load_config
 from keyboards.set_menu import set_main_menu
 from handlers import other_handlers, user_handlers
 
-
 logger_main = logging.getLogger(__name__)
 storage = MemoryStorage()
 
+
 async def main():
     logging.basicConfig(level=logging.DEBUG,
-                        format='%(filename)s:%(lineno)d #%(levelname)-8s '
-                               '[%(asctime)s] - %(name)s - %(message)s',
+                        format='[%(asctime)s] #%(levelname)-8s %(filename)s:'
+                               '%(lineno)d - %(name)s <%(funcName)s>: %('
+                               'message)s',
                         datefmt='%Y.%m.%d %H:%M:%S')
 
     logger_main.info('Start bot')
@@ -36,5 +39,6 @@ async def main():
     await bot.delete_webhook(drop_pending_updates=True)
     # start polling
     await dp.start_polling(bot)
+
 
 asyncio.run(main())

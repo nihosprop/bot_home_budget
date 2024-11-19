@@ -1,6 +1,5 @@
 import logging
 
-
 from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 
@@ -24,6 +23,7 @@ async def add_user_in_db(msg: Message):
 
 async def calc_percent(
         amount: int | float, num: int | float) -> (int | float):
+    logger_utils.debug(f'{amount=}')
     return round(num * 100 / amount, 1)
 
 
@@ -84,7 +84,6 @@ async def generate_fin_report(clbk: CallbackQuery, data: dict) -> str:
         report += f'  {EXPENSES_CATEG_BUTT[category]}:\n'
         for subcategory, value in data.items():
             report += (f'    - {EXPENSE_SUBCATEGORY_BUTTONS[subcategory]}: '
-                       f'{value}('
-                   f'{await calc_percent(sum_income, value)}%)\n')
+                       f'{value}({await calc_percent(sum_income, value)}%)\n')
 
     return f'<code>{report}</code>'
