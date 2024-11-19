@@ -13,7 +13,7 @@ logger_main = logging.getLogger(__name__)
 storage = MemoryStorage()
 
 async def main():
-    logging.basicConfig(level=logging.INFO,
+    logging.basicConfig(level=logging.DEBUG,
                         format='%(filename)s:%(lineno)d #%(levelname)-8s '
                                '[%(asctime)s] - %(name)s - %(message)s',
                         datefmt='%Y.%m.%d %H:%M:%S')

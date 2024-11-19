@@ -35,7 +35,7 @@ user_router = Router()
 @user_router.message(CommandStart(), StateFilter(default_state))
 async def cmd_start(msg: Message, state: FSMContext):
     await add_user_in_db(msg)
-    logger_user_hand.info(database)
+    logger_user_hand.debug(database)
     await msg.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
     await state.update_data(msg_for_del=set())
@@ -153,7 +153,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{LexiconRu.await_amount}',
                                          reply_markup=kb_for_wait_amount)
-    logger_user_hand.info(database)
+    logger_user_hand.debug(database)
     msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
                                                              set())
 
@@ -217,7 +217,7 @@ async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{LexiconRu.await_amount}',
                                          reply_markup=kb_for_wait_amount)
-    logger_user_hand.info(f'{database}')
+    logger_user_hand.debug(f'{database}')
     msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
                                                              set())
 

@@ -3,7 +3,7 @@ from aiogram.filters import BaseFilter
 from aiogram.types import Message
 import logging
 
-filters_logger = logging.getLogger(__name__)
+logger_filters = logging.getLogger(__name__)
 
 class IsNumber(BaseFilter):
 
@@ -17,10 +17,11 @@ class IsNumber(BaseFilter):
                 try:
                     value = {'number': float(number)}
                 except ValueError:
+                    logger_filters.info(f'Не удалось преобразовать сообщение в '
+                                     f'число: {message.text}')
                     return False
-            filters_logger.info(f'{value=}')
+            logger_filters.debug(f'{value=}')
             return value if value['number'] != 0 else False
-
-        filters_logger.info(f'drop_update -> {message.content_type}')
+        logger_filters.debug(f'drop_update -> {message.content_type}')
 
         return False
