@@ -16,10 +16,9 @@ storage = MemoryStorage()
 
 async def main():
     logging.basicConfig(level=logging.DEBUG,
-                        format='[%(asctime)s] #%(levelname)-8s %(filename)s:'
-                               '%(lineno)d - %(name)s <%(funcName)s>: %('
-                               'message)s',
-                        datefmt='%Y.%m.%d %H:%M:%S')
+                        format='[{asctime}] #{levelname:8} {filename}:'
+                               '{lineno} - {name} - <{funcName}> - {message}',
+                        datefmt='%Y.%m.%d %H:%M:%S', style='{')
 
     logger_main.info('Start bot')
 
