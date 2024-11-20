@@ -12,6 +12,7 @@ from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
                                  kb_for_wait_amount,
                                  kb_income_categories,
+                                 kb_reset_month_stats,
                                  kb_yes_cancel,
                                  kbs_for_expenses)
 from filters.filters import IsNumber
@@ -21,11 +22,6 @@ from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
                                 LexiconRu,
                                 MAP)
 from states.states import FSMMakeTransaction
-from utils.utils import (add_expenses_in_db,
-                         add_income_in_db,
-                         add_user_in_db,
-                         generate_fin_stats,
-                         remove_user_from_db)
 
 user_router = Router()
 logger_user_hand = logging.getLogger(__name__)

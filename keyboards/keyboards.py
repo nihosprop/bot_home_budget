@@ -19,12 +19,14 @@ from lexicon.lexicon_ru import (CLOTHING_ACCESSORIES_BUTT,
                                 TRANSPORT_BUTT,
                                 UTILITIES_BUTT,
                                 FOR_AWAIT_AMOUNT_BUTT,
-                                YES_NO_BUTT)
+                                YES_NO_BUTT,
+                                RESET_CANCEL_BUTT)
 
 logger_keyboards = logging.getLogger(__name__)
 
 kb_yes_cancel = create_inline_kb(2, cancel_butt=False, **YES_NO_BUTT)
 kb_for_wait_amount = create_inline_kb(1, cancel_butt=False, **FOR_AWAIT_AMOUNT_BUTT)
+kb_reset_month_stats = create_inline_kb(2, cancel_butt=False, **RESET_CANCEL_BUTT)
 
 kb_direction = create_inline_kb(2, **DIRECTION_BUTT)
 kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)
