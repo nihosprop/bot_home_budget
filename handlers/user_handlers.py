@@ -24,7 +24,7 @@ from states.states import FSMMakeTransaction
 from utils.utils import (add_expenses_in_db,
                          add_income_in_db,
                          add_user_in_db,
-                         generate_fin_report,
+                         generate_fin_stats,
                          remove_user_from_db)
 
 user_router = Router()
@@ -98,8 +98,8 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     logger_user_hand.info(msg_id)
     if msg_id:
         await clbk.message.delete()
-    await clbk.message.answer(text=await generate_fin_report(clbk,
-                                                             database) + '\n'
+    await clbk.message.answer(text=await generate_fin_stats(clbk,
+                                                            database) + '\n'
                                    + LexiconRu.await_amount)
 
 
