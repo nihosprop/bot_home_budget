@@ -27,3 +27,4 @@ async def other_clbk(clbk: CallbackQuery):
     await clbk.message.delete()
     await clbk.answer('Запустите бота\n'
                       'Меню -> /start', show_alert=True)
+    await clbk.answer()

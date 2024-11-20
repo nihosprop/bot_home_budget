@@ -51,7 +51,6 @@ async def cmd_start(msg: Message, state: FSMContext):
     await state.set_state(FSMMakeTransaction.fill_number)
     await state.update_data(msg_for_del=set())
 
-
 # reset user month stats
 @user_router.callback_query(F.data == 'reset_month_stats', ~StateFilter(default_state))
 async def clbk_reset_month(clbk: CallbackQuery):
@@ -67,7 +66,8 @@ async def confirm_reset_month_stats(clbk: CallbackQuery):
     await reset_stats(clbk)
     logger_user_hand.info(f'Statistics for the month have been reset for '
                           f'{clbk.from_user.id}')
-    await clbk.message.edit_text('Статистика обнулена!✅\nВведите сумму👇')
+    await clbk.message.edit_text('Статистика за месяц обнулена!✅\nВведите '
+                                 'сумму👇')
     await clbk.answer()
 
 

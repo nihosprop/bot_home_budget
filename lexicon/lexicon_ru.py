@@ -135,13 +135,11 @@ EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
 
 CANCEL_BUTT: dict[str, str] = {'cancel': '❌ОТМЕНА'}
 YES_NO_BUTT: dict[str, str] = {'yes': '🗑️Удалить', '/cancel': '❌Отмена'}
-RESET_CANCEL_BUTT: dict[str, str] = {
-        '/reset': 'Сброс',
-        '/cancel': '❌Отмена'}
+RESET_CANCEL_BUTT: dict[str, str] = {'/reset': 'Сброс', '/cancel': '❌Отмена'}
 FOR_AWAIT_AMOUNT_BUTT: dict[str, str] = {
-        '/report': 'Отчет',
+        'reset_month_stats': 'Сброс статистики за месяц',
         '/category': 'Категории',
-        'reset_month_stats': 'Сброс статистики за месяц'}
+        '/report': 'Отчет'}
 
 MAP = """
 Доходы:
