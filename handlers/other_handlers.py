@@ -12,7 +12,7 @@ other_router = Router()
 
 # default_state -> cancel
 @other_router.message(F.text == '/cancel', StateFilter(default_state))
-async def cmd_cancel_in_state(msg: Message):
+async def cmd_cancel(msg: Message):
     await msg.delete()
     await msg.answer(f'Сейчас нечего отменять.\n'
                      f'{LexiconRu.await_start}')
