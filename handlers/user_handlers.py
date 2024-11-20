@@ -8,6 +8,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.exceptions import TelegramBadRequest
 
 from database.db import database
+from database.db_utils import (add_user_in_db,
+                               reset_stats,
+                               remove_user_from_db,
+                               generate_fin_stats,
+                               add_income_in_db,
+                               add_expenses_in_db)
 from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
                                  kb_for_wait_amount,
@@ -34,6 +40,7 @@ formatter1 = logging.Formatter(fmt=format_1,
 file_handler = logging.FileHandler('logs/logs.log', mode='w', encoding='utf-8')
 file_handler.setFormatter(formatter1)
 logger_user_hand.addHandler(file_handler)
+
 
 # default_state
 @user_router.message(CommandStart(), StateFilter(default_state))
@@ -113,9 +120,9 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     logger_user_hand.info(msg_id)
     if msg_id:
         await clbk.message.delete()
-    await clbk.message.answer(text=await generate_fin_stats(clbk,
-                                                            database) + '\n'
-                                   + LexiconRu.await_amount)
+    await clbk.message.answer(await generate_fin_stats(clbk,
+                                                       database) + '\n' +
+                              LexiconRu.await_amount)
 
 
 # default_state -> cancel
