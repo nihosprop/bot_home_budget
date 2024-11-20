@@ -124,13 +124,12 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
                                                        database) + '\n' +
                               LexiconRu.await_amount)
 
+    msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
+                                                             set())
+    msg_for_del.add(value.message_id)
+    await state.update_data(msg_for_del=msg_for_del)
 
-# default_state -> cancel
-@user_router.message(F.text == '/cancel', StateFilter(default_state))
-async def cmd_cancel_in_state(msg: Message):
-    await msg.delete()
-    await msg.answer(f'Сейчас нечего отменять.\n'
-                     f'{LexiconRu.await_start}')
+    await clbk.answer()
 
 
 # cmd_categories
