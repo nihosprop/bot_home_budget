@@ -1,5 +1,5 @@
 # bot_home_budget
-**Version:** 0.0.1
+**Version:** 0.1.0
 
 # Income and Expense Tracker Bot
 
@@ -17,7 +17,7 @@ balance and receive reports.
 ## Functional
 
 - Adding Income and Expenses
-- View your balance
+- Viewing a transaction report
 - Receive reports by category
-
-## Installation
+- Delete all data
+- Reset data for the month (the main balance remains)
