@@ -67,7 +67,7 @@ async def confirm_reset_month_stats(clbk: CallbackQuery):
     logger_user_hand.info(f'Statistics for the month have been reset for '
                           f'{clbk.from_user.id}')
     await clbk.message.edit_text('Статистика за месяц обнулена!✅\nВведите '
-                                 'сумму👇')
+                                 'сумму👇', reply_markup=kb_for_wait_amount)
     await clbk.answer()
 
 
@@ -117,12 +117,19 @@ async def cmd_cancel_in_state(
                             StateFilter(FSMMakeTransaction.fill_number))
 async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     msg_id = dict(await state.get_data()).get('msg_record_trans')
-    logger_user_hand.info(msg_id)
-    if msg_id:
-        await clbk.message.delete()
-    await clbk.message.answer(await generate_fin_stats(clbk,
+    kb = clbk.message.reply_markup
+    msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
+                                                             set())
+    for msg_id in msg_for_del:
+        try:
+            await clbk.bot.delete_message(chat_id=clbk.message.chat.id,
+                                          message_id=msg_id)
+        except TelegramBadRequest as err:
+            logger_user_hand.error(f'Failed to remove inline keyboard: {err}')
+    await state.update_data(msg_for_del=set())
+    value = await clbk.message.answer(await generate_fin_stats(clbk,
                                                        database) + '\n' +
-                              LexiconRu.await_amount)
+                              LexiconRu.await_amount, reply_markup=kb)
 
     msg_for_del: set[int] = dict(await state.get_data()).get('msg_for_del',
                                                              set())
