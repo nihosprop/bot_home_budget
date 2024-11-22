@@ -1,11 +1,11 @@
 import logging
 
+from math import isnan
 from aiogram.enums import ContentType
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
 
 logger_filters = logging.getLogger(__name__)
-
 
 class IsNumber(BaseFilter):
     """ Filter to check if the message content is a number. """
@@ -21,10 +21,13 @@ class IsNumber(BaseFilter):
                 value = {'number': int(number)}
             except ValueError:
                 try:
+                    if isnan(float(number)):
+                        return False
+
                     value = {'number': float(number)}
                 except ValueError:
-                    logger_filters.debug(f'Не удалось преобразовать сообщение в '
-                                         f'число: {message.text}')
+                    logger_filters.info(f'Failed to convert message to number:'
+                                        f' {message.text}')
                     return False
             logger_filters.debug(f'{value=}')
             return value if value['number'] != 0 else False
