@@ -22,6 +22,8 @@ class IsNumber(BaseFilter):
             except ValueError:
                 try:
                     if isnan(float(number)):
+                        user_id = message.from_user.id
+                        logger_filters.error(f'NaN attempt!!! -> {user_id=}')
                         return False
 
                     value = {'number': float(number)}
