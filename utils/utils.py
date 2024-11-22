@@ -19,28 +19,34 @@ class MessageProcessor:
     _message: Message | CallbackQuery
     _state: FSMContext
 
-    async def deletes_messages(self) -> None:
+    async def deletes_messages(self, key='msg_for_del') -> None:
         """
-        Deletes messages from the chat whose IDs are stored in the state.
-        Retrieves the set of message IDs to delete from the state, attempts to
-        delete each message, and updates the state to clear the set of message
-        IDs.
+        Deletes messages from the chat whose IDs are stored in the state under
+        the specified key.
+        Retrieves the set of message IDs to delete from the state using the
+        provided key, attempts to delete each message,
+        and updates the state to clear the set of message IDs.
+
         Logs the start and end of the deletion process, and any errors
         encountered.
+
+        :param key: Str
         :return: None
         """
         logger_utils.info('Starting to delete messages…')
 
-        msg_for_del: set = dict(await self._state.get_data()).get('msg_for_del',
-                                                                  set())
-        for msg_id in msg_for_del:
+        data: set = dict(await self._state.get_data()).get(key, set())
+        if isinstance(self._message, Message):
+            chat_id = self._message.chat.id
+        else:
+            chat_id = self._message.message.chat.id
+
+        for msg_id in data:
             try:
-                await self._message.bot.delete_message(
-                        chat_id=self._message.message.chat.id, message_id=msg_id)
+                await self._message.bot.delete_message(chat_id=chat_id, message_id=msg_id)
             except TelegramBadRequest as err:
                 logger_utils.error(f'Failed to remove inline keyboard: {err}')
-        await self._state.update_data(msg_for_del=set())
-
+        await self._state.update_data({key: set()})
         logger_utils.info('Messages deleted')
 
     async def writes_msg_id_to_storage(
@@ -48,7 +54,8 @@ class MessageProcessor:
 
         """
         Writes the message ID to the storage in the state.
-        Retrieves the current set of message IDs from the state, adds the new message ID to the set,
+        Retrieves the current set of message IDs from the state, adds the new
+        message ID to the set,
         and updates the state with the new set of message IDs.
         Logs the start and end of the writing process.
 
@@ -60,7 +67,44 @@ class MessageProcessor:
 
         data: set[int] = dict(await self._state.get_data()).get(key, set())
         data.add(value.message_id)
-        dct = {key: data}
-        await self._state.update_data(dct)
+        await self._state.update_data({key: data})
 
         logger_utils.info('Message ID to recorded')
+
+    async def removes_inline_msg_kb(self, key='msg_ids_remove_kb') -> None:
+        """
+        Removes built-in keyboards from messages.
+        This function gets message IDs from the state and removes
+        built-in keyboards from these messages. After removing the keyboards,
+        the state is updated to clear the list of message IDs.
+        Logs:
+            — Start the keyboard removal process.
+            — Errors when removing the keyboard.
+            — Successful completion of the keyboard removal process.
+        :param key: Str
+        :return: None
+        """
+        logger_utils.info('Starting delete keyboard…')
+
+        data: set = dict(await self._state.get_data()).get(key, set())
+        if isinstance(self._message, Message):
+            chat_id = self._message.chat.id
+        else:
+            chat_id = self._message.message.chat.id
+
+        for msg_id in data:
+            try:
+                await self._message.bot.edit_message_reply_markup(
+                        chat_id=chat_id, message_id=msg_id)
+            except TelegramBadRequest as err:
+                logger_utils.error(f'Failed to remove inline keyboard: {err}',
+                                   exc_info=True)
+        await self._state.update_data({key: set()})
+
+        logger_utils.info('Keyboard removed')
+
+    async def remove_msg_and_kb(self):
+        logger_utils.debug(f'START remove_msg_and_kb')
+        await self.removes_inline_msg_kb()
+        await self.deletes_messages()
+        logger_utils.debug(f'END remove_msg_and_kb')
