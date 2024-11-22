@@ -59,13 +59,9 @@ async def cmd_start(msg: Message, state: FSMContext):
 async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
     logger_user_hand.debug(f'{database=}')
     msg_processor: MessageProcessor = MessageProcessor(clbk, state)
-    await msg_processor.removes_inline_msg_kb()
-
-    value = await clbk.message.answer('Подтвердите сброс статистики за месяц.\n'
+    value = await clbk.message.edit_text('Подтвердите сброс статистики за месяц.\n'
                                       'Общий баланс затронут не будет.',
                                       reply_markup=kb_reset_month_stats)
-    await msg_processor.writes_msg_id_to_storage(value)
-
     await clbk.answer()
 
 
@@ -73,13 +69,11 @@ async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
 @user_router.callback_query(F.data == '/reset')
 async def confirm_reset_month_stats(clbk: CallbackQuery, state: FSMContext):
     msg_processor: MessageProcessor = MessageProcessor(clbk, state)
-    await msg_processor.deletes_messages()
     await reset_stats(clbk)
-
     logger_user_hand.info(f'Monthly statistics for {clbk.from_user.id} reset')
+
     value = await clbk.message.edit_text(LexiconRu.text_statistics_reset,
                                          reply_markup=kb_for_wait_amount)
-    await msg_processor.writes_msg_id_to_storage(value)
     await clbk.answer()
 
 
@@ -132,13 +126,13 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
                             StateFilter(FSMMakeTransaction.fill_number))
 async def cmd_show_categories(clbk: CallbackQuery, state: FSMContext):
     msg_processor: MessageProcessor = MessageProcessor(clbk, state)
-    await msg_processor.deletes_messages()
+    await msg_processor.removes_inline_msg_kb()
     kb = clbk.message.reply_markup
     value = await clbk.message.answer(f'<pre>{MAP}</pre>\n'
                                       f'{LexiconRu.await_amount}',
                                       reply_markup=kb)
 
-    await msg_processor.writes_msg_id_to_storage(value)
+    await msg_processor.writes_msg_id_to_storage(value, 'msg_ids_remove_kb')
     await clbk.answer()
 
 
