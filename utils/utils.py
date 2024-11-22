@@ -62,4 +62,4 @@ class MessageProcessor:
         msg_for_del.add(value.message_id)
         await self._state.update_data(msg_for_del=msg_for_del)
 
-        logger_utils.info('Data recorded')
+        logger_utils.info('Message ID to recorded')

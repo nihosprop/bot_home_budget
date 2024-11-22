@@ -37,7 +37,7 @@ class LexiconRu:
                       '3. Выбрать категорию для записи транзакции.\n'
                       'Что-бы посмотреть структуру категорий нажмите:\n'
                       '-> <b>/category</b>\n\n')
-
+    text_statistics_reset: str = 'Статистика за месяц обнулена!✅\nВведите сумму👇'
     help_default_state: str = text_help + await_start
     help_state_fill_number: str = text_help + await_amount
     help_state_direction: str = text_help + await_direction

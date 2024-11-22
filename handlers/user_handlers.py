@@ -8,12 +8,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.exceptions import TelegramBadRequest
 
 from database.db import database
-from database.db_utils import (add_user_in_db,
-                               reset_stats,
-                               remove_user_from_db,
-                               generate_fin_stats,
+from database.db_utils import (add_expenses_in_db,
                                add_income_in_db,
-                               add_expenses_in_db)
+                               add_user_in_db,
+                               generate_fin_stats,
+                               remove_user_from_db,
+                               reset_stats)
 from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
                                  kb_for_wait_amount,
@@ -32,8 +32,9 @@ from states.states import FSMMakeTransaction
 user_router = Router()
 logger_user_hand = logging.getLogger(__name__)
 
-format_1 = ('[{asctime}] #{levelname:8} {filename}: {lineno} - <{funcName}> - {'
-            'message}')
+format_1 = (
+    '[{asctime}] #{levelname:<8} {filename:<17}:{lineno:4} - <{funcName}> - {'
+    'message}')
 formatter1 = logging.Formatter(fmt=format_1,
                                datefmt='%Y.%m.%d %H:%M:%S',
                                style='{')
@@ -51,23 +52,27 @@ async def cmd_start(msg: Message, state: FSMContext):
     await state.set_state(FSMMakeTransaction.fill_number)
     await state.update_data(msg_for_del=set())
 
+
 # reset user month stats
-@user_router.callback_query(F.data == 'reset_month_stats', ~StateFilter(default_state))
-async def clbk_reset_month(clbk: CallbackQuery):
+@user_router.callback_query(F.data == 'reset_month_stats',
+                            ~StateFilter(default_state))
+async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
     logger_user_hand.debug(f'{database=}')
     await clbk.message.answer('Подтвердите сброс статистики за месяц.\n'
                               'Общий баланс затронут не будет.',
                               reply_markup=kb_reset_month_stats)
+    await clbk.answer()
 
 
 # confirm reset month stats
 @user_router.callback_query(F.data == '/reset')
 async def confirm_reset_month_stats(clbk: CallbackQuery):
     await reset_stats(clbk)
-    logger_user_hand.info(f'Statistics for the month have been reset for '
-                          f'{clbk.from_user.id}')
-    await clbk.message.edit_text('Статистика за месяц обнулена!✅\nВведите '
-                                 'сумму👇', reply_markup=kb_for_wait_amount)
+
+    logger_user_hand.info(f'Monthly statistics for {clbk.from_user.id} reset')
+    value = await clbk.message.edit_text(LexiconRu.text_statistics_reset,
+                                         reply_markup=kb_for_wait_amount)
+    await msg_processor.writes_msg_id_to_storage(value)
     await clbk.answer()
 
 
