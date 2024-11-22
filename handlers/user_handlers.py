@@ -28,15 +28,16 @@ from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
                                 LexiconRu,
                                 MAP)
 from states.states import FSMMakeTransaction
+from utils.utils import MessageProcessor
 
 user_router = Router()
 logger_user_hand = logging.getLogger(__name__)
 
 format_1 = (
-    '[{asctime}] #{levelname:<8} {filename:<17}:{lineno:4} - <{funcName}> - {'
-    'message}')
-formatter1 = logging.Formatter(fmt=format_1,
-                               datefmt='%Y.%m.%d %H:%M:%S',
+        '[{asctime}] #{levelname:<8} {filename:<17}:{lineno:4} - <{funcName}> '
+        '- {'
+        'message}')
+formatter1 = logging.Formatter(fmt=format_1, datefmt='%Y.%m.%d %H:%M:%S',
                                style='{')
 file_handler = logging.FileHandler('logs/logs.log', mode='w', encoding='utf-8')
 file_handler.setFormatter(formatter1)
@@ -159,6 +160,8 @@ async def process_number_sent(
         msg: Message, state: FSMContext, number: dict[str, int | float]):
     await state.update_data(amount=number)
     await msg.answer(LexiconRu.select_direction, reply_markup=kb_direction)
+
+    # removes_inline_msg_kb
     await state.set_state(FSMMakeTransaction.select_direction)
 
 

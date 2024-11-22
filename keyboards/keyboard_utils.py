@@ -36,8 +36,8 @@ def create_inline_kb(
                 small_text.append(InlineKeyboardButton(text=text,
                                                      callback_data=button))
 
-    kb_builder.row(*small_text, width=width)
     kb_builder.row(*big_text, width=1)
+    kb_builder.row(*small_text, width=width)
     if cancel_butt:
         kb_builder.row(InlineKeyboardButton(text=CANCEL_BUTT['cancel'],
                                         callback_data='/cancel'))
