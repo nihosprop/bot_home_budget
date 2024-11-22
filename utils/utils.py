@@ -44,22 +44,23 @@ class MessageProcessor:
         logger_utils.info('Messages deleted')
 
     async def writes_msg_id_to_storage(
-            self, value: Message | CallbackQuery) -> None:
+            self, value: Message | CallbackQuery, key='msg_for_del') -> None:
 
         """
         Writes the message ID to the storage in the state.
-        Retrieves the current set of message IDs from the state, adds the new
-        message ID to the set,
+        Retrieves the current set of message IDs from the state, adds the new message ID to the set,
         and updates the state with the new set of message IDs.
         Logs the start and end of the writing process.
-        :param value: Message | CallbackQuery
+
+        :param1 value: Message | CallbackQuery
+        :param2 key: Str
         :return: None
         """
         logger_utils.info('Start writing data to storage…')
 
-        msg_for_del: set[int] = dict(await self._state.get_data()).get(
-                'msg_for_del', set())
-        msg_for_del.add(value.message_id)
-        await self._state.update_data(msg_for_del=msg_for_del)
+        data: set[int] = dict(await self._state.get_data()).get(key, set())
+        data.add(value.message_id)
+        dct = {key: data}
+        await self._state.update_data(dct)
 
         logger_utils.info('Message ID to recorded')
