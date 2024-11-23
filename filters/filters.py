@@ -1,6 +1,6 @@
 import logging
+import math
 
-from math import isnan
 from aiogram.enums import ContentType
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
@@ -21,9 +21,10 @@ class IsNumber(BaseFilter):
                 value = {'number': int(number)}
             except ValueError:
                 try:
-                    if isnan(float(number)):
+                    if not math.isfinite(float(number)):
                         user_id = message.from_user.id
-                        logger_filters.error(f'NaN attempt!!! -> {user_id=}')
+                        logger_filters.error(f'NaN or INF attempt!!! ->'
+                                             f' {user_id=}')
                         return False
 
                     value = {'number': float(number)}
