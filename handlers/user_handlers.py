@@ -126,6 +126,7 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
                             StateFilter(FSMMakeTransaction.fill_number))
 async def cmd_show_categories(clbk: CallbackQuery, state: FSMContext):
     msg_processor: MessageProcessor = MessageProcessor(clbk, state)
+    await msg_processor.deletes_messages()
     await msg_processor.removes_inline_msg_kb()
     kb = clbk.message.reply_markup
     value = await clbk.message.answer(f'<pre>{MAP}</pre>\n'
