@@ -16,7 +16,8 @@ async def remove_user_from_db(user_id: str):
 # move to middleware!!!
 async def add_user_in_db(msg: Message) -> None:
     user_id = str(msg.from_user.id)
-    database.setdefault(user_id, {'balance': 0, 'income': {}, 'expenses': {}})
+    if not database.get(user_id):
+        database.setdefault(user_id, {'balance': 0, 'income': {}, 'expenses': {}})
 
 async def reset_stats(clbk: CallbackQuery) -> None:
     """Resets statistics on request for only a month."""
