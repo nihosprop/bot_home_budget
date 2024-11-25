@@ -48,7 +48,8 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
     await add_user_in_db(msg)
     await msg.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
-    await state.update_data(msg_for_del=set())
+    if not database.get(str(msg.from_user.id)):
+        await state.update_data(msg_for_del=set())
 
 
 # reset user month stats
