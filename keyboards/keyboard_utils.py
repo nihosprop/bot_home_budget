@@ -1,6 +1,6 @@
 import logging
 
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from lexicon.lexicon_ru import CANCEL_BUTT
@@ -9,8 +9,8 @@ logger_kb_utils = logging.getLogger(__name__)
 
 
 def create_inline_kb(
-        width: int, *args: str, cancel_butt=True, **kwargs: str) -> (
-        InlineKeyboardMarkup):
+        width: int, *args: str, cancel_butt=True, webapp=False,
+        **kwargs: str) -> InlineKeyboardMarkup:
     """Generates inline keyboards on the fly"""
 
     kb_builder = InlineKeyboardBuilder()
@@ -42,4 +42,8 @@ def create_inline_kb(
     if cancel_butt:
         kb_builder.row(InlineKeyboardButton(text=CANCEL_BUTT['cancel'],
                                             callback_data='/cancel'))
-        return kb_builder.as_markup()
+    if webapp:
+        kb_builder.row(InlineKeyboardButton(text="GitHub",
+                                            web_app=WebAppInfo(
+                                                url='https://github.com')))
+    return kb_builder.as_markup()
