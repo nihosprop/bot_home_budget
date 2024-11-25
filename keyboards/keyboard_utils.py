@@ -7,6 +7,7 @@ from lexicon.lexicon_ru import CANCEL_BUTT
 
 logger_kb_utils = logging.getLogger(__name__)
 
+
 def create_inline_kb(
         width: int, *args: str, cancel_butt=True, **kwargs: str) -> (
         InlineKeyboardMarkup):
@@ -19,26 +20,26 @@ def create_inline_kb(
     if args:
         for button in args:
             if len(button) > 16:
-                big_text.append(InlineKeyboardButton(text=CANCEL_BUTT[
-                    button] if CANCEL_BUTT.get(button) else button,
-                                                     callback_data=button))
+                big_text.append(InlineKeyboardButton(
+                        text=CANCEL_BUTT[button] if CANCEL_BUTT.get(
+                                button) else button, callback_data=button))
             else:
-                small_text.append(InlineKeyboardButton(text=CANCEL_BUTT[
-                    button] if CANCEL_BUTT.get(button) else button,
-                                                       callback_data=button))
+                small_text.append(InlineKeyboardButton(
+                        text=CANCEL_BUTT[button] if CANCEL_BUTT.get(
+                                button) else button, callback_data=button))
 
     if kwargs:
         for button, text in kwargs.items():
             if len(text) > 16:
-                big_text.append(InlineKeyboardButton(text=text,
-                                                     callback_data=button))
+                big_text.append(
+                        InlineKeyboardButton(text=text, callback_data=button))
             else:
-                small_text.append(InlineKeyboardButton(text=text,
-                                                     callback_data=button))
+                small_text.append(
+                        InlineKeyboardButton(text=text, callback_data=button))
 
     kb_builder.row(*big_text, width=1)
     kb_builder.row(*small_text, width=width)
     if cancel_butt:
         kb_builder.row(InlineKeyboardButton(text=CANCEL_BUTT['cancel'],
-                                        callback_data='/cancel'))
-    return kb_builder.as_markup()
+                                            callback_data='/cancel'))
+        return kb_builder.as_markup()

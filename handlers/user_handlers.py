@@ -56,24 +56,21 @@ async def cmd_start(msg: Message, state: FSMContext):
 # reset user month stats
 @user_router.callback_query(F.data == 'reset_month_stats',
                             ~StateFilter(default_state))
-async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
+async def clbk_reset_month(clbk: CallbackQuery):
     logger_user_hand.debug(f'{database=}')
-    msg_processor: MessageProcessor = MessageProcessor(clbk, state)
-    value = await clbk.message.edit_text('Подтвердите сброс статистики за месяц.\n'
-                                      'Общий баланс затронут не будет.',
-                                      reply_markup=kb_reset_month_stats)
+    await clbk.message.edit_text('Подтвердите сброс статистики за месяц.\n'
+                                 'Общий баланс затронут не будет.',
+                                 reply_markup=kb_reset_month_stats)
     await clbk.answer()
 
 
 # confirm reset month stats
-@user_router.callback_query(F.data == '/reset')
-async def confirm_reset_month_stats(clbk: CallbackQuery, state: FSMContext):
-    msg_processor: MessageProcessor = MessageProcessor(clbk, state)
+@user_router.callback_query(F.data == '/reset', ~StateFilter(default_state))
+async def confirm_reset_month_stats(clbk: CallbackQuery):
     await reset_stats(clbk)
     logger_user_hand.info(f'Monthly statistics for {clbk.from_user.id} reset')
-
-    value = await clbk.message.edit_text(LexiconRu.text_statistics_reset,
-                                         reply_markup=kb_for_wait_amount)
+    await clbk.message.edit_text(LexiconRu.text_statistics_reset,
+                                 reply_markup=kb_for_wait_amount)
     await clbk.answer()
 
 
@@ -114,9 +111,10 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     await msg_processor.removes_inline_msg_kb()
     await msg_processor.deletes_messages()
     kb = clbk.message.reply_markup
-    value = await clbk.message.answer(
-        await generate_fin_stats(clbk, database) + '\n' + LexiconRu.await_amount,
-        reply_markup=kb)
+    value = await clbk.message.answer(await generate_fin_stats(clbk,
+                                                               database) +
+                                      '\n' + LexiconRu.await_amount,
+            reply_markup=kb)
     await msg_processor.writes_msg_id_to_storage(value, key='msg_ids_remove_kb')
     await clbk.answer()
 
