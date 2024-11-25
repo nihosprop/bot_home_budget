@@ -101,7 +101,6 @@ async def cmd_cancel_in_state(
     await clbk.answer()
 
 
-# region important(__int__)
 # cmd_report
 @user_router.callback_query(F.data == '/report',
                             StateFilter(FSMMakeTransaction.fill_number))
@@ -151,8 +150,6 @@ async def process_number_sent(
 async def sent_invalid_number(msg: Message):
     await msg.delete()
 
-
-# endregion
 
 # select_income_direction
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_direction),
