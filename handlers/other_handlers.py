@@ -25,7 +25,7 @@ async def other_message(msg: Message):
 
 
 # cap
-@other_router.callback_query(F.data != '/start')
+@other_router.callback_query()
 async def other_clbk(clbk: CallbackQuery):
     await clbk.message.delete()
     await clbk.answer('Запустите бота\n'
