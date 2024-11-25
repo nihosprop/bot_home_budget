@@ -33,7 +33,7 @@ class MessageProcessor:
         :param key: Str
         :return: None
         """
-        logger_utils.info('Starting to delete messages…')
+        logger_utils.debug('Starting to delete messages…')
 
         data: set = dict(await self._state.get_data()).get(key, set())
         if isinstance(self._message, Message):
@@ -48,7 +48,7 @@ class MessageProcessor:
             except TelegramBadRequest as err:
                 logger_utils.error(f'Failed to remove inline keyboard: {err}')
         await self._state.update_data({key: set()})
-        logger_utils.info('Messages deleted')
+        logger_utils.debug('Messages deleted')
 
     async def writes_msg_id_to_storage(
             self, value: Message | CallbackQuery, key='msg_for_del') -> None:
@@ -64,13 +64,13 @@ class MessageProcessor:
         :param2 key: Str
         :return: None
         """
-        logger_utils.info('Start writing data to storage…')
+        logger_utils.debug('Start writing data to storage…')
 
         data: set[int] = dict(await self._state.get_data()).get(key, set())
         data.add(value.message_id)
         await self._state.update_data({key: data})
 
-        logger_utils.info('Message ID to recorded')
+        logger_utils.debug('Message ID to recorded')
 
     async def removes_inline_msg_kb(self, key='msg_ids_remove_kb') -> None:
         """
