@@ -46,7 +46,6 @@ logger_user_hand.addHandler(file_handler)
 @user_router.message(CommandStart(), StateFilter(default_state))
 async def cmd_start_default_state(msg: Message, state: FSMContext):
     await add_user_in_db(msg)
-    logger_user_hand.debug(f'{database=}')
     await msg.answer(LexiconRu.start)
     await state.set_state(FSMMakeTransaction.fill_number)
     await state.update_data(msg_for_del=set())
