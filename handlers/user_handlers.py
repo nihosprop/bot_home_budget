@@ -42,7 +42,7 @@ file_handler.setFormatter(formatter1)
 logger_user_hand.addHandler(file_handler)
 
 
-# default_state
+# cmd_start_default_state
 @user_router.message(CommandStart(), StateFilter(default_state))
 async def cmd_start(msg: Message, state: FSMContext):
     await add_user_in_db(msg)
