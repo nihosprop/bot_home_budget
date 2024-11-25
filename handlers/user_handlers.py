@@ -34,8 +34,7 @@ logger_user_hand = logging.getLogger(__name__)
 
 format_1 = (
         '[{asctime}] #{levelname:<8} {filename:<17}:{lineno:4} - <{funcName}> '
-        '- {'
-        'message}')
+        '- {message}')
 formatter1 = logging.Formatter(fmt=format_1, datefmt='%Y.%m.%d %H:%M:%S',
                                style='{')
 file_handler = logging.FileHandler('logs/logs.log', mode='w', encoding='utf-8')
@@ -111,10 +110,9 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     await msg_processor.removes_inline_msg_kb()
     await msg_processor.deletes_messages()
     kb = clbk.message.reply_markup
-    value = await clbk.message.answer(await generate_fin_stats(clbk,
-                                                               database) +
-                                      '\n' + LexiconRu.await_amount,
-            reply_markup=kb)
+    value = await clbk.message.answer(
+        await generate_fin_stats(clbk, database) + '\n' + LexiconRu.await_amount,
+        reply_markup=kb)
     await msg_processor.writes_msg_id_to_storage(value, key='msg_ids_remove_kb')
     await clbk.answer()
 
