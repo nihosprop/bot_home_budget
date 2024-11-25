@@ -7,6 +7,7 @@ from aiogram.types import Message
 
 logger_filters = logging.getLogger(__name__)
 
+
 class IsNumber(BaseFilter):
     """ Filter to check if the message content is a number. """
 
@@ -24,7 +25,7 @@ class IsNumber(BaseFilter):
                     if not math.isfinite(float(number)):
                         user_id = message.from_user.id
                         logger_filters.warning(f'NaN or INF attempt!!! ->'
-                                             f' {user_id=}:{number=}')
+                                               f' {user_id=}:{number=}')
                         return False
 
                     value = {'number': float(number)}
