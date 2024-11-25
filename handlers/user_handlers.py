@@ -1,7 +1,7 @@
 import logging
 
 from aiogram import F, Router
-from aiogram.filters import StateFilter
+from aiogram.filters import CommandStart, StateFilter
 from aiogram.types import (CallbackQuery, Message)
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
