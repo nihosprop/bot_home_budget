@@ -24,7 +24,7 @@ class IsNumber(BaseFilter):
                     if not math.isfinite(float(number)):
                         user_id = message.from_user.id
                         logger_filters.warning(f'NaN or INF attempt!!! ->'
-                                             f' {user_id=}')
+                                             f' {user_id=}:{number=}')
                         return False
 
                     value = {'number': float(number)}
