@@ -2,7 +2,7 @@ import logging
 
 from aiogram import F, Router
 from aiogram.filters import CommandStart, StateFilter
-from aiogram.types import (CallbackQuery, Message)
+from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 
@@ -58,10 +58,12 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
 async def cmd_start_in_state(msg: Message):
     await msg.delete()
 
+
 @user_router.message(F.text == '/start',
                      StateFilter(FSMMakeTransaction.fill_number))
 async def cmd_start_in_state(msg: Message):
     value = await msg.answer(LexiconRu.start)
+
 
 # reset user month stats
 @user_router.callback_query(F.data == 'reset_month_stats',
