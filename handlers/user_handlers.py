@@ -61,12 +61,6 @@ async def cmd_start_in_state(msg: Message):
     await msg.delete()
 
 
-@user_router.message(F.text == '/start',
-                     StateFilter(FSMMakeTransaction.fill_number))
-async def cmd_start_in_state(msg: Message):
-    value = await msg.answer(LexiconRu.start)
-
-
 # reset user month stats
 @user_router.callback_query(F.data == 'reset_month_stats',
                             ~StateFilter(default_state))
