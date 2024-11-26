@@ -7,6 +7,7 @@ logger_lexicon = logging.getLogger(__name__)
 @dataclass
 class LexiconCommandsRu:
     delete_user: str = 'Стереть все данные'
+    start: str = 'Запуск'
 
 
 @dataclass
