@@ -83,9 +83,12 @@ async def confirm_reset_month_stats(clbk: CallbackQuery):
 
 
 # remove user
-@user_router.message(F.text == '/delete_user', ~StateFilter(default_state))
-async def cmd_delete_user(msg: Message):
-    await msg.answer('Подтвердить удаление данных!', reply_markup=kb_yes_cancel)
+@user_router.callback_query(F.data == 'delete_user_data',
+                            ~StateFilter(default_state))
+async def cmd_delete_user(clbk: Message, state: FSMContext):
+    await clbk.message.edit_text('Подтвердить удаление данных!',
+                                 reply_markup=kb_yes_cancel)
+    await state.set_state(FSMDeleteUser.confirm_deletion)
 
 
 # confirm remove user
