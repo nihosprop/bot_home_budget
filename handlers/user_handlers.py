@@ -98,7 +98,8 @@ async def invalid_confirm_user(msg: Message):
 
 
 # confirm remove user
-@user_router.callback_query(F.data == 'yes')
+@user_router.callback_query(F.data == 'yes',
+                            StateFilter(FSMDeleteUser.confirm_deletion))
 async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
     await remove_user_from_db(str(clbk.from_user.id))
     await clbk.message.edit_text(LexiconRu.text_confirm_remove)
@@ -155,12 +156,8 @@ async def cmd_show_categories(clbk: CallbackQuery, state: FSMContext):
 async def process_number_sent(
         msg: Message, state: FSMContext, number: bool | int | float):
     msg_processor = MessageProcessor(msg, state)
-    updates = await msg.bot.get_updates()
-    logger_user_hand.debug(f'{bool(updates)=}')
     await msg_processor.deletes_messages()
     await msg_processor.removes_inline_msg_kb()
-    logger_user_hand.debug(f'{bool(updates)=}')
-
     await state.update_data(amount=number)
     await msg.answer(LexiconRu.select_direction, reply_markup=kb_direction)
     await state.set_state(FSMMakeTransaction.select_direction)
