@@ -91,6 +91,12 @@ async def cmd_delete_user(clbk: Message, state: FSMContext):
     await state.set_state(FSMDeleteUser.confirm_deletion)
 
 
+# invalid confirm user
+@user_router.message(StateFilter(FSMDeleteUser.confirm_deletion))
+async def invalid_confirm_user(msg: Message):
+    await msg.delete()
+
+
 # confirm remove user
 @user_router.callback_query(F.data == 'yes')
 async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
