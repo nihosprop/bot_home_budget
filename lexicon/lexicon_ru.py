@@ -6,7 +6,6 @@ logger_lexicon = logging.getLogger(__name__)
 
 @dataclass
 class LexiconCommandsRu:
-    delete_user: str = 'Стереть все данные'
     start: str = 'Запуск'
 
 
@@ -138,6 +137,7 @@ YES_NO_BUTT: dict[str, str] = {'yes': '🗑️Удалить', '/cancel': '❌О
 RESET_CANCEL_BUTT: dict[str, str] = {'/reset': 'Сброс', '/cancel': '❌Отмена'}
 FOR_AWAIT_AMOUNT_BUTT: dict[str, str] = {
         'reset_month_stats': 'Сброс статистики за месяц',
+        'delete_user_data': 'Стереть все данные',
         '/category': 'Категории',
         '/report': 'Отчет'}
 MAP = """
