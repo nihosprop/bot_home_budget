@@ -95,8 +95,7 @@ async def cmd_delete_user(msg: Message):
 # confirm remove user
 @user_router.callback_query(F.data == 'yes')
 async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
-    user_id = str(clbk.from_user.id)
-    await remove_user_from_db(user_id)
+    await remove_user_from_db(str(clbk.from_user.id))
     await clbk.message.edit_text(LexiconRu.text_confirm_remove)
     await state.clear()
 
