@@ -55,7 +55,8 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
 
 # cmd_start_not_default_state
 @user_router.message(F.text == '/start',
-                     ~StateFilter(FSMMakeTransaction.fill_number))
+                     ~StateFilter(FSMMakeTransaction.fill_number,
+                                  FSMDeleteUser.confirm_deletion))
 async def cmd_start_in_state(msg: Message):
     await msg.delete()
 
