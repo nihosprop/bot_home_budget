@@ -162,7 +162,7 @@ async def process_number_sent(
 
 # invalid number
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number))
-async def sent_invalid_number(msg: Message):
+async def process_invalid_number(msg: Message):
     await msg.delete()
 
 
