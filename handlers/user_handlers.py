@@ -26,7 +26,7 @@ from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
                                 INCOME_CATEG_BUTT,
                                 LexiconRu,
                                 MAP)
-from states.states import FSMMakeTransaction
+from states.states import FSMDeleteUser, FSMMakeTransaction
 from utils.utils import MessageProcessor
 
 user_router = Router()
