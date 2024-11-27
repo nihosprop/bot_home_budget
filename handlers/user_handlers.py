@@ -43,7 +43,7 @@ logger_user_hand.addHandler(file_handler)
 
 
 # cmd_start_default_state
-@user_router.message(CommandStart(), StateFilter(default_state))
+@user_router.message(F.text == '/start', StateFilter(default_state))
 async def cmd_start_default_state(msg: Message, state: FSMContext):
     await add_user_in_db(msg)
     value = await msg.answer(LexiconRu.start, reply_markup=kb_for_wait_amount)
