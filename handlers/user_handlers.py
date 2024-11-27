@@ -55,10 +55,13 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
 
 # cmd_start_not_default_state
 @user_router.message(F.text == '/start',
-                     ~StateFilter(FSMMakeTransaction.fill_number,
-                                  FSMDeleteUser.confirm_deletion))
-async def cmd_start_in_state(msg: Message):
-    await msg.delete()
+                     ~StateFilter(default_state))
+async def cmd_start_in_state(msg: Message, state: FSMContext):
+    message_processor = MessageProcessor(msg, state)
+    await message_processor.deletes_messages()
+    value = await msg.answer(LexiconRu.start, reply_markup=kb_for_wait_amount)
+    await state.set_state(FSMMakeTransaction.fill_number)
+    await message_processor.writes_msg_id_to_storage(value)
 
 
 # reset user month stats
