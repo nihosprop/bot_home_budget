@@ -36,15 +36,15 @@ class MessageProcessor:
         logger_utils.debug('Starting to delete messages…')
 
         data: set = dict(await self._state.get_data()).get(key, set())
-        if isinstance(self._message, Message):
-            chat_id = self._message.chat.id
+        if isinstance(self._type_update, Message):
+            chat_id = self._type_update.chat.id
         else:
-            chat_id = self._message.message.chat.id
+            chat_id = self._type_update.message.chat.id
 
         for msg_id in data:
             try:
-                await self._message.bot.delete_message(chat_id=chat_id,
-                                                       message_id=msg_id)
+                await self._type_update.bot.delete_message(chat_id=chat_id,
+                                                           message_id=msg_id)
             except TelegramBadRequest as err:
                 logger_utils.error(f'Failed to remove inline keyboard: {err}')
         await self._state.update_data({key: set()})
@@ -88,14 +88,14 @@ class MessageProcessor:
         logger_utils.debug('Starting delete keyboard…')
 
         data: set = dict(await self._state.get_data()).get(key, set())
-        if isinstance(self._message, Message):
-            chat_id = self._message.chat.id
+        if isinstance(self._type_update, Message):
+            chat_id = self._type_update.chat.id
         else:
-            chat_id = self._message.message.chat.id
+            chat_id = self._type_update.message.chat.id
 
         for msg_id in data:
             try:
-                await self._message.bot.edit_message_reply_markup(
+                await self._type_update.bot.edit_message_reply_markup(
                         chat_id=chat_id, message_id=msg_id)
             except TelegramBadRequest as err:
                 logger_utils.error(f'Failed to remove inline keyboard: {err}',
