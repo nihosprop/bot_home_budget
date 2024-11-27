@@ -16,7 +16,7 @@ class MessageProcessor:
     _message (Message | CallbackQuery): The message or callback query object.
     _state (FSMContext): The finite state machine context.
     """
-    _message: Message | CallbackQuery
+    _type_update: Message | CallbackQuery
     _state: FSMContext
 
     async def deletes_messages(self, key='msg_for_del') -> None:
