@@ -58,6 +58,7 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
 async def cmd_start_in_state(msg: Message, state: FSMContext):
     message_processor = MessageProcessor(msg, state)
     await message_processor.deletes_messages()
+    await message_processor.deletes_messages('emergency_removal')
     value = await msg.answer(LexiconRu.start, reply_markup=kb_for_wait_amount)
     await state.set_state(FSMMakeTransaction.fill_number)
     await message_processor.writes_msg_id_to_storage(value)
@@ -66,21 +67,26 @@ async def cmd_start_in_state(msg: Message, state: FSMContext):
 # reset user month stats
 @user_router.callback_query(F.data == 'reset_month_stats',
                             ~StateFilter(default_state))
-async def clbk_reset_month(clbk: CallbackQuery):
+async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
     logger_user_hand.debug(f'{database=}')
-    await clbk.message.edit_text('Подтвердите сброс статистики за месяц.\n'
-                                 'Общий баланс затронут не будет.',
-                                 reply_markup=kb_reset_month_stats)
+    value = await clbk.message.edit_text('Подтвердите сброс статистики за '
+                                         'месяц.\n'
+                                         'Общий баланс затронут не будет.',
+                                         reply_markup=kb_reset_month_stats)
+    await MessageProcessor(clbk, state).writes_msg_id_to_storage(value,
+        'emergency_removal')
     await clbk.answer()
 
 
 # confirm reset month stats
 @user_router.callback_query(F.data == '/reset', ~StateFilter(default_state))
-async def confirm_reset_month_stats(clbk: CallbackQuery):
+async def confirm_reset_month_stats(clbk: CallbackQuery, state: FSMContext):
     await reset_stats(clbk)
     logger_user_hand.info(f'Monthly statistics for {clbk.from_user.id} reset')
-    await clbk.message.edit_text(LexiconRu.text_statistics_reset,
-                                 reply_markup=kb_for_wait_amount)
+    value = await clbk.message.edit_text(LexiconRu.text_statistics_reset,
+                                         reply_markup=kb_for_wait_amount)
+    await MessageProcessor(clbk, state).writes_msg_id_to_storage(value,
+                                                                 'emergency_removal')
     await clbk.answer()
 
 
@@ -88,8 +94,10 @@ async def confirm_reset_month_stats(clbk: CallbackQuery):
 @user_router.callback_query(F.data == 'delete_user_data',
                             ~StateFilter(default_state))
 async def cmd_delete_user(clbk: Message, state: FSMContext):
-    await clbk.message.edit_text('Подтвердить удаление данных!',
+    value = await clbk.message.edit_text('Подтвердить удаление данных!',
                                  reply_markup=kb_yes_cancel)
+    await MessageProcessor(clbk, state).writes_msg_id_to_storage(value,
+                                                                 'emergency_removal')
     await state.set_state(FSMDeleteUser.confirm_deletion)
 
 
@@ -117,6 +125,7 @@ async def cmd_cancel_in_state(
                                          reply_markup=kb_for_wait_amount)
     logger_user_hand.debug(f'{value.__class__=}')
     await msg_processor.writes_msg_id_to_storage(value)
+    await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
     await state.set_state(FSMMakeTransaction.fill_number)
     await clbk.answer()
 
@@ -129,11 +138,11 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     await msg_processor.removes_inline_msg_kb()
     await msg_processor.deletes_messages()
     kb = clbk.message.reply_markup
-    value = await clbk.message.answer(await generate_fin_stats(clbk,
-                                                               database) +
-                                      '\n' + LexiconRu.await_amount,
-            reply_markup=kb)
+    value = await clbk.message.answer(
+        await generate_fin_stats(clbk, database) + '\n' + LexiconRu.await_amount,
+        reply_markup=kb)
     await msg_processor.writes_msg_id_to_storage(value, key='msg_ids_remove_kb')
+    await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
     await clbk.answer()
 
 
@@ -150,6 +159,7 @@ async def cmd_show_categories(clbk: CallbackQuery, state: FSMContext):
                                       reply_markup=kb)
 
     await msg_processor.writes_msg_id_to_storage(value, 'msg_ids_remove_kb')
+    await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
     await clbk.answer()
 
 
@@ -161,7 +171,10 @@ async def process_number_sent(
     await msg_processor.deletes_messages()
     await msg_processor.removes_inline_msg_kb()
     await state.update_data(amount=number)
-    await msg.answer(LexiconRu.select_direction, reply_markup=kb_direction)
+    value = await msg.answer(LexiconRu.select_direction,
+                            reply_markup=kb_direction)
+    await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
+
     await state.set_state(FSMMakeTransaction.select_direction)
 
 
@@ -177,8 +190,10 @@ async def process_invalid_number(msg: Message):
 async def button_press_income(
         clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.edit_text(LexiconRu.select_category,
-                                         reply_markup=kb_income_categories)
-    await state.update_data(msg_id_income_categ=value.message_id)
+                                 reply_markup=kb_income_categories)
+    await MessageProcessor(clbk, state).writes_msg_id_to_storage(value,
+                                                       'emergency_removal')
+
     await state.set_state(FSMMakeTransaction.select_income)
     await clbk.answer()
 
@@ -201,6 +216,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
                                          reply_markup=kb_for_wait_amount)
     logger_user_hand.debug(database)
     await msg_processor.writes_msg_id_to_storage(value)
+    await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
     await state.set_state(FSMMakeTransaction.fill_number)
     await clbk.answer()
 
@@ -216,8 +232,10 @@ async def invalid_income_category(msg: Message):
                             F.data == 'expenses')
 async def button_press_expenses(
         clbk: CallbackQuery, state: FSMContext):
-    await clbk.message.edit_text(LexiconRu.select_category,
+    value = await clbk.message.edit_text(LexiconRu.select_category,
                                  reply_markup=kb_expenses_categories)
+    await MessageProcessor(clbk, state).writes_msg_id_to_storage(value,
+                                                       'emergency_removal')
     await state.set_state(FSMMakeTransaction.select_expenses)
     await clbk.answer()
 
@@ -228,8 +246,10 @@ async def button_press_expenses(
 async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
     category = clbk.data
     await state.update_data(category=category)
-    await clbk.message.edit_text(LexiconRu.select_category,
+    value = await clbk.message.edit_text(LexiconRu.select_category,
                                  reply_markup=kbs_for_expenses[category])
+    await MessageProcessor(clbk, state).writes_msg_id_to_storage(value,
+                                                                 'emergency_removal')
     await state.set_state(FSMMakeTransaction.select_subcategory)
     await clbk.answer()
 
@@ -253,6 +273,7 @@ async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
     msg_processor = MessageProcessor(clbk, state)
     await msg_processor.deletes_messages()
     await msg_processor.writes_msg_id_to_storage(value)
+    await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
     await state.set_state(FSMMakeTransaction.fill_number)
     await clbk.answer()
 
