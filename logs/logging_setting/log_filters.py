@@ -10,6 +10,6 @@ class CriticalLogFilter(logging.Filter):
     def filter(self, record):
         return record.levelname == 'CRITICAL'
 
-class DebugWarningLogFilter(logging.Filter):
+class DebugInfoLogFilter(logging.Filter):
     def filter(self, record):
         return record.levelname in ('DEBUG', 'INFO')
