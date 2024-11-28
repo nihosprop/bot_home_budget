@@ -46,8 +46,6 @@ async def add_expenses_in_db(
         clbk: CallbackQuery, state: FSMContext) -> None:
     user_id = str(clbk.from_user.id)
     data = await state.get_data()
-    logger_db_utils.debug(f'{data=}')
-
     amount = data['amount']
     category = data['category']
     subcategory = clbk.data
