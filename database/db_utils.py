@@ -58,8 +58,7 @@ async def add_expenses_in_db(
 
 async def generate_fin_stats(clbk: CallbackQuery, data: dict) -> str:
     date: str = clbk.message.date.strftime('%d.%m.%Y %H:%M (UTC)')
-
-    logger_db_utils.debug(f'{date}')
+    logger_db_utils.debug(f'{date=}')
     user_id = str(clbk.from_user.id)
     logger_db_utils.debug(f'{user_id=}')
     monthly_income: dict[str, float | int] = data[user_id]['income']
