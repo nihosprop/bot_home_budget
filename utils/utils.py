@@ -46,7 +46,7 @@ class MessageProcessor:
                 await self._type_update.bot.delete_message(chat_id=chat_id,
                                                            message_id=msg_id)
             except TelegramBadRequest as err:
-                logger_utils.error(f'Failed to remove inline keyboard: {err}')
+                logger_utils.warning(f'Failed to remove inline keyboard: {err}')
         await self._state.update_data({key: set()})
         logger_utils.debug('Messages deleted')
 
