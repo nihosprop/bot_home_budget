@@ -50,6 +50,7 @@ async def add_expenses_in_db(
     category = data['category']
     subcategory = clbk.data
     database.setdefault(user_id, {'income': {}, 'expenses': {}})
+    database.setdefault(user_id)['balance'] -= amount
     database[user_id]['expenses'][category][subcategory] = (
             database[user_id]['expenses'].setdefault(category, {}).setdefault(
                     subcategory,
@@ -71,7 +72,7 @@ async def generate_fin_stats(clbk: CallbackQuery, data: dict) -> str:
     report: str = (f'<u><i>{date}</i></u>\n\n'
                    f'<b>Баланс: </b>{balance}\n'
                    f'<b>Сальдо:</b>'
-                   f' {sum_income - sum_expenses}\n'
+                   f' {balance - sum_expenses}\n'
                    f'------------------------\n'
                    f'<b>Доходы за месяц:</b> {sum_income}\n')
 
