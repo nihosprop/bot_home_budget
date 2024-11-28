@@ -214,7 +214,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{LexiconRu.await_amount}',
                                          reply_markup=kb_for_wait_amount)
-    logger_user_hand.debug(database)
+    logger_user_hand.debug(f'{database=}')
     await msg_processor.writes_msg_id_to_storage(value)
     await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
     await state.set_state(FSMMakeTransaction.fill_number)
@@ -266,11 +266,11 @@ async def invalid_expenses_categories(msg: Message):
                                                 EXPENSE_SUBCATEGORY_BUTTONS.values())))
 async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
     await add_expenses_in_db(clbk, state)
+    msg_processor = MessageProcessor(clbk, state)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{LexiconRu.await_amount}',
                                          reply_markup=kb_for_wait_amount)
-    logger_user_hand.debug(f'{database}')
-    msg_processor = MessageProcessor(clbk, state)
+    logger_user_hand.debug(f'{database=}')
     await msg_processor.deletes_messages()
     await msg_processor.writes_msg_id_to_storage(value)
     await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
