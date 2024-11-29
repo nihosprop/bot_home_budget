@@ -16,10 +16,10 @@ storage = MemoryStorage()
 
 
 async def main():
-    logging.basicConfig(level=logging.DEBUG,
-                        format='[{asctime}] #{levelname:<8} {filename:<17}:{'
-                               'lineno:4} - <{funcName}> - {message}',
-                        datefmt='%Y.%m.%d %H:%M:%S', style='{')
+
+    with open('logs/logging_setting/logging_config.yaml', 'rt') as file:
+        log_config = yaml.safe_load(file.read())
+    dictConfig(log_config)
 
     logger_main.info('Start bot')
 
