@@ -30,7 +30,7 @@ class IsNumber(BaseFilter):
 
                     value = {'number': float(number)}
                 except ValueError:
-                    logger_filters.error(f'Failed to convert message to number:'
+                    logger_filters.warning(f'Failed to convert message to number:'
                                          f' {message.text=}')
                     return False
             logger_filters.debug(f'{value=}')
