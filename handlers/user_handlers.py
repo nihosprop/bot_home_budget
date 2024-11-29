@@ -32,15 +32,6 @@ from utils.utils import MessageProcessor
 user_router = Router()
 logger_user_hand = logging.getLogger(__name__)
 
-format_1 = (
-        '[{asctime}] #{levelname:<8} {filename:<17}:{lineno:4} - <{funcName}> '
-        '- {message}')
-formatter1 = logging.Formatter(fmt=format_1, datefmt='%Y.%m.%d %H:%M:%S',
-                               style='{')
-file_handler = logging.FileHandler('logs/logs.log', mode='w', encoding='utf-8')
-file_handler.setFormatter(formatter1)
-logger_user_hand.addHandler(file_handler)
-
 
 # cmd_start_default_state
 @user_router.message(F.text == '/start', StateFilter(default_state))
