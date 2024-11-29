@@ -1,0 +1,117 @@
+version: 1
+disable_existing_loggers: True
+
+formatters:
+  default:
+    format: '[{asctime}] #{levelname:<8} {filename:<17}:{lineno:4} - <{funcName}> - {message}'
+    datefmt: '%Y.%m.%d %H:%M:%S'
+    style: '{'
+
+  formatter_1:
+    format: '[{asctime}] #{levelname:<8} {filename:<17}:{lineno:4} - <{funcName}> - {message}'
+    datefmt: '%Y.%m.%d %H:%M:%S'
+    style: '{'
+
+
+filters:
+  error_critical_filter:
+    (): logs.logging_setting.log_filters.ErrorCriticalLogFilter
+
+  info_warning_err_filter:
+    (): logs.logging_setting.log_filters.InfoWarningLogFilter
+
+  debug_filter:
+    (): logs.logging_setting.log_filters.DebugLogFilter
+
+handlers:
+  default:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: default
+
+  stdout:
+    class: logging.StreamHandler
+    formatter: formatter_1
+    stream: ext://sys.stdout
+
+  warning_file:
+    class: logging.FileHandler
+    filename: logs/warning.log
+    encoding: utf-8
+    mode: w
+    formatter: formatter_1
+    filters: [info_warning_err_filter]
+
+  critical_file:
+    class: logging.FileHandler
+    filename: logs/critical.log
+    encoding: utf-8
+    mode: w
+    formatter: formatter_1
+    filters: [error_critical_filter]
+
+loggers:
+  handlers.user_handlers:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  other.user_handlers:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  config_data.config:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  database.db_utils:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  filters.filters:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  keyboards.keyboard_utils:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  keyboards.keyboards:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  keyboards.set_menu:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  lexicon.lexicon_ru:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  states.states:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+  utils.utils:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+
+  __main__:
+    level: DEBUG
+    handlers: [stdout, warning_file, critical_file]
+    propagate: no
+
+root:
+  level: DEBUG
+  handlers: [default]
