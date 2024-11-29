@@ -1,5 +1,7 @@
 import asyncio
 import logging
+from logging.config import dictConfig
+
 import yaml
 
 from aiogram.fsm.storage.memory import MemoryStorage
