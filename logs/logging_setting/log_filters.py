@@ -1,15 +1,16 @@
 import logging
 
 
-class WarningErrorLogFilter(logging.Filter):
+class InfoWarningLogFilter(logging.Filter):
     def filter(self, record):
-        return record.levelname in ('WARNING', 'ERROR')
+        return record.levelname in ('WARNING', 'INFO')
 
 
-class CriticalLogFilter(logging.Filter):
+class ErrorCriticalLogFilter(logging.Filter):
     def filter(self, record):
-        return record.levelname == 'CRITICAL'
+        return record.levelname in ('ERROR', 'CRITICAL')
 
-class DebugInfoLogFilter(logging.Filter):
+
+class DebugLogFilter(logging.Filter):
     def filter(self, record):
-        return record.levelname in ('DEBUG', 'INFO')
+        return record.levelname == 'DEBUG'
