@@ -130,7 +130,7 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     await msg_processor.deletes_messages()
     kb = clbk.message.reply_markup
     value = await clbk.message.answer(
-        await generate_fin_stats(clbk, database) + '\n' + LexiconRu.await_amount,
+        f'{await generate_fin_stats(clbk, database)}\n{LexiconRu.await_amount}',
         reply_markup=kb)
     await msg_processor.writes_msg_id_to_storage(value, key='msg_ids_remove_kb')
     await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
