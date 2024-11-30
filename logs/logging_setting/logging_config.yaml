@@ -35,16 +35,20 @@ handlers:
     stream: ext://sys.stdout
 
   warning_file:
-    class: logging.FileHandler
+    class: logging.handlers.RotatingFileHandler
     filename: logs/warning.log
+    maxBytes: 10485760  # 10MB
+    backupCount: 5
     encoding: utf-8
     mode: w
     formatter: formatter_1
     filters: [info_warning_err_filter]
 
   critical_file:
-    class: logging.FileHandler
+    class: logging.handlers.RotatingFileHandler
     filename: logs/critical.log
+    maxBytes: 10485760  # 10MB
+    backupCount: 5
     encoding: utf-8
     mode: w
     formatter: formatter_1
