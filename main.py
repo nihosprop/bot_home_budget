@@ -18,12 +18,10 @@ storage = MemoryStorage()
 
 
 async def main():
-
     with open('logs/logging_setting/logging_config.yaml', 'rt') as file:
         log_config = yaml.safe_load(file.read())
     dictConfig(log_config)
-
-    logger_main.info('Start bot')
+    logger_main.info('Loading logging settings successfully')
 
     config: Config = load_config()
     bot = Bot(token=config.tg_bot.token,
@@ -39,7 +37,9 @@ async def main():
 
     # skip_updates
     await bot.delete_webhook(drop_pending_updates=True)
+
     # start polling
+    logger_main.info('Start bot')
     await dp.start_polling(bot)
     logger_main.info('Stop bot')
 
