@@ -34,6 +34,7 @@ class MessageProcessor:
         :return: None
         """
         logger_utils.debug('Starting to delete messages…')
+        logger_utils.debug(f'Вход\n{self._state.__dict__}')
 
         data: set = dict(await self._state.get_data()).get(key, set())
         if isinstance(self._type_update, Message):

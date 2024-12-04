@@ -47,6 +47,7 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
 # cmd_start_not_default_state
 @user_router.message(F.text == '/start', ~StateFilter(default_state))
 async def cmd_start_in_state(msg: Message, state: FSMContext):
+    logger_user_hand.debug(f'Вход\n{state.__dict__}')
     message_processor = MessageProcessor(msg, state)
     await message_processor.deletes_messages()
     await message_processor.deletes_messages('emergency_removal')
