@@ -161,7 +161,7 @@ async def process_number_sent(
     msg_processor = MessageProcessor(msg, state)
     await msg_processor.deletes_messages()
     await msg_processor.removes_inline_msg_kb()
-    await state.update_data(amount=number)
+    await state.hset(amount=number)
     value = await msg.answer(LexiconRu.select_direction,
                              reply_markup=kb_direction)
     await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
@@ -237,7 +237,7 @@ async def button_press_expenses(
                             F.data.in_(EXPENSES_CATEG_BUTT))
 async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
     category = clbk.data
-    await state.update_data(category=category)
+    await state.hset(category=category)
     value = await clbk.message.edit_text(LexiconRu.select_category,
                                          reply_markup=kbs_for_expenses[category])
     await MessageProcessor(clbk, state).writes_msg_id_to_storage(value,
