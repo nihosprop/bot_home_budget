@@ -4,7 +4,7 @@ from logging.config import dictConfig
 
 import yaml
 
-from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.fsm.storage.redis import RedisStorage, Redis
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -14,7 +14,6 @@ from keyboards.set_menu import set_main_menu
 from handlers import other_handlers, user_handlers
 
 logger_main = logging.getLogger(__name__)
-storage = MemoryStorage()
 
 
 async def main():
@@ -26,6 +25,9 @@ async def main():
     config: Config = load_config()
     bot = Bot(token=config.tg_bot.token,
               default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+
+    redis = Redis(host='localhost')
+    storage = RedisStorage(redis=redis)
     dp = Dispatcher(storage=storage)
 
     # menu_button_setting
