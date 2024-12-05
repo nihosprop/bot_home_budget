@@ -36,7 +36,7 @@ logger_user_hand = logging.getLogger(__name__)
 # cmd_start_default_state
 @user_router.message(F.text == '/start', StateFilter(default_state))
 async def cmd_start_default_state(msg: Message, state: FSMContext):
-    await add_user_in_db(msg)
+    await add_user_in_db(str(msg.from_user.id))
     value = await msg.answer(LexiconRu.start, reply_markup=kb_for_wait_amount)
     await state.set_state(FSMMakeTransaction.fill_number)
     if not database.get(str(msg.from_user.id)):
@@ -47,9 +47,12 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
 # cmd_start_not_default_state
 @user_router.message(F.text == '/start', ~StateFilter(default_state))
 async def cmd_start_in_state(msg: Message, state: FSMContext):
-    logger_user_hand.debug(f'Вход\n{state.__dict__}')
+    logger_user_hand.debug('Вход')
     message_processor = MessageProcessor(msg, state)
     await message_processor.deletes_messages()
+
+    logger_user_hand.debug('Finished deletes messages, continuing execution.')
+
     await message_processor.deletes_messages('emergency_removal')
     value = await msg.answer(LexiconRu.start, reply_markup=kb_for_wait_amount)
     await state.set_state(FSMMakeTransaction.fill_number)
@@ -159,6 +162,7 @@ async def cmd_show_categories(clbk: CallbackQuery, state: FSMContext):
 @user_router.message(StateFilter(FSMMakeTransaction.fill_number), IsNumber())
 async def process_number_sent(
         msg: Message, state: FSMContext, number: bool | int | float):
+    logger_user_hand.debug('Вход')
     msg_processor = MessageProcessor(msg, state)
     await msg_processor.deletes_messages()
     await msg_processor.removes_inline_msg_kb()
@@ -168,6 +172,7 @@ async def process_number_sent(
     await msg_processor.writes_msg_id_to_storage(value, 'emergency_removal')
 
     await state.set_state(FSMMakeTransaction.select_direction)
+    logger_user_hand.debug('Выход')
 
 
 # invalid number
@@ -237,14 +242,16 @@ async def button_press_expenses(
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_expenses),
                             F.data.in_(EXPENSES_CATEG_BUTT))
 async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
+    logger_user_hand.debug('Вход')
     category = clbk.data
-    await state.hset(category=category)
+    await state.update_data(category=category)
     value = await clbk.message.edit_text(LexiconRu.select_category,
                                          reply_markup=kbs_for_expenses[category])
     await MessageProcessor(clbk, state).writes_msg_id_to_storage(value,
                                                                  'emergency_removal')
     await state.set_state(FSMMakeTransaction.select_subcategory)
     await clbk.answer()
+    logger_user_hand.debug('Выход')
 
 
 # invalid select expenses
@@ -258,7 +265,11 @@ async def invalid_expenses_categories(msg: Message):
                                         F.data.in_(
                                                 EXPENSE_SUBCATEGORY_BUTTONS.values())))
 async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
-    await add_expenses_in_db(clbk, state)
+    logger_user_hand.debug('Вход')
+    try:
+        await add_expenses_in_db(clbk, state)
+    except Exception as err:
+        logger_user_hand.error(f'{err=}')
     msg_processor = MessageProcessor(clbk, state)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{await generate_fin_stats(clbk, 

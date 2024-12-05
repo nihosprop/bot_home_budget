@@ -1,7 +1,7 @@
 import logging
 
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery, Message
+from aiogram.types import CallbackQuery
 
 from lexicon.lexicon_ru import (EXPENSE_SUBCATEGORY_BUTTONS,
                                 EXPENSES_CATEG_BUTT,
@@ -14,8 +14,7 @@ async def remove_user_from_db(user_id: str):
     database.pop(user_id)
 
 # move to middleware!!!
-async def add_user_in_db(msg: Message) -> None:
-    user_id = str(msg.from_user.id)
+async def add_user_in_db(user_id: str) -> None:
     if not database.get(user_id):
         database.setdefault(user_id, {'balance': 0, 'income': {}, 'expenses': {}})
 
@@ -33,18 +32,34 @@ async def calc_percent(
 
 async def add_income_in_db(
         clbk: CallbackQuery, state: FSMContext) -> None:
+    logger_db_utils.debug('Вход')
+
     category = clbk.data
     user_id = str(clbk.from_user.id)
+    await add_user_in_db(str(clbk.from_user.id))
     data = await state.get_data()
-    amount = data['amount']
-    database[user_id]['balance'] += amount
-    database[user_id]['income'][category] = (
-            database[user_id]['income'].setdefault(category, 0) + amount)
+    logger_db_utils.debug(f'{data=}')
+    amount = data.get('amount')
+    logger_db_utils.debug(f'{amount=}')
+
+    try:
+        database[user_id]['balance'] += amount
+    except Exception as err:
+        logger_db_utils.error(f'{err=}')
+
+    try:
+        database[user_id]['income'][category] = (
+                database[user_id]['income'].setdefault(category, 0) + amount)
+    except Exception as err:
+        logger_db_utils.error(f'{err=}')
+
+    logger_db_utils.debug('Выход')
 
 
 async def add_expenses_in_db(
         clbk: CallbackQuery, state: FSMContext) -> None:
     user_id = str(clbk.from_user.id)
+    await add_user_in_db(user_id)
     data = await state.get_data()
     amount = data['amount']
     category = data['category']
