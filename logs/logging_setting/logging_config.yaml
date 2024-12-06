@@ -60,7 +60,7 @@ loggers:
     handlers: [stdout, warning_file, critical_file]
     propagate: no
 
-  other.user_handlers:
+  handlers.other_handlers:
     level: DEBUG
     handlers: [stdout, warning_file, critical_file]
     propagate: no
