@@ -1,86 +1,145 @@
+import json
 import logging
 
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
+from aiogram.fsm.storage.redis import Redis
 
 from lexicon.lexicon_ru import (EXPENSE_SUBCATEGORY_BUTTONS,
                                 EXPENSES_CATEG_BUTT,
                                 INCOME_CATEG_BUTT)
-from utils.utils import logger_utils
-from database.db import database
+
 logger_db_utils = logging.getLogger(__name__)
+db = Redis(host='localhost', port=6379, db=1)
+
+
+async def set_data_json(path: str = 'database/db.json'):
+    keys = await db.keys()
+    all_data: dict = {}
+
+    for key in keys:
+        value = await db.get(key)
+        deserialized_value: dict = json.loads(value.decode('utf-8'))
+        all_data[key.decode('utf-8')] = deserialized_value
+
+    with open(path, 'w') as file:
+        json.dump(all_data, file, indent=4)
+
+
+async def get_data_json(path: str = 'database/db.json'):
+
+    with open(path, 'r') as file:
+        data = json.load(file)
+    # Cleaning up the current Redis database
+    await db.flushdb()
+    for user_id, user_info in data.items():
+        await db.set(user_id, json.dumps(user_info))
+
 
 async def remove_user_from_db(user_id: str):
-    database.pop(user_id)
+    await db.delete(user_id)
+    await set_data_json()
 
-# move to middleware!!!
+
 async def add_user_in_db(user_id: str) -> None:
-    if not database.get(user_id):
-        database.setdefault(user_id, {'balance': 0, 'income': {}, 'expenses': {}})
+    logger_db_utils.debug('Entry')
+    data_user = await db.get(user_id)
+    logger_db_utils.debug(f'{data_user=}')
 
-async def reset_stats(clbk: CallbackQuery) -> None:
+    if not data_user:
+        user_dict = {'balance': 0, 'income': {}, 'expenses': {}}
+        await db.set(user_id, json.dumps(user_dict))
+        await set_data_json()
+
+    logger_db_utils.debug('Exit')
+
+
+async def reset_month_stats(clbk: CallbackQuery) -> None:
     """Resets statistics on request for only a month."""
-    user_id = str(clbk.from_user.id)
-    database[user_id].update({'income': {}, 'expenses': {}})
-    logger_utils.debug(f'{user_id=}{database=}')
+    logger_db_utils.debug('Entry')
 
-async def calc_percent(
+    user_id = str(clbk.from_user.id)
+    user_data = await db.get(user_id)
+    user_data_dict = json.loads(user_data.decode('utf-8'))
+    user_data_dict['income'] = {}
+    user_data_dict['expenses'] = {}
+    await db.set(user_id, json.dumps(user_data_dict))
+    await set_data_json()
+
+    logger_db_utils.debug('Exit')
+
+async def _calc_percent(
         amount: int | float, num: int | float) -> str:
     if amount:
         return f'({round(num * 100 / amount, 1)}%)'
     return ''
 
-async def add_income_in_db(
-        clbk: CallbackQuery, state: FSMContext) -> None:
-    logger_db_utils.debug('Вход')
+async def add_income_in_db(clbk: CallbackQuery, state: FSMContext) -> None:
+    logger_db_utils.debug('Entry')
 
     category = clbk.data
     user_id = str(clbk.from_user.id)
-    await add_user_in_db(str(clbk.from_user.id))
+    user_data = await db.get(user_id)
+
+    if not user_data:
+        await add_user_in_db(user_id)
+
+    user_data_dict = json.loads(user_data.decode('utf-8'))
+
     data = await state.get_data()
+
     logger_db_utils.debug(f'{data=}')
     amount = data.get('amount')
     logger_db_utils.debug(f'{amount=}')
 
     try:
-        database[user_id]['balance'] += amount
+        user_data_dict['balance'] += amount
     except Exception as err:
         logger_db_utils.error(f'{err=}')
-
     try:
-        database[user_id]['income'][category] = (
-                database[user_id]['income'].setdefault(category, 0) + amount)
+        user_data_dict['income'][category] = (
+                user_data_dict['income'].setdefault(category, 0) + amount)
     except Exception as err:
         logger_db_utils.error(f'{err=}')
+    logger_db_utils.debug('Exit')
+    await db.set(user_id, json.dumps(user_data_dict))
+    await set_data_json()
 
-    logger_db_utils.debug('Выход')
+    logger_db_utils.debug('Entry')
 
 
 async def add_expenses_in_db(
         clbk: CallbackQuery, state: FSMContext) -> None:
+    logger_db_utils.debug('Entry')
+
     user_id = str(clbk.from_user.id)
-    await add_user_in_db(user_id)
     data = await state.get_data()
-    amount = data['amount']
+    amount = data.get('amount')
     category = data['category']
     subcategory = clbk.data
-    database.setdefault(user_id, {'income': {}, 'expenses': {}})
-    database.setdefault(user_id)['balance'] -= amount
-    database[user_id]['expenses'][category][subcategory] = (
-            database[user_id]['expenses'].setdefault(category, {}).setdefault(
-                    subcategory,
-                    0) + amount)
+
+    user_data = await db.get(user_id)
+    user_data_dict = json.loads(user_data.decode('utf-8'))
+    user_data_dict['balance'] -= amount
+    user_data_dict['expenses'][category][subcategory] = (
+            user_data_dict['expenses'].setdefault(category, {}).setdefault(
+                    subcategory, 0) + amount)
+    logger_db_utils.debug('Exit')
+    await db.set(user_id, json.dumps(user_data_dict))
+    await set_data_json()
 
 
-async def generate_fin_stats(clbk: CallbackQuery, data: dict) -> str:
+async def generate_fin_stats(clbk: CallbackQuery) -> str:
     date: str = clbk.message.date.strftime('%d.%m.%Y %H:%M (UTC)')
-    logger_db_utils.debug(f'{date=}')
     user_id = str(clbk.from_user.id)
-    logger_db_utils.debug(f'{user_id=}')
-    monthly_income: dict[str, float | int] = data[user_id]['income']
+    logger_db_utils.debug(f'Entry\n{date=}:{user_id=}')
+    user_data = await db.get(user_id)
+    user_data_dict = json.loads(user_data.decode('utf-8'))
+
+    monthly_income = user_data_dict['income']
     sum_income = sum(monthly_income.values())
-    balance: int | float = data[user_id]['balance']
-    expenses: dict[str, dict[str, float | int]] = data[user_id]['expenses']
+    balance: int | float = user_data_dict['balance']
+    expenses: dict[str, dict[str, float | int]] = user_data_dict['expenses']
     sum_expenses = sum(
             sum(obj) for obj in (categ.values() for categ in expenses.values()))
 
@@ -101,6 +160,6 @@ async def generate_fin_stats(clbk: CallbackQuery, data: dict) -> str:
         for subcategory, value in data.items():
 
             report += (f'    - {EXPENSE_SUBCATEGORY_BUTTONS[subcategory]}: '
-                       f'{value}{await calc_percent(sum_income, value)}\n')
-
+                       f'{value}{await _calc_percent(sum_income, value)}\n')
+    logger_db_utils.debug('Exit')
     return f'<code>{report}</code>'

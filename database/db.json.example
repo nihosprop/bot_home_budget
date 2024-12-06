@@ -1,0 +1,14 @@
+# Data storage example
+{
+    "3746511100": {
+        "balance": 636,
+        "income": {
+            "dividends": 2
+        },
+        "expenses": {
+            "transport": {
+                "personal": 7
+            }
+        }
+    }
+}

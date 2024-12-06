@@ -1,6 +1,7 @@
 import logging
 
 from aiogram.filters import StateFilter
+from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import default_state
 from aiogram.types import CallbackQuery, Message
 from aiogram import F, Router
@@ -20,8 +21,10 @@ async def cmd_cancel(msg: Message):
 
 
 @other_router.message()
-async def other_message(msg: Message):
+async def other_message(msg: Message, state: FSMContext):
+    logger_other_hand.debug(f'Entry\n{await state.get_state()}')
     await msg.answer(LexiconRu.text_problems)
+    logger_other_hand.debug('Exit')
 
 
 # cap
