@@ -12,7 +12,7 @@ from database.db_utils import (add_expenses_in_db,
                                add_user_in_db,
                                generate_fin_stats,
                                remove_user_from_db,
-                               reset_stats)
+                               reset_month_stats)
 from keyboards.keyboards import (kb_direction,
                                  kb_expenses_categories,
                                  kb_for_wait_amount,
