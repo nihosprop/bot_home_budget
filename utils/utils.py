@@ -62,7 +62,7 @@ class MessageProcessor:
             await self._state.update_data({key: []})
         else:
             logger_utils.debug('No data to delete.')
-        logger_utils.debug('Выход')
+        logger_utils.debug('Exit')
 
     async def writes_msg_id_to_storage(
             self, value: Message | CallbackQuery, key='msg_for_del') -> None:
