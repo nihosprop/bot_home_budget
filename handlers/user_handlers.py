@@ -63,7 +63,7 @@ async def cmd_start_in_state(msg: Message, state: FSMContext):
 @user_router.callback_query(F.data == 'reset_month_stats',
                             ~StateFilter(default_state))
 async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
-    logger_user_hand.debug(f'{database=}')
+    
     value = await clbk.message.edit_text('Подтвердите сброс статистики за '
                                          'месяц.\n'
                                          'Общий баланс затронут не будет.',
