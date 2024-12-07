@@ -19,7 +19,7 @@ class MessageProcessor:
     _type_update: Message | CallbackQuery
     _state: FSMContext
 
-    async def deletes_messages(self, key='msg_for_del') -> None:
+    async def deletes_messages(self, key='msgs_for_del') -> None:
         """
         Deletes messages from the chat whose IDs are stored in the state under
         the specified key.
@@ -54,39 +54,55 @@ class MessageProcessor:
                 except TelegramBadRequest as err:
                     if "message to delete not found" in str(err):
                         logger_utils.warning(
-                            f'Failed to delete message with id {msg_id}: {err}')
+                                f'Failed to delete message with id {msg_id}: '
+                                f'{err}')
                     else:
                         logger_utils.error(
-                            f'Failed to delete message with id {msg_id}: {err}')
+                                f'Failed to delete message with id {msg_id}: '
+                                f'{err}')
             # Clearing the storage after successfully deleting all messages
             await self._state.update_data({key: []})
         else:
             logger_utils.debug('No data to delete.')
         logger_utils.debug('Exit')
 
-    async def writes_msg_id_to_storage(
-            self, value: Message | CallbackQuery, key='msg_for_del') -> None:
-
+    async def save_msg_id(
+            self, value: Message | CallbackQuery, msgs_for_del=False,
+            msgs_fast_del=False, msgs_remove_kb=False) -> None:
         """
-        Writes the message ID to the storage in the state.
-        Retrieves the current set of message IDs from the state, adds the new
-        message ID to the set,
-        and updates the state with the new set of message IDs.
-        Logs the start and end of the writing process.
-
-        :param1 value: Message | CallbackQuery
-        :param2 key: Str
+        The writes_msg_id_to_storage method is intended for writing an identifier
+        messages in the store depending on the values of the passed flags.
+        It analyzes the method signature, determines the parameters with the set
+        defaults to True, and then stores the message ID
+        in the corresponding list in the object's state.
+        After the recording process is completed, a success message is logged.
+        completion of the operation.
+        :param value: Message | CallbackQuery
+        :param msgs_for_del: bool
+        :param msgs_remove_kb: bool
+        :param msgs_fast_del: bool
         :return: None
         """
+        logger_utils.debug('Entry')
+
+        kwargs: dict = {
+                "msgs_for_del": msgs_for_del,
+                "msgs_fast_del": msgs_fast_del,
+                "msgs_remove_kb": msgs_remove_kb}
+
         logger_utils.debug('Start writing data to storage…')
 
-        data: list = dict(await self._state.get_data()).get(key, [])
-        data.append(value.message_id)
-        await self._state.update_data({key: data})
+        for key, val in kwargs.items():
+            if val:
+                logger_utils.debug(f'{key=}')
+                data: list = dict(await self._state.get_data()).get(key, [])
+                data.append(value.message_id)
+                await self._state.update_data({key: data})
+                logger_utils.debug('Message ID to recorded')
 
-        logger_utils.debug('Message ID to recorded')
+        logger_utils.debug('Exit')
 
-    async def removes_inline_msg_kb(self, key='msg_ids_remove_kb') -> None:
+    async def removes_inline_msg_kb(self, key='msgs_remove_kb') -> None:
         """
         Removes built-in keyboards from messages.
         This function gets message IDs from the state and removes
