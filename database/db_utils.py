@@ -14,6 +14,15 @@ db = Redis(host='localhost', port=6379, db=1)
 
 
 async def set_data_json(path: str = 'database/db.json'):
+    """
+    Saves all data from the Redis database to a JSON file.
+    This method retrieves all keys and values from the Redis database,
+    deserializes them and saves as a JSON object to a file.
+    Args: path (str): Path to the file, where the data will be saved.
+    The default is 'database/db.json'.
+    :param path:
+    :return: None
+    """
     keys = await db.keys()
     all_data: dict = {}
 
