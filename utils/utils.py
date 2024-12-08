@@ -19,51 +19,51 @@ class MessageProcessor:
     _type_update: Message | CallbackQuery
     _state: FSMContext
 
-    async def deletes_messages(self, key='msgs_for_del') -> None:
+    async def deletes_messages(
+            self, msgs_for_del=False, msgs_fast_del=False,
+            msgs_remove_kb=False) -> None:
         """
-        Deletes messages from the chat whose IDs are stored in the state under
-        the specified key.
-        Retrieves the set of message IDs to delete from the state using the
-        provided key, attempts to delete each message,
-        and updates the state to clear the set of message IDs.
-        Logs the start and end of the deletion process, and any errors
-        encountered.
-        :param key: Str
+        Deleting messages from chat based on passed parameters.
+        This method removes various types of messages from a chat.
+        Messages are deleted only if the corresponding parameters
+        are set to True.
+        If no parameters are specified, the method does not perform any
+        actions.
+        :param msgs_fast_del: bool
+        :param msgs_for_del: bool
+        :param msgs_remove_kb: bool
         :return: None
         """
-        logger_utils.debug(f'Вход')
-        try:
-            msgs: list = dict(await self._state.get_data()).get(key, [])
-        except Exception as e:
-            logger_utils.error(f'Error getting data: {e}')
-            msgs = []
-        logger_utils.debug(f'{msgs=}')
+        logger_utils.debug(f'Entry')
 
         if isinstance(self._type_update, Message):
             chat_id = self._type_update.chat.id
         else:
             chat_id = self._type_update.message.chat.id
 
-        if msgs:
-            logger_utils.debug(f'Starting to delete messages…')
-            for msg_id in set(msgs):
-                try:
-                    await self._type_update.bot.delete_message(chat_id=chat_id,
-                                                               message_id=msg_id)
-                    logger_utils.debug(f'Message with id {msg_id} deleted')
-                except TelegramBadRequest as err:
-                    if "message to delete not found" in str(err):
+        kwargs: dict = {
+                "msgs_for_del": msgs_for_del,
+                "msgs_fast_del": msgs_fast_del,
+                "msgs_remove_kb": msgs_remove_kb}
+
+        keys = [key for key, val in kwargs.items() if val]
+        logger_utils.debug(f'{keys=}')
+
+        if keys:
+            for key in keys:
+                msgs_ids: list = dict(await self._state.get_data()).get(key, [])
+                logger_utils.debug(f'Starting to delete messages…')
+
+                for msg_id in set(msgs_ids):
+                    try:
+                        await self._type_update.bot.delete_message(
+                                chat_id=chat_id, message_id=msg_id)
+                    except Exception as err:
                         logger_utils.warning(
-                                f'Failed to delete message with id {msg_id}: '
-                                f'{err}')
-                    else:
-                        logger_utils.error(
-                                f'Failed to delete message with id {msg_id}: '
-                                f'{err}')
-            # Clearing the storage after successfully deleting all messages
-            await self._state.update_data({key: []})
-        else:
-            logger_utils.debug('No data to delete.')
+                                f'Failed to delete message with id {msg_id=}: '
+                                f'{err=}')
+                await self._state.update_data({key: []})
+
         logger_utils.debug('Exit')
 
     async def save_msg_id(
@@ -102,7 +102,7 @@ class MessageProcessor:
 
         logger_utils.debug('Exit')
 
-    async def removes_inline_msg_kb(self, key='msgs_remove_kb') -> None:
+    async def removes_inline_kb(self, key='msgs_remove_kb') -> None:
         """
         Removes built-in keyboards from messages.
         This function gets message IDs from the state and removes
@@ -134,9 +134,3 @@ class MessageProcessor:
         await self._state.update_data({key: []})
 
         logger_utils.debug('Keyboard removed')
-
-    async def remove_msg_and_kb(self):
-        logger_utils.debug(f'START remove_msg_and_kb')
-        await self.deletes_messages()
-        await self.removes_inline_msg_kb()
-        logger_utils.debug(f'END remove_msg_and_kb')
