@@ -5,8 +5,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from aiogram.fsm.storage.redis import Redis
 
-from lexicon.lexicon_ru import (EXPENSE_SUBCATEGORY_BUTT,
-                                EXPENSES_CATEG_BUTT,
+from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
+                                EXPENSE_SUBCATEGORY_BUTT,
                                 INCOME_CATEG_BUTT)
 
 logger_db_utils = logging.getLogger(__name__)
@@ -23,10 +23,9 @@ async def set_data_json(path: str = 'database/db.json'):
     :param path:
     :return: None
     """
-    keys = await db.keys()
-    all_data: dict = {}
 
-    for key in keys:
+    all_data: dict = {}
+    for key in await db.keys():
         value = await db.get(key)
         deserialized_value: dict = json.loads(value.decode('utf-8'))
         all_data[key.decode('utf-8')] = deserialized_value
@@ -77,11 +76,13 @@ async def reset_month_stats(clbk: CallbackQuery) -> None:
     logger_db_utils.info(f'Monthly statistics for {clbk.from_user.id} reset')
     logger_db_utils.debug('Exit')
 
+
 async def _calc_percent(
         amount: int | float, num: int | float) -> str:
     if amount:
         return f'({round(num * 100 / amount, 1)}%)'
     return ''
+
 
 async def add_income_in_db(clbk: CallbackQuery, state: FSMContext) -> None:
     logger_db_utils.debug('Entry')
