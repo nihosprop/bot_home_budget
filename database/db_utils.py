@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from aiogram.fsm.storage.redis import Redis
 
-from lexicon.lexicon_ru import (EXPENSE_SUBCATEGORY_BUTTONS,
+from lexicon.lexicon_ru import (EXPENSE_SUBCATEGORY_BUTT,
                                 EXPENSES_CATEG_BUTT,
                                 INCOME_CATEG_BUTT)
 
@@ -159,7 +159,7 @@ async def generate_fin_stats(clbk: CallbackQuery) -> str:
         report += f'  {EXPENSES_CATEG_BUTT[category]}:\n'
         for subcategory, value in data.items():
 
-            report += (f'    - {EXPENSE_SUBCATEGORY_BUTTONS[subcategory]}: '
+            report += (f'    - {EXPENSE_SUBCATEGORY_BUTT[subcategory]}: '
                        f'{value}{await _calc_percent(sum_income, value)}\n')
     logger_db_utils.debug('Exit')
     return f'<code>{report}</code>'
