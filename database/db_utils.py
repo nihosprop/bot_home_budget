@@ -65,7 +65,7 @@ async def reset_month_stats(clbk: CallbackQuery) -> None:
     user_data_dict['expenses'] = {}
     await db.set(user_id, json.dumps(user_data_dict))
     await set_data_json()
-
+    logger_db_utils.info(f'Monthly statistics for {clbk.from_user.id} reset')
     logger_db_utils.debug('Exit')
 
 async def _calc_percent(

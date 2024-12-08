@@ -38,7 +38,7 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
     logger_user_hand.debug('Entry')
 
     await add_user_in_db(str(msg.from_user.id))
-    value = await msg.answer(LexiconRu.start, reply_markup=kb_for_wait_amount)
+    value = await msg.answer(LexiconRu.await_amount, reply_markup=kb_for_wait_amount)
     await state.set_state(FSMMakeTransaction.fill_number)
     await MessageProcessor(msg, state).save_msg_id(value, msgs_for_del=True)
 
@@ -52,7 +52,8 @@ async def cmd_start_in_state(msg: Message, state: FSMContext):
 
     msg_processor = MessageProcessor(msg, state)
     await msg_processor.deletes_messages(msgs_for_del=True, msgs_fast_del=True)
-    value = await msg.answer(LexiconRu.start, reply_markup=kb_for_wait_amount)
+    value = await msg.answer(LexiconRu.await_amount,
+                             reply_markup=kb_for_wait_amount)
     await state.set_state(FSMMakeTransaction.fill_number)
     await msg_processor.save_msg_id(value, msgs_for_del=True)
 
@@ -73,7 +74,6 @@ async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
 @user_router.callback_query(F.data == '/reset', ~StateFilter(default_state))
 async def confirm_reset_month_stats(clbk: CallbackQuery, state: FSMContext):
     await reset_month_stats(clbk)
-    logger_user_hand.info(f'Monthly statistics for {clbk.from_user.id} reset')
     value = await clbk.message.edit_text(LexiconRu.text_statistics_reset,
                                          reply_markup=kb_for_wait_amount)
     await MessageProcessor(clbk, state).save_msg_id(value, msgs_fast_del=True)
@@ -84,7 +84,7 @@ async def confirm_reset_month_stats(clbk: CallbackQuery, state: FSMContext):
 @user_router.callback_query(F.data == 'delete_user_data',
                             ~StateFilter(default_state))
 async def cmd_delete_user(clbk: Message, state: FSMContext):
-    value = await clbk.message.edit_text('Подтвердить удаление данных!',
+    value = await clbk.message.edit_text(LexiconRu.text_confirm_del_data,
                                          reply_markup=kb_yes_cancel)
     await MessageProcessor(clbk, state).save_msg_id(value, msgs_fast_del=True)
     await state.set_state(FSMDeleteUser.confirm_deletion)
@@ -101,7 +101,7 @@ async def invalid_confirm_user(msg: Message):
                             StateFilter(FSMDeleteUser.confirm_deletion))
 async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
     await remove_user_from_db(str(clbk.from_user.id))
-    await clbk.message.edit_text(LexiconRu.text_confirm_remove)
+    await clbk.message.edit_text(LexiconRu.text_del_success_data)
     await state.clear()
 
 

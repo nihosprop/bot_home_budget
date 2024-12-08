@@ -19,9 +19,10 @@ class LexiconRu:
     select_direction: str = 'Выберите направление'
     select_category: str = 'Выберите категорию'
     transaction_recorded: str = 'Транзакция записана!✅'
+    text_confirm_del_data: str = 'Подтвердить удаление данных!'
     text_problems: str = 'Нажмите: <b>/start</b>'
-    text_confirm_remove: str = ('Ваши данные удалены!✅\n'
-                                'Нажмите <b>/start</b> что-бы начать')
+    text_del_success_data: str = ('Ваши данные удалены!✅\n'
+                                  'Нажмите <b>/start</b> что-бы начать')
     text_confirm_reset_month: str = ('Подтвердите сброс статистики за месяц.\n'
                                      'Общий баланс затронут не будет.')
     text_help: str = (f'Бот находится в постоянном ожидании суммы(числа).\n'
