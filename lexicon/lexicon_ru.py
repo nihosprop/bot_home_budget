@@ -11,22 +11,19 @@ class LexiconCommandsRu:
 
 @dataclass
 class LexiconRu:
-    start: str = ('Отправьте сумму(целое или вещественное число) и выберите'
-                  ' категорию.')
     await_start = ('<b>Что-бы запустить бота нажмите:\n'
                    '-> /start</b>')
     await_amount: str = '<b>Ожидаю ввод суммы…</b>👇'
     await_direction: str = '<b>Ожидается выбор направления…</b>'
     await_categories: str = '<b>Ожидается выбор категории…</b>'
-    other_message: str = ('Пришлите целое или вещественное число,'
-                          ' отличное от нуля!')
     select_direction: str = 'Выберите направление'
     select_category: str = 'Выберите категорию'
-    select_subcategory: str = 'Выберите под-категорию'
     transaction_recorded: str = 'Транзакция записана!✅'
     text_problems: str = 'Нажмите: <b>/start</b>'
     text_confirm_remove: str = ('Ваши данные удалены!✅\n'
                                 'Нажмите <b>/start</b> что-бы начать')
+    text_confirm_reset_month: str = ('Подтвердите сброс статистики за месяц.\n'
+                                     'Общий баланс затронут не будет.')
     text_help: str = (f'Бот находится в постоянном ожидании суммы(числа).\n'
                       'Вам нужно:\n'
                       '1. Ввести сумму.\n'
@@ -37,10 +34,6 @@ class LexiconRu:
                       '-> <b>/category</b>\n\n')
     text_statistics_reset: str = ('Статистика за месяц обнулена!✅\nВведите '
                                   'сумму👇')
-    help_default_state: str = text_help + await_start
-    help_state_fill_number: str = text_help + await_amount
-    help_state_direction: str = text_help + await_direction
-    help_state_categories: str = text_help + await_categories
 
 
 @dataclass
@@ -119,18 +112,17 @@ DEBTS_BUTT = {
         'mortgage': 'Ипотека',
         'borrowing': 'Займ'}
 
-EXPENSE_SUBCATEGORY_BUTTONS: dict[str, str] = dict(**SUPERMARKET_BUTT,
-                                                   **FEEDING_BUTT,
-                                                   **TRANSPORT_BUTT,
-                                                   **DEBTS_BUTT,
-                                                   **HOUSEHOLD_NEEDS_BUTT,
-                                                   **MISC_EXPENSES_BUTT,
-                                                   **PETS_BUTT,
-                                                   **CLOTHING_ACCESSORIES_BUTT,
-                                                   **EDUCATION_BUTT,
-                                                   **HEALTH_BEAUTY_BUTT,
-                                                   **ENTERTAINMENT_BUTT,
-                                                   **UTILITIES_BUTT)
+EXPENSE_SUBCATEGORY_BUTT: dict[str, str] = dict(**SUPERMARKET_BUTT,
+                                                **FEEDING_BUTT, **TRANSPORT_BUTT,
+                                                **DEBTS_BUTT,
+                                                **HOUSEHOLD_NEEDS_BUTT,
+                                                **MISC_EXPENSES_BUTT,
+                                                **PETS_BUTT,
+                                                **CLOTHING_ACCESSORIES_BUTT,
+                                                **EDUCATION_BUTT,
+                                                **HEALTH_BEAUTY_BUTT,
+                                                **ENTERTAINMENT_BUTT,
+                                                **UTILITIES_BUTT)
 
 CANCEL_BUTT: dict[str, str] = {'cancel': '❌ОТМЕНА'}
 YES_NO_BUTT: dict[str, str] = {'yes': '🗑️Удалить', '/cancel': '❌Отмена'}
