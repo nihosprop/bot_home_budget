@@ -11,6 +11,7 @@ certifi==2024.8.30
 environs==11.0.0
 frozenlist==1.5.0
 idna==3.10
+importlib_metadata==8.5.0
 magic-filter==1.0.12
 marshmallow==3.23.0
 multidict==6.1.0
@@ -21,6 +22,8 @@ pydantic_core==2.23.4
 python-dotenv==1.0.1
 PyYAML==6.0.2
 redis==5.2.0
+scanreq==0.0.9
 setuptools==75.6.0
 typing_extensions==4.12.2
 yarl==1.17.1
+zipp==3.21.0
