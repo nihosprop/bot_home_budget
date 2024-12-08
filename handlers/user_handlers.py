@@ -36,12 +36,11 @@ logger_user_hand = logging.getLogger(__name__)
 @user_router.message(F.text == '/start', StateFilter(default_state))
 async def cmd_start_default_state(msg: Message, state: FSMContext):
     logger_user_hand.debug('Entry')
-
     await add_user_in_db(str(msg.from_user.id))
-    value = await msg.answer(LexiconRu.await_amount, reply_markup=kb_for_wait_amount)
+    value = await msg.answer(LexiconRu.await_amount,
+                             reply_markup=kb_for_wait_amount)
     await state.set_state(FSMMakeTransaction.fill_number)
     await MessageProcessor(msg, state).save_msg_id(value, msgs_for_del=True)
-
     logger_user_hand.debug('Exit')
 
 
@@ -49,14 +48,12 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
 @user_router.message(F.text == '/start', ~StateFilter(default_state))
 async def cmd_start_in_state(msg: Message, state: FSMContext):
     logger_user_hand.debug('Entry')
-
     msg_processor = MessageProcessor(msg, state)
     await msg_processor.deletes_messages(msgs_for_del=True, msgs_fast_del=True)
     value = await msg.answer(LexiconRu.await_amount,
                              reply_markup=kb_for_wait_amount)
     await state.set_state(FSMMakeTransaction.fill_number)
     await msg_processor.save_msg_id(value, msgs_for_del=True)
-
     logger_user_hand.debug('Exit')
 
 
@@ -128,7 +125,6 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.answer(
             f'{await generate_fin_stats(clbk)}\n{LexiconRu.await_amount}',
             reply_markup=kb)
-
     await msg_processor.save_msg_id(value, msgs_remove_kb=True,
                                     msgs_fast_del=True)
     await clbk.answer()
@@ -155,7 +151,6 @@ async def cmd_show_categories(clbk: CallbackQuery, state: FSMContext):
 async def process_number_sent(
         msg: Message, state: FSMContext, number: bool | int | float):
     logger_user_hand.debug('Entry')
-
     msg_processor = MessageProcessor(msg, state)
     await msg_processor.deletes_messages(msgs_for_del=True)
     await msg_processor.removes_inline_kb()
@@ -164,7 +159,6 @@ async def process_number_sent(
                              reply_markup=kb_direction)
     await msg_processor.save_msg_id(value, msgs_fast_del=True)
     await state.set_state(FSMMakeTransaction.select_direction)
-
     logger_user_hand.debug('Exit')
 
 
@@ -228,16 +222,15 @@ async def button_press_expenses(clbk: CallbackQuery, state: FSMContext):
 @user_router.callback_query(StateFilter(FSMMakeTransaction.select_expenses),
                             F.data.in_(EXPENSES_CATEG_BUTT))
 async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
-    logger_user_hand.debug('Вход')
+    logger_user_hand.debug('Entry')
     category = clbk.data
-
     await state.update_data(category=category)
     value = await clbk.message.edit_text(LexiconRu.select_category,
                                          reply_markup=kbs_for_expenses[category])
     await MessageProcessor(clbk, state).save_msg_id(value, msgs_fast_del=True)
     await state.set_state(FSMMakeTransaction.select_subcategory)
     await clbk.answer()
-    logger_user_hand.debug('Выход')
+    logger_user_hand.debug('Exit')
 
 
 # invalid select expenses
@@ -251,7 +244,7 @@ async def invalid_expenses_categories(msg: Message):
                                         F.data.in_(
                                                 EXPENSE_SUBCATEGORY_BUTT.values())))
 async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
-    logger_user_hand.debug('Вход')
+    logger_user_hand.debug('Entry')
     await add_expenses_in_db(clbk, state)
     msg_processor = MessageProcessor(clbk, state)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
@@ -262,6 +255,7 @@ async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
     await msg_processor.save_msg_id(value, msgs_for_del=True, msgs_fast_del=True)
     await state.set_state(FSMMakeTransaction.fill_number)
     await clbk.answer()
+    logger_user_hand.debug('Exit')
 
 
 # invalid select subcategory
