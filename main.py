@@ -46,5 +46,12 @@ async def main():
     await dp.start_polling(bot)
     logger_main.info('Stop bot')
 
+    await redis.close()
+    await redis.shutdown()
+
+    loop = asyncio.get_running_loop()
+    loop.stop()
+
+
 if __name__ == "__main__":
     asyncio.run(main())
