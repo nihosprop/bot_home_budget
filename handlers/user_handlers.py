@@ -173,12 +173,9 @@ async def process_number_sent(
     await msg_processor.deletes_messages(msgs_for_del=True)
     await msg_processor.removes_inline_kb()
     await state.hset(amount=number)
-    try:
-        value = await msg.answer(LexiconRu.select_direction,
-                                 reply_markup=kb_direction)
-        await msg_processor.save_msg_id(value, msgs_fast_del=True)
-    except Exception as err:
-        logger_user_hand.debug(f'{err=}')
+    value = await msg.answer(LexiconRu.select_direction,
+                             reply_markup=kb_direction)
+    await msg_processor.save_msg_id(value, msgs_fast_del=True)
     await state.set_state(FSMMakeTransaction.select_direction)
     logger_user_hand.debug('Exit')
 
