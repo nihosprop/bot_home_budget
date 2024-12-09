@@ -25,36 +25,42 @@ async def main():
 
     config: Config = load_config()
     bot = Bot(token=config.tg_bot.token,
-           default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+              default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
     redis = Redis(host='localhost', port=6379, db=0)
     storage = RedisStorage(redis=redis)
 
     dp = Dispatcher(storage=storage)
 
-    await get_data_json()
-    logger_main.info('Loading from a db.json success')
+    try:
+        await get_data_json()
+        logger_main.info('Loading from a db.json success')
 
-    await set_main_menu(bot)
+        await set_main_menu(bot)
 
-    dp.include_router(user_handlers.user_router)
-    dp.include_router(other_handlers.other_router)
+        dp.include_router(user_handlers.user_router)
+        dp.include_router(other_handlers.other_router)
 
-    await bot.delete_webhook(drop_pending_updates=True)
+        await bot.delete_webhook(drop_pending_updates=True)
 
-    logger_main.info('Start bot')
-    await dp.start_polling(bot)
-    logger_main.info('Stop bot')
+        logger_main.info('Start bot')
+        await dp.start_polling(bot)
 
-    tasks = asyncio.all_tasks()
-    for t in tasks:
-        if not t.done():
-            await t
+        # Ожидаем завершения всех задач
+        tasks = asyncio.all_tasks()
+        await asyncio.gather(*tasks)
 
-    logger_main.info('Stop bot')
+        logger_main.info('Stop bot')
 
-    await redis.close()
-    await redis.shutdown()
+    finally:
+        # Проверка существования переменных и их закрытие
+        if 'redis' in locals():
+            await redis.close()
+            await redis.shutdown()
+
+        # Завершаем цикл событий
+        loop = asyncio.get_running_loop()
+        loop.stop()
 
 
 if __name__ == "__main__":
