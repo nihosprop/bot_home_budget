@@ -25,7 +25,7 @@ async def main():
 
     config: Config = load_config()
     bot = Bot(token=config.tg_bot.token,
-              default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+           default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
     redis = Redis(host='localhost', port=6379, db=0)
     storage = RedisStorage(redis=redis)
@@ -46,11 +46,15 @@ async def main():
     await dp.start_polling(bot)
     logger_main.info('Stop bot')
 
+    tasks = asyncio.all_tasks()
+    for t in tasks:
+        if not t.done():
+            await t
+
+    logger_main.info('Stop bot')
+
     await redis.close()
     await redis.shutdown()
-
-    loop = asyncio.get_running_loop()
-    loop.stop()
 
 
 if __name__ == "__main__":
