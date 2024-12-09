@@ -115,7 +115,7 @@ class MessageProcessor:
         :param key: Str
         :return: None
         """
-        logger_utils.debug('Starting delete keyboard…')
+        logger_utils.debug('Entry')
 
         msgs: list = dict(await self._state.get_data()).get(key, [])
 
@@ -125,12 +125,14 @@ class MessageProcessor:
             chat_id = self._type_update.message.chat.id
 
         for msg_id in set(msgs):
+            logger_utils.debug('Starting remove keyboard…')
             try:
                 await self._type_update.bot.edit_message_reply_markup(
                         chat_id=chat_id, message_id=msg_id)
             except TelegramBadRequest as err:
                 logger_utils.error(f'Failed to remove inline keyboard: {err}',
                                    exc_info=True)
+        logger_utils.debug('Keyboard removed')
         await self._state.update_data({key: []})
 
-        logger_utils.debug('Keyboard removed')
+        logger_utils.debug('Exit')
