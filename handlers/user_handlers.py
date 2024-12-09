@@ -32,6 +32,24 @@ user_router = Router()
 logger_user_hand = logging.getLogger(__name__)
 
 
+# async def send_maintenance_message(_type: Message | CallbackQuery):
+#     if isinstance(_type, Message):
+#         await _type.answer("В связи с обновлением бот временно недоступен.\n"
+#                            "Мы скоро вернемся!")
+#     if isinstance(_type, CallbackQuery):
+#         await _type.answer("В связи с обновлением бот временно "
+#                            "недоступен.\n", show_alert=True)
+#
+# @user_router.message()
+# async def maintenance_mode(update):
+#     await send_maintenance_message(update)
+#
+#
+# @user_router.callback_query()
+# async def maintenance_mode(update):
+#     await send_maintenance_message(update)
+
+
 # cmd_start_default_state
 @user_router.message(F.text == '/start', StateFilter(default_state))
 async def cmd_start_default_state(msg: Message, state: FSMContext):
