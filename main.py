@@ -58,8 +58,8 @@ async def main():
         raise
 
     finally:
-        await redis.flushdb()
         logger_main.info('Stop bot')
+
 
 
 if __name__ == "__main__":
