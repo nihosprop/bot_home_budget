@@ -215,7 +215,9 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
                                          f'{LexiconRu.await_amount}',
                                          reply_markup=kb_for_wait_amount)
     await msg_processor.save_msg_id(value, msgs_for_del=True, msgs_fast_del=True)
-    await state.set_state(FSMMakeTransaction.fill_number)
+
+    # await state.set_state(FSMMakeTransaction.fill_number)
+    await state.clear()
     await clbk.answer()
 
 
@@ -271,7 +273,8 @@ async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
                                          reply_markup=kb_for_wait_amount)
     await msg_processor.deletes_messages(msgs_for_del=True)
     await msg_processor.save_msg_id(value, msgs_for_del=True, msgs_fast_del=True)
-    await state.set_state(FSMMakeTransaction.fill_number)
+    # await state.set_state(FSMMakeTransaction.fill_number)
+    await state.clear()
     await clbk.answer()
     logger_user_hand.debug('Exit')
 
