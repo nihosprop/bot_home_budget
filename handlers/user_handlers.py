@@ -46,6 +46,7 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
 
     logger_user_hand.debug('Exit')
 
+
 # reset user month stats
 @user_router.callback_query(F.data == 'reset_month_stats')
 async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
@@ -88,7 +89,7 @@ async def invalid_confirm_user(msg: Message):
 async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
     await remove_user_from_db(str(clbk.from_user.id))
     await clbk.message.edit_text(LexiconRu.text_del_success_data)
-    await state.set_state()
+    await state.clear()
 
 
 # cancel -> default_state
@@ -206,6 +207,7 @@ async def button_press_expenses(clbk: CallbackQuery, state: FSMContext):
 async def expenses_categ_click(clbk: CallbackQuery, state: FSMContext):
     logger_user_hand.debug('Entry')
     category = clbk.data
+    await state.update_data(category=category)
     await clbk.message.edit_text(LexiconRu.select_category,
                                  reply_markup=kbs_for_expenses[category])
     await state.set_state(FSMMakeTransaction.select_subcategory)

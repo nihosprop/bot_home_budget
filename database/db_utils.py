@@ -127,16 +127,17 @@ async def add_expenses_in_db(
     amount = data.get('amount')
     category = data['category']
     subcategory = clbk.data
-
     user_data = await db1.get(user_id)
     user_data_dict = json.loads(user_data.decode('utf-8'))
     user_data_dict['balance'] -= amount
     user_data_dict['expenses'][category][subcategory] = (
             user_data_dict['expenses'].setdefault(category, {}).setdefault(
                     subcategory, 0) + amount)
-    logger_db_utils.debug('Exit')
+
     await db1.set(user_id, json.dumps(user_data_dict))
     await set_data_json()
+
+    logger_db_utils.debug('Exit')
 
 
 async def generate_fin_stats(clbk: CallbackQuery) -> str:

@@ -3,8 +3,7 @@ import logging
 from logging.config import dictConfig
 
 import yaml
-
-from aiogram.fsm.storage.redis import RedisStorage, Redis
+from aiogram.fsm.storage.redis import Redis, RedisStorage
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -12,9 +11,10 @@ from aiogram.enums import ParseMode
 from config_data.config import Config, load_config
 from keyboards.set_menu import set_main_menu
 from handlers import other_handlers, user_handlers
-from database.db_utils import get_data_json, db1
+from database.db_utils import get_data_json
 
 logger_main = logging.getLogger(__name__)
+
 
 async def check_redis_connection(redis):
     try:
@@ -59,7 +59,6 @@ async def main():
 
     finally:
         logger_main.info('Stop bot')
-        await db1.aclose()
 
 
 if __name__ == "__main__":
