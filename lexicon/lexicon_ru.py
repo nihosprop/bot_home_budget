@@ -22,7 +22,8 @@ class LexiconRu:
     text_confirm_del_data: str = 'Подтвердить удаление данных!'
     text_problems: str = 'Нажмите: <b>/start</b>'
     text_del_success_data: str = ('Ваши данные удалены!✅\n'
-                                  'Нажмите <b>/start</b> что-бы начать')
+                                  'Нажмите <b>/start</b> или пришлите '
+                                  'сумму, что-бы начать.')
     text_confirm_reset_month: str = ('Подтвердите сброс статистики за месяц.\n'
                                      'Общий баланс затронут не будет.')
     text_help: str = (f'Бот находится в постоянном ожидании суммы(числа).\n'
