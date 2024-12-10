@@ -140,7 +140,7 @@ async def process_number_sent(
     msg_processor = MessageProcessor(msg, state)
     await msg_processor.deletes_messages(msgs_for_del=True)
     await msg_processor.removes_inline_kb()
-    await state.hset(amount=number)
+    await state.update_data(amount=number)
     await msg.answer(LexiconRu.select_direction, reply_markup=kb_direction)
     await state.set_state(FSMMakeTransaction.select_direction)
 
