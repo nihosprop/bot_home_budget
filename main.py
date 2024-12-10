@@ -16,6 +16,14 @@ from database.db_utils import get_data_json, db1
 
 logger_main = logging.getLogger(__name__)
 
+async def check_redis_connection(redis):
+    try:
+        await redis.ping()
+        logger_main.info("Redis connection established successfully.")
+    except Exception as e:
+        logger_main.error(f"Error connecting to Redis: {e}")
+        raise
+
 
 async def main():
     with open('logs/logging_setting/logging_config.yaml', 'rt') as file:
@@ -28,6 +36,7 @@ async def main():
               default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
     redis = Redis(host='localhost', port=6379, db=0)
+    await check_redis_connection(redis)
     storage = RedisStorage(redis=redis)
 
     dp = Dispatcher(storage=storage)
@@ -47,6 +56,7 @@ async def main():
         await dp.start_polling(bot)
     except Exception as err:
         logger_main.exception(err)
+        raise
 
     finally:
         logger_main.info('Stop bot')
