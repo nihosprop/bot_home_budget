@@ -58,7 +58,8 @@ async def main():
         raise
 
     finally:
-        await storage.close()
+        # await storage.close()
+        # await redis.close()
         await db1.close()
         logger_main.info('Stop bot')
 

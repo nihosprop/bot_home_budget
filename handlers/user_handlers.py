@@ -35,7 +35,7 @@ logger_user_hand = logging.getLogger(__name__)
 # cmd_start
 @user_router.message(F.text == '/start')
 async def cmd_start_default_state(msg: Message, state: FSMContext):
-    logger_user_hand.debug('Entry')
+    logger_user_hand.debug(f'Entry {await state.get_state()=}')
     # remove msg '/start' from the user
     await add_user_in_db(str(msg.from_user.id))
     msg_processor = MessageProcessor(msg, state)
