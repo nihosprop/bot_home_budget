@@ -46,11 +46,12 @@ async def main():
         logger_main.info('Start bot')
         await dp.start_polling(bot)
     except Exception as err:
-        logger_main.error(f'{err=}')
+        logger_main.exception(err)
 
     finally:
         logger_main.info('Stop bot')
-        await db1.close()
+        await redis.aclose()
+        await db1.aclose()
 
 
 if __name__ == "__main__":
