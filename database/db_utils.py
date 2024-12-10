@@ -10,7 +10,7 @@ from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
                                 INCOME_CATEG_BUTT)
 
 logger_db_utils = logging.getLogger(__name__)
-db = Redis(host='localhost', port=6379, db=1)
+db1 = Redis(host='localhost', port=6379, db=1)
 
 
 async def set_data_json(path: str = 'database/db.json'):
@@ -25,8 +25,8 @@ async def set_data_json(path: str = 'database/db.json'):
     """
 
     all_data: dict = {}
-    for key in await db.keys():
-        value = await db.get(key)
+    for key in await db1.keys():
+        value = await db1.get(key)
         deserialized_value: dict = json.loads(value.decode('utf-8'))
         all_data[key.decode('utf-8')] = deserialized_value
 
@@ -39,24 +39,24 @@ async def get_data_json(path: str = 'database/db.json'):
     with open(path, 'r') as file:
         data = json.load(file)
     # Cleaning up the current Redis database
-    await db.flushdb()
+    await db1.flushdb()
     for user_id, user_info in data.items():
-        await db.set(user_id, json.dumps(user_info))
+        await db1.set(user_id, json.dumps(user_info))
 
 
 async def remove_user_from_db(user_id: str):
-    await db.delete(user_id)
+    await db1.delete(user_id)
     await set_data_json()
 
 
 async def add_user_in_db(user_id: str) -> None:
     logger_db_utils.debug('Entry')
-    data_user = await db.get(user_id)
+    data_user = await db1.get(user_id)
     logger_db_utils.debug(f'{data_user=}')
 
     if not data_user:
         user_dict = {'balance': 0, 'income': {}, 'expenses': {}}
-        await db.set(user_id, json.dumps(user_dict))
+        await db1.set(user_id, json.dumps(user_dict))
         await set_data_json()
 
     logger_db_utils.debug('Exit')
@@ -67,11 +67,11 @@ async def reset_month_stats(clbk: CallbackQuery) -> None:
     logger_db_utils.debug('Entry')
 
     user_id = str(clbk.from_user.id)
-    user_data = await db.get(user_id)
+    user_data = await db1.get(user_id)
     user_data_dict = json.loads(user_data.decode('utf-8'))
     user_data_dict['income'] = {}
     user_data_dict['expenses'] = {}
-    await db.set(user_id, json.dumps(user_data_dict))
+    await db1.set(user_id, json.dumps(user_data_dict))
     await set_data_json()
     logger_db_utils.info(f'Monthly statistics for {clbk.from_user.id} reset')
     logger_db_utils.debug('Exit')
@@ -89,7 +89,7 @@ async def add_income_in_db(clbk: CallbackQuery, state: FSMContext) -> None:
 
     category = clbk.data
     user_id = str(clbk.from_user.id)
-    user_data = await db.get(user_id)
+    user_data = await db1.get(user_id)
 
     if not user_data:
         await add_user_in_db(user_id)
@@ -112,7 +112,7 @@ async def add_income_in_db(clbk: CallbackQuery, state: FSMContext) -> None:
     except Exception as err:
         logger_db_utils.error(f'{err=}')
     logger_db_utils.debug('Exit')
-    await db.set(user_id, json.dumps(user_data_dict))
+    await db1.set(user_id, json.dumps(user_data_dict))
     await set_data_json()
 
     logger_db_utils.debug('Entry')
@@ -128,14 +128,14 @@ async def add_expenses_in_db(
     category = data['category']
     subcategory = clbk.data
 
-    user_data = await db.get(user_id)
+    user_data = await db1.get(user_id)
     user_data_dict = json.loads(user_data.decode('utf-8'))
     user_data_dict['balance'] -= amount
     user_data_dict['expenses'][category][subcategory] = (
             user_data_dict['expenses'].setdefault(category, {}).setdefault(
                     subcategory, 0) + amount)
     logger_db_utils.debug('Exit')
-    await db.set(user_id, json.dumps(user_data_dict))
+    await db1.set(user_id, json.dumps(user_data_dict))
     await set_data_json()
 
 
@@ -143,7 +143,7 @@ async def generate_fin_stats(clbk: CallbackQuery) -> str:
     date: str = clbk.message.date.strftime('%d.%m.%Y %H:%M (UTC)')
     user_id = str(clbk.from_user.id)
     logger_db_utils.debug(f'Entry\n{date=}:{user_id=}')
-    user_data = await db.get(user_id)
+    user_data = await db1.get(user_id)
     user_data_dict = json.loads(user_data.decode('utf-8'))
 
     monthly_income = user_data_dict['income']

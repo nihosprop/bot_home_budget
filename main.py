@@ -12,7 +12,7 @@ from aiogram.enums import ParseMode
 from config_data.config import Config, load_config
 from keyboards.set_menu import set_main_menu
 from handlers import other_handlers, user_handlers
-from database.db_utils import get_data_json
+from database.db_utils import get_data_json, db1
 
 logger_main = logging.getLogger(__name__)
 
@@ -32,19 +32,25 @@ async def main():
 
     dp = Dispatcher(storage=storage)
 
-    await get_data_json()
-    logger_main.info('Loading from a db.json success')
+    try:
+        await get_data_json()
+        logger_main.info('Loading from a db.json success')
 
-    await set_main_menu(bot)
+        await set_main_menu(bot)
 
-    dp.include_router(user_handlers.user_router)
-    dp.include_router(other_handlers.other_router)
+        dp.include_router(user_handlers.user_router)
+        dp.include_router(other_handlers.other_router)
 
-    await bot.delete_webhook(drop_pending_updates=True)
+        await bot.delete_webhook(drop_pending_updates=True)
 
-    logger_main.info('Start bot')
-    await dp.start_polling(bot)
-    logger_main.info('Stop bot')
+        logger_main.info('Start bot')
+        await dp.start_polling(bot)
+    except Exception as err:
+        logger_main.error(f'{err=}')
+
+    finally:
+        logger_main.info('Stop bot')
+        await db1.close()
 
 
 if __name__ == "__main__":
