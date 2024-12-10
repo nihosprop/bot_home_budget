@@ -11,18 +11,9 @@ from aiogram.enums import ParseMode
 from config_data.config import Config, load_config
 from keyboards.set_menu import set_main_menu
 from handlers import other_handlers, user_handlers
-from database.db_utils import get_data_json, db1
+from database.db_utils import get_data_json
 
 logger_main = logging.getLogger(__name__)
-
-
-async def check_redis_connection(redis):
-    try:
-        await redis.ping()
-        logger_main.info("Redis connection established successfully.")
-    except Exception as e:
-        logger_main.error(f"Error connecting to Redis: {e}")
-        raise
 
 
 async def main():
@@ -36,8 +27,14 @@ async def main():
               default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
     redis = Redis(host='localhost', port=6379, db=0)
-    await redis.flushdb()
-    await check_redis_connection(redis)
+
+    try:
+        await redis.ping()
+        logger_main.info("Redis connection established successfully.")
+    except Exception as e:
+        logger_main.error(f"Error connecting to Redis: {e}")
+        raise
+
     storage = RedisStorage(redis=redis)
 
     dp = Dispatcher(storage=storage)
@@ -59,8 +56,6 @@ async def main():
         raise
 
     finally:
-        await redis.aclose()
-        await db1.aclose()
         logger_main.info('Stop bot')
 
 
