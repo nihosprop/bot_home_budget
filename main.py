@@ -50,7 +50,6 @@ async def main():
 
     finally:
         logger_main.info('Stop bot')
-        await redis.aclose()
         await db1.aclose()
 
 
