@@ -36,6 +36,7 @@ async def main():
               default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
     redis = Redis(host='localhost', port=6379, db=0)
+    await redis.flushdb()
     await check_redis_connection(redis)
     storage = RedisStorage(redis=redis)
 
@@ -58,8 +59,8 @@ async def main():
         raise
 
     finally:
-        # await storage.close()
-        # await redis.close()
+        await storage.close()
+        await redis.close()
         await db1.close()
         logger_main.info('Stop bot')
 
