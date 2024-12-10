@@ -20,8 +20,7 @@ class MessageProcessor:
     _state: FSMContext
 
     async def deletes_messages(
-            self, msgs_for_del=False, msgs_fast_del=False,
-            msgs_remove_kb=False) -> None:
+            self, msgs_for_del=False, msgs_remove_kb=False) -> None:
         """
         Deleting messages from chat based on passed parameters.
         This method removes various types of messages from a chat.
@@ -29,7 +28,6 @@ class MessageProcessor:
         are set to True.
         If no parameters are specified, the method does not perform any
         actions.
-        :param msgs_fast_del: bool
         :param msgs_for_del: bool
         :param msgs_remove_kb: bool
         :return: None
@@ -43,7 +41,6 @@ class MessageProcessor:
 
         kwargs: dict = {
                 "msgs_for_del": msgs_for_del,
-                "msgs_fast_del": msgs_fast_del,
                 "msgs_remove_kb": msgs_remove_kb}
 
         keys = [key for key, val in kwargs.items() if val]
@@ -68,7 +65,7 @@ class MessageProcessor:
 
     async def save_msg_id(
             self, value: Message | CallbackQuery, msgs_for_del=False,
-            msgs_fast_del=False, msgs_remove_kb=False) -> None:
+            msgs_remove_kb=False) -> None:
         """
         The writes_msg_id_to_storage method is intended for writing an identifier
         messages in the store depending on the values of the passed flags.
@@ -80,14 +77,12 @@ class MessageProcessor:
         :param value: Message | CallbackQuery
         :param msgs_for_del: bool
         :param msgs_remove_kb: bool
-        :param msgs_fast_del: bool
         :return: None
         """
         logger_utils.debug('Entry')
 
         kwargs: dict = {
                 "msgs_for_del": msgs_for_del,
-                "msgs_fast_del": msgs_fast_del,
                 "msgs_remove_kb": msgs_remove_kb}
 
         logger_utils.debug('Start writing data to storage…')
@@ -96,10 +91,11 @@ class MessageProcessor:
             if val:
                 logger_utils.debug(f'{key=}')
                 data: list = dict(await self._state.get_data()).get(key, [])
-                data.append(value.message_id)
+                if value.message_id not in data:
+                    data.append(value.message_id)
+                    logger_utils.debug('Msg ID to recorded')
+                logger_utils.debug('No msg ID to record')
                 await self._state.update_data({key: data})
-                logger_utils.debug('Message ID to recorded')
-
         logger_utils.debug('Exit')
 
     async def removes_inline_kb(self, key='msgs_remove_kb') -> None:
@@ -125,13 +121,13 @@ class MessageProcessor:
             chat_id = self._type_update.message.chat.id
 
         for msg_id in set(msgs):
-            logger_utils.debug('Starting remove keyboard…')
+            logger_utils.debug(f'Starting remove keyboard…\n'
+                               f'Msgs for remove {set(msgs)=}')
             try:
                 await self._type_update.bot.edit_message_reply_markup(
                         chat_id=chat_id, message_id=msg_id)
             except TelegramBadRequest as err:
-                logger_utils.error(f'Failed to remove inline keyboard: {err}',
-                                   exc_info=True)
+                logger_utils.error(f'{err}')
         logger_utils.debug('Keyboard removed')
         await self._state.update_data({key: []})
 
