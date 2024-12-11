@@ -3,7 +3,6 @@ import logging
 from aiogram import F, Router
 from aiogram.filters import StateFilter
 from aiogram.types import CallbackQuery, Message
-from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 
 from database.db_utils import (add_expenses_in_db,
@@ -146,7 +145,7 @@ async def process_number_sent(
 
 
 # invalid number
-@user_router.message(StateFilter(default_state))
+@user_router.message()
 async def process_invalid_number(msg: Message):
     await msg.delete()
 
@@ -180,7 +179,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
                                          reply_markup=kb_for_wait_amount)
     await msg_processor.save_msg_id(value, msgs_for_del=True)
     await state.set_state()
-    await clbk.answer()
+    # await clbk.answer()
 
 
 # invalid_category
