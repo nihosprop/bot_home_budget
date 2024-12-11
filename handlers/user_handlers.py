@@ -37,6 +37,7 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
     msg_processor = MessageProcessor(msg, state)
     await add_user_in_db(str(msg.from_user.id))
     await msg_processor.deletes_messages(msgs_for_del=True)
+    await msg_processor.removes_inline_kb()
     value = await msg.answer(LexiconRu.await_amount,
                              reply_markup=kb_for_wait_amount)
     await msg_processor.save_msg_id(value, msgs_for_del=True)
@@ -180,7 +181,7 @@ async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
                                          reply_markup=kb_for_wait_amount)
     await msg_processor.save_msg_id(value, msgs_for_del=True)
     await state.set_state()
-    # await clbk.answer()
+    await clbk.answer()
 
 
 # invalid_category
