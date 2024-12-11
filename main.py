@@ -11,7 +11,7 @@ from aiogram.enums import ParseMode
 from config_data.config import Config, load_config
 from keyboards.set_menu import set_main_menu
 from handlers import other_handlers, user_handlers
-from database.db_utils import get_data_json
+from database.db_utils import get_data_json, db1
 
 logger_main = logging.getLogger(__name__)
 
@@ -56,7 +56,9 @@ async def main():
         raise
 
     finally:
-        await redis.close
+        await redis.aclose()
+        await db1.aclose()
+
         logger_main.info('Stop bot')
 
 
