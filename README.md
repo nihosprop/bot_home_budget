@@ -1,23 +1,29 @@
-# bot_home_budget
-**Version:** 0.1.0
+# Bot Home Budget
 
-# Income and Expense Tracker Bot
-
-![GitHub stars](https://img.shields.io/github/stars/username/repository)
-![GitHub forks](https://img.shields.io/github/forks/username/repository)
-![GitHub issues](https://img.shields.io/github/issues/username/repository)
-![GitHub license](https://img.shields.io/github/license/username/repository)
+[![Version](https://img.shields.io/badge/version-PreRealise_v0.9.0-blue)](https://github.com/nihosprop/bot_home_budget/releases/latest)
+[![Python Version](https://img.shields.io/badge/python-3.12%2B-green)](https://www.python.org/downloads/release/python-3128/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Platforms](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20iOS%20%7C%20Android%20%7C%20Linux-lightgrey%20%7C%20)](https://github.com/nihosprop/bot_home_budget.svg)
+![GitHub stars](https://img.shields.io/github/stars/nihosprop/bot_home_budget.svg)
+![GitHub forks](https://img.shields.io/github/forks/nihosprop/bot_home_budget.svg)
+![GitHub issues](https://img.shields.io/github/issues/nihosprop/bot_home_budget.svg)
 
 ## Description
 
-This Telegram bot helps users track their income and expenses.
-You can use popular categories of expenses and income, view
-balance and receive reports.
+This is a financial accounting bot.
+The user can send amounts, choose the direction of movement of funds 
+(Income or Expenses) and category.
 
+[🤖 Start using the Bot Home Budget](https://t.me/homeSimple_BudgetBot)
 ## Functional
 
-- Adding Income and Expenses
-- Viewing a transaction report
-- Receive reports by category
-- Delete all data
-- Reset data for the month (the main balance remains)
+1. Delete all data
+2. Viewing reports
+3. View available categories
+4. Function of resetting monthly data on a specified date or manually
+   (automatically reset on the 1st of every month)
+
+## Planned
+
+1. Database connection PostgreSQL
+2. Expansion of functionality
