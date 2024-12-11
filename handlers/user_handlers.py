@@ -67,11 +67,12 @@ async def confirm_reset_month_stats(clbk: CallbackQuery, state: FSMContext):
 
 # remove user
 @user_router.callback_query(F.data == 'delete_user_data')
-async def cmd_delete_user(clbk: Message, state: FSMContext):
+async def cmd_delete_user(clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.edit_text(LexiconRu.text_confirm_del_data,
                                          reply_markup=kb_yes_cancel)
     await MessageProcessor(clbk, state).save_msg_id(value, msgs_for_del=True)
     await state.set_state(FSMDeleteUser.confirm_deletion)
+    await clbk.answer()
 
 
 # invalid confirm user
