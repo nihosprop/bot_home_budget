@@ -37,8 +37,6 @@ async def get_data_json(path: str = 'database/db.json'):
 
     with open(path, 'r') as file:
         data = json.load(file)
-    # Cleaning up the current Redis database
-    # await db1.flushdb()
     for user_id, user_info in data.items():
         await db1.set(user_id, json.dumps(user_info))
 
