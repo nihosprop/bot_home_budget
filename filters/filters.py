@@ -28,7 +28,6 @@ class IsNumber(BaseFilter):
                         logger_filters.warning(f'NaN or INF attempt!!! ->'
                                                f' {user_id=}: {number=}')
                         return False
-
                     value = {'number': float(number)}
                 except ValueError:
                     logger_filters.warning(
