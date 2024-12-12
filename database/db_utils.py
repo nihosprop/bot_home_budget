@@ -154,7 +154,7 @@ async def generate_fin_stats(clbk: CallbackQuery) -> str:
     report: str = (f'<u><i>{date}</i></u>\n\n'
                    f'<b>Баланс: </b>{balance}\n'
                    f'<b>Сальдо:</b>'
-                   f' {balance - sum_expenses}\n'
+                   f' {round(balance - sum_expenses, 2)}\n'
                    f'------------------------\n'
                    f'<b>Доходы за месяц:</b> {sum_income}\n')
 
