@@ -146,7 +146,7 @@ async def generate_fin_stats(clbk: CallbackQuery) -> str:
 
     monthly_income = user_data_dict['income']
     sum_income = sum(monthly_income.values())
-    balance: int | float = user_data_dict['balance']
+    balance: int | float = round(user_data_dict['balance'], 2)
     expenses: dict[str, dict[str, float | int]] = user_data_dict['expenses']
     sum_expenses = sum(
             sum(obj) for obj in (categ.values() for categ in expenses.values()))
