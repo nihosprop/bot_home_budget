@@ -150,7 +150,9 @@ async def process_number_sent(
 # invalid number
 @user_router.message()
 async def process_invalid_number(msg: Message):
+    logger_user_hand.debug('Entry')
     await msg.delete()
+    logger_user_hand.debug('Exit')
 
 
 # select_income_direction

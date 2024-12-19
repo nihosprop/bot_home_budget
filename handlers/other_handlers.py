@@ -2,7 +2,7 @@ import logging
 
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
-from aiogram import F, Router
+from aiogram import Router
 
 from lexicon.lexicon_ru import LexiconRu
 
@@ -12,7 +12,7 @@ other_router = Router()
 
 @other_router.message()
 async def other_message(msg: Message, state: FSMContext):
-    logger_other_hand.debug(f'Entry{await state.get_state()=}')
+    logger_other_hand.debug(f'Entry')
     await msg.answer(LexiconRu.text_problems)
     logger_other_hand.debug('Exit')
 
