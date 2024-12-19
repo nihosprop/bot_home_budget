@@ -55,6 +55,11 @@ handlers:
     filters: [error_critical_filter]
 
 loggers:
+  middlewares.outer:
+    level: DEBUG
+    handlers: [ stdout, warning_file, critical_file ]
+    propagate: no
+
   handlers.user_handlers:
     level: DEBUG
     handlers: [stdout, warning_file, critical_file]

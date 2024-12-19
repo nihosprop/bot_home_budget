@@ -11,7 +11,8 @@ from aiogram.enums import ParseMode
 from config_data.config import Config, load_config
 from keyboards.set_menu import set_main_menu
 from handlers import other_handlers, user_handlers
-from database.db_utils import get_data_json, db1
+from database.db_utils import db1, get_data_json
+from middlewares.outer import ThrottlingMiddleware
 
 logger_main = logging.getLogger(__name__)
 
@@ -36,8 +37,11 @@ async def main():
         raise
 
     storage = RedisStorage(redis=redis)
-
     dp = Dispatcher(storage=storage)
+
+    # throttling storage
+    storage_throttling: RedisStorage = RedisStorage.from_url(
+            'redis://localhost:6379/7')
 
     try:
         await get_data_json()
@@ -45,8 +49,15 @@ async def main():
 
         await set_main_menu(bot)
 
+        # routers
         dp.include_router(user_handlers.user_router)
         dp.include_router(other_handlers.other_router)
+
+        # middlewares
+        dp.message.outer_middleware(
+                ThrottlingMiddleware(storage=storage_throttling, ttl=700))
+        dp.callback_query.outer_middleware(
+                ThrottlingMiddleware(storage=storage_throttling, ttl=500))
 
         await bot.delete_webhook(drop_pending_updates=True)
         logger_main.info('Start bot')
@@ -58,7 +69,7 @@ async def main():
     finally:
         await redis.aclose()
         await db1.aclose()
-
+        await storage_throttling.redis.aclose()
         logger_main.info('Stop bot')
 
 
