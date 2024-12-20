@@ -12,6 +12,7 @@ from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
 logger_db_utils = logging.getLogger(__name__)
 db1 = Redis(host='localhost', port=6379, db=1)
 
+
 async def set_data_json(path: str = 'database/db.json'):
     """
     Saves all data from the Redis database to a JSON file.
@@ -100,7 +101,7 @@ async def add_income_in_db(clbk: CallbackQuery, state: FSMContext) -> None:
     logger_db_utils.debug(f'{amount=}')
 
     try:
-        user_data_dict['balance'] += amount
+        user_data_dict['balance'] += round(amount, 2)
     except Exception as err:
         logger_db_utils.error(f'{err=}')
     try:
@@ -168,6 +169,7 @@ async def generate_fin_stats(clbk: CallbackQuery) -> str:
         for subcategory, value in data.items():
 
             report += (f'    - {EXPENSE_SUBCATEGORY_BUTT[subcategory]}: '
-                       f'{value}{await _calc_percent(sum_income, value)}\n')
+                       f'{round(value, 2)}'
+                       f'{await _calc_percent(sum_income, value)}\n')
     logger_db_utils.debug('Exit')
     return f'<code>{report}</code>'
