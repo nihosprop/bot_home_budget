@@ -152,24 +152,23 @@ async def generate_fin_stats(clbk: CallbackQuery) -> str:
     sum_expenses = sum(
             sum(obj) for obj in (categ.values() for categ in expenses.values()))
 
-    report: str = (f'<u><i>{date}</i></u>\n\n'
+    report: str = (f'<code><i>{date}</i></code>\n\n'
                    f'<b>Баланс: </b>{balance}\n'
                    f'<b>Сальдо:</b>'
-                   f' {round(balance - sum_expenses, 2)}\n'
-                   f'------------------------\n'
-                   f'<b>Доходы за месяц:</b> {sum_income}\n')
+                   f' <code>{round(balance - sum_expenses, 2)}</code>\n'
+                   f'<b>------------------------</b>\n'
+                   f'<b>Доходы за месяц:</b> <code>{sum_income}</code>\n')
 
     for category, value in monthly_income.items():
-        report += f'  - {INCOME_CATEG_BUTT[category]}: {value}\n'
+        report += f'  - {INCOME_CATEG_BUTT[category]}: <code>{value}</code>\n'
     report += (f'<b>------------------------\n'
-               f'Расходы за месяц: {round(sum_expenses, 2)}</b>\n')
+               f'Расходы за месяц:</b> <code>{round(sum_expenses, 2)}</code>\n')
 
     for category, data in expenses.items():
-        report += f'  {EXPENSES_CATEG_BUTT[category]}:\n'
+        report += f'  <b>{EXPENSES_CATEG_BUTT[category]}:</b>\n'
         for subcategory, value in data.items():
-
             report += (f'    - {EXPENSE_SUBCATEGORY_BUTT[subcategory]}: '
-                       f'{round(value, 2)}'
-                       f'{await _calc_percent(sum_income, value)}\n')
+                       f'<code>{round(value, 2)}</code>'
+                       f'<code>{await _calc_percent(sum_income, value)}</code>\n')
     logger_db_utils.debug('Exit')
-    return f'<code>{report}</code>'
+    return report
