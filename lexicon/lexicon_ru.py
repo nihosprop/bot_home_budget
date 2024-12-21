@@ -68,11 +68,21 @@ EXPENSES_CATEG_BUTT: dict[str, str] = {
         'clothing_and_accessories': 'Одежда и аксессуары',
         'pets': 'Домашние животные',
         'misc_expenses': 'Прочие расходы',
-        'household_expenses': 'Бытовые расходы',
+        'services_expenses': 'Услуги',
         'debts': 'Задолженности'}
 
-SUPERMARKET_BUTT = {'products': 'Продукты', 'alcohol': 'Алкоголь'}
-FEEDING_BUTT = {'restaurant': 'Ресторан', 'cafe': 'Кафе', 'canteen': 'Столовая'}
+SUPERMARKET_BUTT = {
+        'electronics': 'Техника и электроника',
+        'home_goods': 'Товары для дома',
+        'plumbing': 'Сантехника',
+        'alcohol': 'Алкоголь',
+        'household_chemicals': 'Бытовая химия',
+        'products': 'Продукты'}
+FEEDING_BUTT = {
+        'restaurant': 'Ресторан',
+        'cafe': 'Кафе',
+        'canteen': 'Столовая',
+        'school': 'Школа'}
 TRANSPORT_BUTT = {'personal': 'Личный', 'public': 'Общественный'}
 UTILITIES_BUTT = {
         'rent': 'Квартплата',
@@ -89,6 +99,7 @@ ENTERTAINMENT_BUTT = {
         'travel_packages': 'Путевки'}
 HEALTH_BEAUTY_BUTT = {
         'medical_services': 'Мед услуги',
+        'dentist': 'Дантист',
         'fitness': 'Фитнес',
         'self_care': 'Уход за собой'}
 EDUCATION_BUTT = {
@@ -104,13 +115,10 @@ PETS_BUTT = {
 MISC_EXPENSES_BUTT = {
         'gifts': 'Подарки',
         'donations': 'Пожертвования',
-        'investing': 'Инвестинг'}
-HOUSEHOLD_NEEDS_BUTT = {
-        'dry_cleaning': 'Химчистка',
-        'home_goods': 'Товары для дома',
-        'household_chemicals': 'Бытовая химия',
-        'electronics': 'Техника и электроника',
-        'plumbing': 'Сантехника'}
+        'investing': 'Инвестинг',
+        'cash_for_the_child': 'На расходы детям'}
+SERVICES_BUTT = {'dry_cleaning': 'Химчистка', 'plumber': 'Сантехник',
+        'tile_maker': 'Плиточник', 'electric': 'Электрик', 'other': 'Другое'}
 DEBTS_BUTT = {
         'loan': 'Кредит',
         'installment': 'Рассрочка',
@@ -120,7 +128,7 @@ DEBTS_BUTT = {
 EXPENSE_SUBCATEGORY_BUTT: dict[str, str] = dict(**SUPERMARKET_BUTT,
                                                 **FEEDING_BUTT, **TRANSPORT_BUTT,
                                                 **DEBTS_BUTT,
-                                                **HOUSEHOLD_NEEDS_BUTT,
+                                                **SERVICES_BUTT,
                                                 **MISC_EXPENSES_BUTT,
                                                 **PETS_BUTT,
                                                 **CLOTHING_ACCESSORIES_BUTT,
@@ -148,12 +156,17 @@ MAP = """
 
 Расходы:
   1.Супермаркет
+    — Товары для дома
+    — Бытовая химия
+    — Техника и электроника
+    — Сантехника
     — Продукты
     — Алкоголь
   2.Питание
     — Ресторан
     — Кафе
     — Столовая
+    — Школа
   3.Транспорт
     — Личный
     — Общественный
@@ -164,6 +177,7 @@ MAP = """
     — Моб связь
     — Аренда жилья
     — Обслуживание и ремонт
+    — Охрана
   5.Развлечения и Отдых
     — Кино и театр
     — Хобби
@@ -174,6 +188,7 @@ MAP = """
     — Мед услуги
     — Фитнес
     — Уход за собой
+    — Дантист
   7.Образование
     — Курсы и обучение
     — Книги и материалы
@@ -183,19 +198,20 @@ MAP = """
     — Аксессуары
   9.Домашние животные
     — Корм
-    — Медицинские расходы
+    — Мед препараты
     — Аксессуары и игрушки
     — Груминг
   10.Прочие расходы
+    — Личные нужды ребенка
     — Подарки
     — Пожертвования
     — Инвестинг
-  11.Бытовые нужды
+  11.Услуги
     — Химчистка
-    — Товары для дома
-    — Бытовая химия
-    — Техника и электроника
-    — Сантехника
+    — Сантехник
+    — Плиточник
+    — Электрик
+    — Другое
   12.Долги 
     — Кредит
     — Рассрочка

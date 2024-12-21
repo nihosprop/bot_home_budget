@@ -12,7 +12,7 @@ from lexicon.lexicon_ru import (CLOTHING_ACCESSORIES_BUTT,
                                 FEEDING_BUTT,
                                 FOR_AWAIT_AMOUNT_BUTT,
                                 HEALTH_BEAUTY_BUTT,
-                                HOUSEHOLD_NEEDS_BUTT,
+                                SERVICES_BUTT,
                                 INCOME_CATEG_BUTT,
                                 MISC_EXPENSES_BUTT,
                                 PETS_BUTT,
@@ -43,7 +43,7 @@ kb_health = create_inline_kb(2, **HEALTH_BEAUTY_BUTT)
 kb_education = create_inline_kb(2, **EDUCATION_BUTT)
 kb_pets = create_inline_kb(2, **PETS_BUTT)
 kb_misc = create_inline_kb(2, **MISC_EXPENSES_BUTT)
-kb_household = create_inline_kb(2, **HOUSEHOLD_NEEDS_BUTT)
+kb_household = create_inline_kb(2, **SERVICES_BUTT)
 kb_debts = create_inline_kb(2, **DEBTS_BUTT)
 kb_clothing = create_inline_kb(2, **CLOTHING_ACCESSORIES_BUTT)
 
@@ -57,6 +57,6 @@ kbs_for_expenses: dict[str, InlineKeyboardMarkup] = {
         'education': kb_education,
         'pets': kb_pets,
         'misc_expenses': kb_misc,
-        'household_expenses': kb_household,
+        'services_expenses': kb_household,
         'clothing_and_accessories': kb_clothing,
         'debts': kb_debts}
