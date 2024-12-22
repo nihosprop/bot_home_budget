@@ -2,6 +2,7 @@
 
 [![Version](https://img.shields.io/badge/version-PreRealise_v0.9.0-blue)](https://github.com/nihosprop/bot_home_budget/releases/latest)
 [![Python Version](https://img.shields.io/badge/python-3.12%2B-green)](https://www.python.org/downloads/release/python-3128/)
+[![Aiogram Version](https://img.shields.io/badge/Aiogram-3.15.0-green)](https://pypi.org/project/aiogram/3.15.0/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platforms](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20iOS%20%7C%20Android%20%7C%20Linux-lightgrey%20%7C%20)](https://github.com/nihosprop/bot_home_budget.svg)
 ![GitHub stars](https://img.shields.io/github/stars/nihosprop/bot_home_budget.svg)
