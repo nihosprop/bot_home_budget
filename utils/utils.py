@@ -81,9 +81,9 @@ class MessageProcessor:
         """
         logger_utils.debug('Entry')
 
-        kwargs: dict = {
-                "msgs_for_del": msgs_for_del,
-                "msgs_remove_kb": msgs_remove_kb}
+        flags: dict = {
+                'msgs_for_del': msgs_for_del,
+                'msgs_remove_kb': msgs_remove_kb}
 
         logger_utils.debug('Start writing data to storage…')
 
