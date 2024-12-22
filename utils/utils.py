@@ -85,9 +85,8 @@ class MessageProcessor:
                 'msgs_for_del': msgs_for_del,
                 'msgs_remove_kb': msgs_remove_kb}
 
-        logger_utils.debug('Start writing data to storage…')
-
-        for key, val in kwargs.items():
+        for key, val in flags.items():
+            logger_utils.debug('Start writing data to storage…')
             if val:
                 logger_utils.debug(f'{key=}')
                 data: list = dict(await self._state.get_data()).get(key, [])
