@@ -2,6 +2,7 @@ import logging
 
 from aiogram import F, Router
 from aiogram.filters import StateFilter
+from aiogram.fsm.state import default_state
 from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 
@@ -84,13 +85,28 @@ async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
 
 
 # cancel -> default_state
-@user_router.callback_query(F.data == '/cancel')
-async def cmd_cancel_no_state(clbk: CallbackQuery, state: FSMContext):
-    value = await clbk.message.edit_text(LexiconRu.await_amount,
-                                         reply_markup=kb_for_wait_amount)
-    await MessageProcessor(clbk, state).save_msg_id(value, msgs_for_del=True)
+@user_router.callback_query(F.data == '/cancel', StateFilter(default_state))
+async def cmd_cancel_default_state(clbk: CallbackQuery, state: FSMContext):
+    logger_user_hand.debug('Entry')
+    await clbk.message.edit_text(LexiconRu.await_amount,
+                                 reply_markup=kb_for_wait_amount)
     await state.set_state()
     await clbk.answer()
+    logger_user_hand.debug('Exit')
+
+
+# cancel -> not default_state
+@user_router.callback_query(F.data == '/cancel', ~StateFilter(default_state))
+async def cmd_cancel_state(clbk: CallbackQuery, state: FSMContext):
+    logger_user_hand.debug('Entry')
+    msg_processor = MessageProcessor(clbk, state)
+    await msg_processor.delete_message()
+    value = await clbk.message.edit_text(LexiconRu.await_amount,
+                                         reply_markup=kb_for_wait_amount)
+    await msg_processor.save_msg_id(value, msgs_for_del=True)
+    await state.set_state()
+    await clbk.answer()
+    logger_user_hand.debug('Exit')
 
 
 # cmd_report
@@ -102,7 +118,7 @@ async def cmd_report(clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.answer(
             f'{await generate_fin_stats(clbk)}\n{LexiconRu.await_amount}',
             reply_markup=kb)
-    await msg_processor.save_msg_id(value, msgs_remove_kb=True)
+    await msg_processor.save_msg_id(value, msgs_for_del=True)
     await clbk.answer()
 
 
@@ -129,6 +145,9 @@ async def process_number_sent(
     msg_processor = MessageProcessor(msg, state)
     await msg_processor.deletes_messages(msgs_for_del=True)
     await state.update_data(amount=number)
+    value = await msg.answer(f'Обработка запроса {number}...')
+    await state.update_data(msg_id_for_change=str(value.message_id))
+    await msg.delete()
     await msg.answer(LexiconRu.select_direction, reply_markup=kb_direction)
     await state.set_state(FSMMakeTransaction.select_direction)
 
@@ -163,6 +182,7 @@ async def invalid_select_direction(msg: Message):
 async def process_income_categories(clbk: CallbackQuery, state: FSMContext):
     await add_income_in_db(clbk, state)
     msg_processor = MessageProcessor(clbk, state)
+    await msg_processor.change_message()
     await msg_processor.deletes_messages(msgs_for_del=True)
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{await generate_fin_stats(clbk)}'
@@ -217,12 +237,14 @@ async def press_subcategory(clbk: CallbackQuery, state: FSMContext):
     logger_user_hand.debug('Entry')
     await add_expenses_in_db(clbk, state)
     msg_processor = MessageProcessor(clbk, state)
+    await msg_processor.change_message()
     value = await clbk.message.edit_text(f'{LexiconRu.transaction_recorded}\n'
                                          f'{await generate_fin_stats(clbk)}'
                                          f'{LexiconRu.await_amount}',
                                          reply_markup=kb_for_wait_amount)
     await msg_processor.deletes_messages(msgs_for_del=True)
     await msg_processor.save_msg_id(value, msgs_for_del=True)
+    await clbk.answer()
     await state.set_state()
     logger_user_hand.debug('Exit')
 

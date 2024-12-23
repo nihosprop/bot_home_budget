@@ -5,6 +5,8 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
+from lexicon.lexicon_ru import EXPENSE_SUBCATEGORY_BUTT, INCOME_CATEG_BUTT
+
 logger_utils = logging.getLogger(__name__)
 
 
@@ -130,4 +132,55 @@ class MessageProcessor:
         logger_utils.debug('Keyboard removed')
         await self._state.update_data({key: []})
 
+        logger_utils.debug('Exit')
+
+    async def change_message(self, key='msg_id_for_change') -> None:
+        """
+        This method is used to change the text of an existing message in
+        chat based on the transmitted data about category and amount. If the
+        category relates to income, then the message will contain information
+        about income with a positive amount. IN otherwise, the message will
+        contain information about expenses from negative amount. Parameters: -
+        `key` (str): Key to receive ID of the message you want to change.
+        Defaults to 'msg_id_for_change'. Returns: - None Exceptions: - Any
+        an exception that occurs while executing a method will be logged.
+        :param key: str
+        :return: None
+        """
+        logger_utils.debug('Entry')
+        try:
+            data = await self._state.get_data()
+            category = self._type_update.data
+            amount = data.get('amount')
+            msg_id = data.get(key)
+            text = 'Доходы'
+            if INCOME_CATEG_BUTT.get(category):
+                text = (f'<code>{text}:\n{INCOME_CATEG_BUTT.get(category)} '
+                        f'+{amount}</code>')
+            else:
+                text = (f'<code>Расходы:\n'
+                        f'{EXPENSE_SUBCATEGORY_BUTT.get(category)} '
+                        f'-{amount}</code>')
+
+            chat_id = self._type_update.message.chat.id
+            await self._type_update.bot.edit_message_text(text, chat_id=chat_id,
+                                                          message_id=msg_id)
+        except Exception as err:
+            logger_utils.error(f'{err=}\n{err.__class__=}')
+        logger_utils.debug('Entry')
+
+    async def delete_message(self, key='msg_id_for_change') -> None:
+        """
+        Deletes a message using the specified key. The method retrieves data from
+        states and uses them to delete a message with the specified key.
+        Args: key (str): The key by which the message will be found for
+        removal. Default 'msg_id_for_change'. Return: None.
+        :param key: str
+        :return: None
+        """
+        logger_utils.debug('Entry')
+        data = await self._state.get_data()
+        chat_id = self._type_update.message.chat.id
+        await self._type_update.bot.delete_message(chat_id=chat_id,
+                                                   message_id=data.get(key))
         logger_utils.debug('Exit')
