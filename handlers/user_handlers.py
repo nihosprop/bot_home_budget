@@ -73,7 +73,6 @@ async def cmd_delete_user(clbk: CallbackQuery, state: FSMContext):
     value = await clbk.message.edit_text(LexiconRu.text_confirm_del_data,
                                          reply_markup=kb_yes_cancel)
     await MessageProcessor(clbk, state).save_msg_id(value, msgs_for_del=True)
-    await state.set_state(FSMDeleteUser.confirm_deletion)
     await clbk.answer()
 
 
@@ -84,8 +83,7 @@ async def invalid_confirm_user(msg: Message):
 
 
 # confirm remove user
-@user_router.callback_query(F.data == 'yes',
-                            StateFilter(FSMDeleteUser.confirm_deletion))
+@user_router.callback_query(F.data == 'yes')
 async def confirm_remove_user(clbk: CallbackQuery, state: FSMContext):
     await remove_user_from_db(str(clbk.from_user.id))
     await clbk.message.edit_text(LexiconRu.text_del_success_data)
