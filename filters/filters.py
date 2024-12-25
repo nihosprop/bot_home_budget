@@ -11,14 +11,14 @@ logger_filters = logging.getLogger(__name__)
 class IsNumber(BaseFilter):
     """ Filter to check if the message content is a number. """
 
-    async def __call__(self, message: Message) -> bool | dict[str, int | float]:
+    async def __call__(self, msg: Message) -> bool | dict[str, int | float]:
         """ Checks whether the message content is a number. Returns
         False if the content is not a number. Returns a dictionary with
         number if the content is a number.
         """
-        if message.content_type is ContentType.TEXT:
-            number = message.text.replace(',', '.')
-            user_id = message.from_user.id
+        if msg.content_type is ContentType.TEXT:
+            number = msg.text.replace(',', '.')
+            user_id = msg.from_user.id
             try:
                 value = {'number': int(number)}
             except ValueError:
@@ -32,10 +32,10 @@ class IsNumber(BaseFilter):
                 except ValueError:
                     logger_filters.warning(
                         f'Failed to convert message to number:'
-                        f' {user_id=}: {message.text=}')
+                        f' {user_id=}: {msg.text=}')
                     return False
             logger_filters.debug(f'{value=}')
             return value if value['number'] != 0 else False
-        logger_filters.debug(f'drop_update -> {message.content_type}')
+        logger_filters.debug(f'drop_update -> {msg.content_type}')
 
         return False
