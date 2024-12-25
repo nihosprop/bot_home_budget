@@ -58,7 +58,6 @@ async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
 # confirm reset month stats
 @user_router.callback_query(F.data == '/reset')
 async def confirm_reset_month_stats(clbk: CallbackQuery, state: FSMContext):
-    logger_user_hand.debug(f'{clbk.message.message_id=}')
     await reset_month_stats(clbk)
     value = await clbk.message.edit_text(LexiconRu.text_statistics_reset,
                                          reply_markup=kb_for_wait_amount)
