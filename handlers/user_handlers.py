@@ -49,7 +49,6 @@ async def cmd_start_default_state(msg: Message, state: FSMContext):
 # reset user month stats
 @user_router.callback_query(F.data == 'reset_month_stats')
 async def clbk_reset_month(clbk: CallbackQuery, state: FSMContext):
-    logger_user_hand.debug(f'{clbk.message.message_id=}')
     value = await clbk.message.edit_text(LexiconRu.text_confirm_reset_month,
                                          reply_markup=kb_reset_month_stats)
     await MessageProcessor(clbk, state).save_msg_id(value, msgs_for_del=True)
