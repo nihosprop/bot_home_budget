@@ -47,6 +47,8 @@ class Categories:
     pass
 
 
+ADMIN_PANEL_BUTT: dict[str, str] = {'newsletter': 'Рассылка'}
+
 # collect into dataclass Categories
 DIRECTION_BUTT: dict[str, str] = {'income': 'Доходы', 'expenses': 'Расходы'}
 

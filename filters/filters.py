@@ -39,3 +39,7 @@ class IsNumber(BaseFilter):
         logger_filters.debug(f'drop_update -> {msg.content_type}')
 
         return False
+
+class IsAdmin(BaseFilter):
+    async def __call__(self, msg: Message):
+        pass

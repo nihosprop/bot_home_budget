@@ -10,7 +10,7 @@ from aiogram.enums import ParseMode
 
 from config_data.config import Config, load_config
 from keyboards.set_menu import set_main_menu
-from handlers import other_handlers, user_handlers
+from handlers import other_handlers, user_handlers, admin_handlers
 from database.db_utils import db1, get_data_json
 from middlewares.outer import ThrottlingMiddleware
 
@@ -50,6 +50,7 @@ async def main():
         await set_main_menu(bot)
 
         # routers
+        dp.include_router(admin_handlers.admin_router)
         dp.include_router(user_handlers.user_router)
         dp.include_router(other_handlers.other_router)
 
