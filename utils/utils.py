@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from dataclasses import dataclass
 
@@ -8,6 +9,7 @@ from aiogram.types import CallbackQuery, Message
 from lexicon.lexicon_ru import EXPENSE_SUBCATEGORY_BUTT, INCOME_CATEG_BUTT
 
 logger_utils = logging.getLogger(__name__)
+
 
 
 @dataclass
@@ -92,8 +94,8 @@ class MessageProcessor:
             if val:
                 data: list = dict(await self._state.get_data()).get(key, [])
                 if value.message_id not in data:
-                    data.append(value.message_id)
-                    logger_utils.debug('Msg ID to recorded')
+                    data.append(str(value.message_id))
+                    logger_utils.debug(f'Msg ID to recorded')
                 logger_utils.debug('No msg ID to record')
                 await self._state.update_data({key: data})
         logger_utils.debug('Exit')
@@ -121,13 +123,11 @@ class MessageProcessor:
             chat_id = self._type_update.message.chat.id
 
         for msg_id in set(msgs):
-            logger_utils.debug(f'Starting remove keyboard…\n'
-                               f'Msgs for remove {set(msgs)=}')
             try:
                 await self._type_update.bot.edit_message_reply_markup(
                         chat_id=chat_id, message_id=msg_id)
             except TelegramBadRequest as err:
-                logger_utils.error(f'{err}')
+                logger_utils.error(f'{err}', stack_info=True)
         logger_utils.debug('Keyboard removed')
         await self._state.update_data({key: []})
 
@@ -166,7 +166,7 @@ class MessageProcessor:
                                                           message_id=msg_id)
         except Exception as err:
             logger_utils.error(f'{err=}\n{err.__class__=}')
-        logger_utils.debug('Entry')
+        logger_utils.debug('Exit')
 
     async def delete_message(self, key='msg_id_for_change') -> None:
         """
@@ -183,3 +183,17 @@ class MessageProcessor:
         await self._type_update.bot.delete_message(chat_id=chat_id,
                                                    message_id=data.get(key))
         logger_utils.debug('Exit')
+
+    @staticmethod
+    async def deletes_msg_a_delay(msg: Message, delay: int) -> None:
+        """
+         Deletes a message after a specified time interval.
+         Arguments: message (types.Message): The message to be deleted.
+                    delay (int): Time in seconds before the message is deleted.
+                    Returns: None
+        :param msg: Message
+        :param delay: int
+        :return: None
+        """
+        await asyncio.sleep(delay)
+        await msg.delete()
