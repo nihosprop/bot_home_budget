@@ -143,7 +143,7 @@ async def process_number_sent(
     msg_processor = MessageProcessor(msg, state)
     await msg_processor.deletes_messages(msgs_for_del=True)
     await state.update_data(amount=number)
-    value = await msg.answer(f'Обработка запроса {number}...')
+    value = await msg.answer(f'Обработка суммы {number}...')
     await state.update_data(msg_id_for_change=str(value.message_id))
     await msg.delete()
     await msg.answer(LexiconRu.select_direction, reply_markup=kb_direction)
