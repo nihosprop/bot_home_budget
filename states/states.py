@@ -9,3 +9,6 @@ class FSMMakeTransaction(StatesGroup):
     select_income = State()
     select_expenses = State()
     select_subcategory = State()
+
+class FSMAdminPanel(StatesGroup):
+    admin_menu = State()
