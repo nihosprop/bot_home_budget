@@ -62,7 +62,7 @@ async def main():
 
         await bot.delete_webhook(drop_pending_updates=True)
         logger_main.info('Start bot')
-        await dp.start_polling(bot)
+        await dp.start_polling(bot, superadmin=config.tg_bot.id_admin)
     except Exception as err:
         logger_main.exception(err)
         raise
