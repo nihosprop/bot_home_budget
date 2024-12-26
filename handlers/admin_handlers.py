@@ -12,7 +12,6 @@ admin_router.message.filter(IsAdmin())
 logger_admin = logging.getLogger(__name__)
 
 
-admin_router.message(F.text == '/admin')
+@admin_router.message(F.text == '/admin')
 async def cmd_admin(msg: Message):
-
     await msg.answer('Админ панель', reply_markup=kb_admin)
