@@ -11,7 +11,6 @@ from lexicon.lexicon_ru import EXPENSE_SUBCATEGORY_BUTT, INCOME_CATEG_BUTT
 logger_utils = logging.getLogger(__name__)
 
 
-
 @dataclass
 class MessageProcessor:
     """
