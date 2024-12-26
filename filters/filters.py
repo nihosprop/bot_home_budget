@@ -41,5 +41,7 @@ class IsNumber(BaseFilter):
         return False
 
 class IsAdmin(BaseFilter):
-    async def __call__(self, msg: Message):
-        pass
+    async def __call__(self, msg: Message, superadmin) -> bool:
+        user_id = str(msg.from_user.id)
+        logger_filters.debug(f'{user_id=}:{superadmin=}')
+        return user_id == superadmin
