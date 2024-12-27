@@ -61,7 +61,7 @@ class ThrottlingMiddleware(BaseMiddleware):
 
             if isinstance(event, Message):
                 value = await event.answer(text=LexiconRu.text_antispam)
-                asyncio.create_task(msg_processor.deletes_msg_a_delay(value, 10))
+                asyncio.create_task(msg_processor.deletes_msg_a_delay(value, 5))
 
             if isinstance(event, CallbackQuery):
                 await event.answer()
