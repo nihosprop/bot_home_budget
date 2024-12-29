@@ -6,6 +6,7 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
+from database.db_utils import get_users
 from lexicon.lexicon_ru import EXPENSE_SUBCATEGORY_BUTT, INCOME_CATEG_BUTT
 
 logger_utils = logging.getLogger(__name__)
@@ -196,3 +197,20 @@ class MessageProcessor:
         """
         await asyncio.sleep(delay)
         await value.delete()
+
+    async def _send_message(self, user_id, text: str) -> None:
+        try:
+            await self._type_update.bot.send_message(chat_id=user_id, text=text)
+        except Exception as err:
+            logger_utils.error(f'Error sending message to user {user_id}: '
+                               f'{err}', exc_info=True)
+
+    async def broadcast(self, text: str) -> None:
+        """
+
+        :param text: str
+        :return: None
+        """
+        for user_id in await get_users():
+            await self._send_message(user_id, text)
+            await asyncio.sleep(0.3)
