@@ -7,10 +7,12 @@ logger_lexicon = logging.getLogger(__name__)
 @dataclass
 class LexiconCommandsRu:
     start: str = 'Запуск'
+    reboot: str = 'Сброс'
 
 
 @dataclass
 class LexiconRu:
+    abc_ru: str = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
     await_start = ('<b>Что-бы запустить бота нажмите:\n'
                    '-> /start</b>')
     await_amount: str = '<b>Ожидаю ввод суммы…</b>👇'
@@ -47,7 +49,9 @@ class Categories:
     pass
 
 
-ADMIN_PANEL_BUTT: dict[str, str] = {'newsletter': 'Рассылка', 'exit': 'Выход'}
+ADMIN_PANEL_BUTT: dict[str, str] = {'newsletter': 'Рассылка', 'upload_words':
+    'Загрузить список слов', 'edit_word': 'Редактировать слово', 'temp': 'TEMP',
+        'print_season_words': 'Вывести слова сезона', 'exit': 'Выход'}
 
 # collect into dataclass Categories
 DIRECTION_BUTT: dict[str, str] = {'income': 'Доходы', 'expenses': 'Расходы'}

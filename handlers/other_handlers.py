@@ -18,9 +18,9 @@ async def other_message(msg: Message, state: FSMContext):
 
 
 # cap
-@other_router.callback_query()
-async def other_clbk(clbk: CallbackQuery):
-    await clbk.message.delete()
-    await clbk.answer('Запустите бота\n'
-                      'Меню -> /start', show_alert=True)
-    await clbk.answer()
+# @other_router.callback_query()
+# async def other_clbk(clbk: CallbackQuery):
+#     await clbk.message.delete()
+#     await clbk.answer('Запустите бота\n'
+#                       'Меню -> /start', show_alert=True)
+#     await clbk.answer()
