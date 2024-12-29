@@ -13,6 +13,10 @@ logger_db_utils = logging.getLogger(__name__)
 db1 = Redis(host='localhost', port=6379, db=1)
 
 
+async def flush_redis_db():
+    await db1.flushdb()
+
+
 async def set_data_json(path: str = 'database/db.json'):
     """
     Saves all data from the Redis database to a JSON file.
