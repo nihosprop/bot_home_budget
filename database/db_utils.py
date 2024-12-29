@@ -169,6 +169,7 @@ async def generate_fin_stats(clbk: CallbackQuery) -> str:
         for subcategory, value in data.items():
             report += (f'    - {EXPENSE_SUBCATEGORY_BUTT[subcategory]}: '
                        f'<code>{round(value, 2)}</code>'
-                       f'<code>{await _calc_percent(sum_income, value)}</code>\n')
+                       f'<code>'
+                       f'{await _calc_percent(sum_income, value)}</code>\n')
     logger_db_utils.debug('Exit')
     return report
