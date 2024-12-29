@@ -48,6 +48,7 @@ class ThrottlingMiddleware(BaseMiddleware):
         logger_middl_outer.debug(f'Entry {__class__.__name__}')
 
         state: FSMContext = data.get('state')
+        logger_middl_outer.debug(f'{await state.get_state()=}')
         msg_processor = MessageProcessor(event, state)
 
         if self.ttl is None:
