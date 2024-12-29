@@ -33,9 +33,10 @@ async def cmd_reboot(msg: Message, state: FSMContext):
 
 @admin_router.callback_query(F.data == 'temp')
 async def clbk_temp(clbk: CallbackQuery, state: FSMContext):
-    await clbk.message.edit_text('Слово дня загадано!\n'
-                                 'Попробуй угадать:\n➖  ➖  ➖  ➖  ➖ \n'
-                                 'ПОПЫТКИ ❤️❤️❤️❤️❤️❤️', reply_markup=kb_game)
+    # await clbk.message.edit_text('Слово дня загадано!\n'
+    #                              'Попробуй угадать:\n➖  ➖  ➖  ➖  ➖ \n'
+    #                              'ПОПЫТКИ ❤️❤️❤️❤️❤️❤️', reply_markup=kb_game)
+    await flush_redis_db()
 
 @admin_router.callback_query(F.data == 'exit')
 async def cmd_exit(clbk: CallbackQuery, state: FSMContext):
