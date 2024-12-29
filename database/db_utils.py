@@ -173,3 +173,15 @@ async def generate_fin_stats(clbk: CallbackQuery) -> str:
                        f'{await _calc_percent(sum_income, value)}</code>\n')
     logger_db_utils.debug('Exit')
     return report
+
+
+async def get_users() -> set[str]:
+    """
+    Returns IDs users
+    :return: set[str]
+    """
+    logger_db_utils.debug('Entry')
+    users = {str(user_id.decode()) for user_id in await db1.keys()}
+    logger_db_utils.debug(f'{users=}')
+    logger_db_utils.debug('Exit')
+    return users
