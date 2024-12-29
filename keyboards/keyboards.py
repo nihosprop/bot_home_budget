@@ -3,7 +3,8 @@ import logging
 from aiogram.types import InlineKeyboardMarkup
 
 from keyboards.keyboard_utils import create_inline_kb
-from lexicon.lexicon_ru import (CLOTHING_ACCESSORIES_BUTT,
+from lexicon.lexicon_ru import (ADMIN_PANEL_BUTT,
+                                CLOTHING_ACCESSORIES_BUTT,
                                 DEBTS_BUTT,
                                 DIRECTION_BUTT,
                                 EDUCATION_BUTT,
@@ -12,16 +13,16 @@ from lexicon.lexicon_ru import (CLOTHING_ACCESSORIES_BUTT,
                                 FEEDING_BUTT,
                                 FOR_AWAIT_AMOUNT_BUTT,
                                 HEALTH_BEAUTY_BUTT,
-                                SERVICES_BUTT,
                                 INCOME_CATEG_BUTT,
+                                LexiconRu,
                                 MISC_EXPENSES_BUTT,
                                 PETS_BUTT,
                                 RESET_CANCEL_BUTT,
+                                SERVICES_BUTT,
                                 SUPERMARKET_BUTT,
                                 TRANSPORT_BUTT,
                                 UTILITIES_BUTT,
-                                YES_NO_BUTT,
-                                ADMIN_PANEL_BUTT)
+                                YES_NO_BUTT)
 
 logger_keyboards = logging.getLogger(__name__)
 
@@ -31,10 +32,14 @@ kb_for_wait_amount = create_inline_kb(2, cancel_butt=False,
 kb_reset_month_stats = create_inline_kb(2, cancel_butt=False,
                                         **RESET_CANCEL_BUTT)
 
+kb_admin = create_inline_kb(2, **ADMIN_PANEL_BUTT, cancel_butt=False)
+kb_back = create_inline_kb(width=1, back='Назад', cancel_butt=False)
+kb_game = create_inline_kb(width=8, cancel_butt=False,
+                           **dict((str(n), w) for n, w in enumerate(LexiconRu.abc_ru)))
+
 kb_direction = create_inline_kb(2, **DIRECTION_BUTT)
 kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)
 kb_expenses_categories = create_inline_kb(2, **EXPENSES_CATEG_BUTT)
-kb_admin = create_inline_kb(2, **ADMIN_PANEL_BUTT)
 
 kb_supermarket = create_inline_kb(2, **SUPERMARKET_BUTT)
 kb_feeding = create_inline_kb(2, **FEEDING_BUTT)

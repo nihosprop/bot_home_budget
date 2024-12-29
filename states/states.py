@@ -12,3 +12,4 @@ class FSMMakeTransaction(StatesGroup):
 
 class FSMAdminPanel(StatesGroup):
     admin_menu = State()
+    newsletter = State()
