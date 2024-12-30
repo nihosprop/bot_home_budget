@@ -48,7 +48,6 @@ class ThrottlingMiddleware(BaseMiddleware):
         logger_middl_outer.debug(f'Entry {__class__.__name__}')
 
         state: FSMContext = data.get('state')
-        logger_middl_outer.debug(f'{await state.get_state()=}')
         msg_processor = MessageProcessor(event, state)
 
         if self.ttl is None:
@@ -61,19 +60,27 @@ class ThrottlingMiddleware(BaseMiddleware):
         if check_user and int(check_user.decode()) == 1:
 
             if isinstance(event, Message):
+                logger_middl_outer.debug(f'{await self.storage.redis.get(throttl_user_id)=}')
+
                 value = await event.answer(text=LexiconRu.text_antispam)
                 asyncio.create_task(msg_processor.deletes_msg_a_delay(value, 5))
 
             if isinstance(event, CallbackQuery):
                 await event.answer()
 
-            await msg_processor.deletes_msg_a_delay(event, 5)
-            await self.storage.redis.set(name=throttl_user_id, value=1, px=2000)
+            asyncio.create_task(msg_processor.deletes_msg_a_delay(event, 5))
+            await self.storage.redis.set(name=throttl_user_id, value=2, px=5000)
 
             logger_middl_outer.warning(f'Throttling:{throttl_user_id=}')
             logger_middl_outer.debug(f'Exit {__class__.__name__}')
             return
 
-        await self.storage.redis.set(name=throttl_user_id, value=1, px=self.ttl)
+        elif check_user and int(check_user.decode()) == 2:
+            asyncio.create_task(msg_processor.deletes_msg_a_delay(event, 5))
+            return
+
+        if not check_user:
+            await self.storage.redis.set(name=throttl_user_id, value=1, px=self.ttl)
+
         logger_middl_outer.debug(f'Exit {__class__.__name__}')
         return await handler(event, data)
