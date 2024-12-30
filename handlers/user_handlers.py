@@ -135,7 +135,7 @@ async def cmd_show_categories(clbk: CallbackQuery, state: FSMContext):
 
 
 # fill_number
-@user_router.message(IsNumber())
+@user_router.message(IsNumber(), StateFilter(default_state))
 async def process_number_sent(
         msg: Message, state: FSMContext, number: bool | int | float):
     logger_user_hand.debug('Entry')
