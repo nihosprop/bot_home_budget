@@ -49,9 +49,21 @@ class Categories:
     pass
 
 
-ADMIN_PANEL_BUTT: dict[str, str] = {'newsletter': 'Рассылка', 'upload_words':
-    'Загрузить список слов', 'edit_word': 'Редактировать слово', 'temp': 'TEMP',
-        'print_season_words': 'Вывести слова сезона', 'exit': 'Выход'}
+ADMIN_PANEL_BUTT: dict[str, str] = {
+        'newsletter': 'Рассылка',
+        'upload_words': 'Загрузить список слов',
+        'edit_word': 'Редактировать слово',
+        'temp': 'TEMP',
+        'print_season_words': 'Вывести слова сезона',
+        'exit': 'Выход'}
+
+# game
+LETTERS_BUTT: dict[str, str] = {str(n): w for n, w in
+        enumerate(LexiconRu.abc_ru)}
+AFTER_LETTERS: dict[str, str] = {
+        'open_symbol': 'Открыть букву 👀',
+        'rating_players': 'Рейтинг игроков 📊'}
+GAME_BUTT: dict[str, str] = dict(**LETTERS_BUTT, **AFTER_LETTERS)
 
 # collect into dataclass Categories
 DIRECTION_BUTT: dict[str, str] = {'income': 'Доходы', 'expenses': 'Расходы'}
@@ -124,8 +136,12 @@ MISC_EXPENSES_BUTT = {
         'donations': 'Пожертвования',
         'investing': 'Инвестинг',
         'cash_for_the_child': 'На расходы детям'}
-SERVICES_BUTT = {'dry_cleaning': 'Химчистка', 'plumber': 'Сантехник',
-        'tile_maker': 'Плиточник', 'electric': 'Электрик', 'other': 'Другое'}
+SERVICES_BUTT = {
+        'dry_cleaning': 'Химчистка',
+        'plumber': 'Сантехник',
+        'tile_maker': 'Плиточник',
+        'electric': 'Электрик',
+        'other': 'Другое'}
 DEBTS_BUTT = {
         'loan': 'Кредит',
         'installment': 'Рассрочка',
@@ -134,8 +150,7 @@ DEBTS_BUTT = {
 
 EXPENSE_SUBCATEGORY_BUTT: dict[str, str] = dict(**SUPERMARKET_BUTT,
                                                 **FEEDING_BUTT, **TRANSPORT_BUTT,
-                                                **DEBTS_BUTT,
-                                                **SERVICES_BUTT,
+                                                **DEBTS_BUTT, **SERVICES_BUTT,
                                                 **MISC_EXPENSES_BUTT,
                                                 **PETS_BUTT,
                                                 **CLOTHING_ACCESSORIES_BUTT,

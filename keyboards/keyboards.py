@@ -22,7 +22,8 @@ from lexicon.lexicon_ru import (ADMIN_PANEL_BUTT,
                                 SUPERMARKET_BUTT,
                                 TRANSPORT_BUTT,
                                 UTILITIES_BUTT,
-                                YES_NO_BUTT)
+                                YES_NO_BUTT,
+                                GAME_BUTT)
 
 logger_keyboards = logging.getLogger(__name__)
 
@@ -34,8 +35,7 @@ kb_reset_month_stats = create_inline_kb(2, cancel_butt=False,
 
 kb_admin = create_inline_kb(2, **ADMIN_PANEL_BUTT, cancel_butt=False)
 kb_back = create_inline_kb(width=1, back='Назад', cancel_butt=False)
-kb_game = create_inline_kb(width=8, cancel_butt=False,
-                           **dict((str(n), w) for n, w in enumerate(LexiconRu.abc_ru)))
+kb_game = create_inline_kb(width=8, **GAME_BUTT, cancel_butt=False)
 
 kb_direction = create_inline_kb(2, **DIRECTION_BUTT)
 kb_income_categories = create_inline_kb(3, **INCOME_CATEG_BUTT)

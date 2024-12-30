@@ -157,7 +157,7 @@ async def generate_fin_stats(clbk: CallbackQuery) -> str:
             sum(obj) for obj in (categ.values() for categ in expenses.values()))
 
     report: str = (f'<code><i>{date}</i></code>\n\n'
-                   f'<b>Баланс: </b>{balance}\n'
+                   f'<b>Баланс: </b><code>{balance}</code>\n'
                    f'<b>Сальдо:</b>'
                    f' <code>{round(balance - sum_expenses, 2)}</code>\n'
                    f'<b>------------------------</b>\n'
