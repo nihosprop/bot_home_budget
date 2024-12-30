@@ -152,17 +152,15 @@ class MessageProcessor:
             category = self._type_update.data
             amount = data.get('amount')
             msg_id = data.get(key)
-            text = 'Доходы'
             if INCOME_CATEG_BUTT.get(category):
-                text = (f'<code>{text}:\n{INCOME_CATEG_BUTT.get(category)} '
+                text = (f'<code>{INCOME_CATEG_BUTT.get(category)} '
                         f'+{amount}</code>')
             else:
-                text = (f'<code>Расходы:\n'
-                        f'{EXPENSE_SUBCATEGORY_BUTT.get(category)} '
+                text = (f'<code>{EXPENSE_SUBCATEGORY_BUTT.get(category)} '
                         f'-{amount}</code>')
 
             chat_id = self._type_update.message.chat.id
-            await self._type_update.bot.edit_message_text(text, chat_id=chat_id,
+            await self._type_update.bot.edit_message_text(text=text, chat_id=chat_id,
                                                           message_id=msg_id)
         except Exception as err:
             logger_utils.error(f'{err=}\n{err.__class__=}')

@@ -28,7 +28,7 @@ class ThrottlingMiddleware(BaseMiddleware):
         Args: storage (RedisStorage): An object for interacting with Redis.
         ttl (int | None, optional): The time-to-live for the key in
         milliseconds. If None, rate limiting is disabled.
-        :param storage:
+        :param storage: RedisStorage
         :param ttl:
         """
         self.storage = storage
@@ -60,8 +60,6 @@ class ThrottlingMiddleware(BaseMiddleware):
         if check_user and int(check_user.decode()) == 1:
 
             if isinstance(event, Message):
-                logger_middl_outer.debug(f'{await self.storage.redis.get(throttl_user_id)=}')
-
                 value = await event.answer(text=LexiconRu.text_antispam)
                 asyncio.create_task(msg_processor.deletes_msg_a_delay(value, 5))
 
