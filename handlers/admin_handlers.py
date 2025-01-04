@@ -4,10 +4,9 @@ from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
-from database.db_utils import flush_redis_db
 from filters.filters import IsAdmin
 from keyboards.keyboards import kb_admin, kb_back, kb_for_wait_amount, kb_game
-from lexicon.lexicon_ru import LexiconRu
+from lexicon import LexiconRu
 from states.states import FSMAdminPanel
 from utils.utils import MessageProcessor
 

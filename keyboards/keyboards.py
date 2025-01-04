@@ -3,27 +3,26 @@ import logging
 from aiogram.types import InlineKeyboardMarkup
 
 from keyboards.keyboard_utils import create_inline_kb
-from lexicon.lexicon_ru import (ADMIN_PANEL_BUTT,
-                                CLOTHING_ACCESSORIES_BUTT,
-                                DEBTS_BUTT,
-                                DIRECTION_BUTT,
-                                EDUCATION_BUTT,
-                                ENTERTAINMENT_BUTT,
-                                EXPENSES_CATEG_BUTT,
-                                FEEDING_BUTT,
-                                FOR_AWAIT_AMOUNT_BUTT,
-                                HEALTH_BEAUTY_BUTT,
-                                INCOME_CATEG_BUTT,
-                                LexiconRu,
-                                MISC_EXPENSES_BUTT,
-                                PETS_BUTT,
-                                RESET_CANCEL_BUTT,
-                                SERVICES_BUTT,
-                                SUPERMARKET_BUTT,
-                                TRANSPORT_BUTT,
-                                UTILITIES_BUTT,
-                                YES_NO_BUTT,
-                                GAME_BUTT)
+from lexicon import (ADMIN_PANEL_BUTT,
+                     CLOTHING_ACCESSORIES_BUTT,
+                     DEBTS_BUTT,
+                     DIRECTION_BUTT,
+                     EDUCATION_BUTT,
+                     ENTERTAINMENT_BUTT,
+                     EXPENSES_CATEG_BUTT,
+                     FEEDING_BUTT,
+                     FOR_AWAIT_AMOUNT_BUTT,
+                     GAME_BUTT,
+                     HEALTH_BEAUTY_BUTT,
+                     INCOME_CATEG_BUTT,
+                     MISC_EXPENSES_BUTT,
+                     PETS_BUTT,
+                     RESET_CANCEL_BUTT,
+                     SERVICES_BUTT,
+                     SUPERMARKET_BUTT,
+                     TRANSPORT_BUTT,
+                     UTILITIES_BUTT,
+                     YES_NO_BUTT)
 
 logger_keyboards = logging.getLogger(__name__)
 

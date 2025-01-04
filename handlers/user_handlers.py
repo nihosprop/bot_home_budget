@@ -20,11 +20,11 @@ from keyboards.keyboards import (kb_direction,
                                  kb_yes_cancel,
                                  kbs_for_expenses)
 from filters.filters import IsNumber
-from lexicon.lexicon_ru import (EXPENSES_CATEG_BUTT,
-                                EXPENSE_SUBCATEGORY_BUTT,
-                                INCOME_CATEG_BUTT,
-                                LexiconRu,
-                                MAP)
+from lexicon import (EXPENSES_CATEG_BUTT,
+                     EXPENSE_SUBCATEGORY_BUTT,
+                     INCOME_CATEG_BUTT,
+                     LexiconRu,
+                     MAP)
 from states.states import FSMMakeTransaction
 from utils.utils import MessageProcessor
 

@@ -7,7 +7,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
 from database.db_utils import get_users
-from lexicon.lexicon_ru import EXPENSE_SUBCATEGORY_BUTT, INCOME_CATEG_BUTT
+from lexicon import EXPENSE_SUBCATEGORY_BUTT, INCOME_CATEG_BUTT
 
 logger_utils = logging.getLogger(__name__)
 

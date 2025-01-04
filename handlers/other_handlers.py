@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 from aiogram import Router
 
-from lexicon.lexicon_ru import LexiconRu
+from lexicon import LexiconRu
 
 logger_other_hand = logging.getLogger(__name__)
 other_router = Router()

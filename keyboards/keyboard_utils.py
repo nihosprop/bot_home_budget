@@ -3,7 +3,7 @@ import logging
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from lexicon.lexicon_ru import CANCEL_BUTT
+from lexicon import CANCEL_BUTT
 
 logger_kb_utils = logging.getLogger(__name__)
 
@@ -43,7 +43,6 @@ def create_inline_kb(
         kb_builder.row(InlineKeyboardButton(text=CANCEL_BUTT['cancel'],
                                             callback_data='/cancel'))
     if webapp:
-        kb_builder.row(InlineKeyboardButton(text="GitHub",
-                                            web_app=WebAppInfo(
-                                                url='https://github.com')))
+        kb_builder.row(InlineKeyboardButton(text="GitHub", web_app=WebAppInfo(
+                url='https://github.com')))
     return kb_builder.as_markup()
